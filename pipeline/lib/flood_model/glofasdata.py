@@ -14,10 +14,26 @@ import urllib.error
 import tarfile
 import time
 #import cdsapi
-from lib.pipeline.dynamicDataDb import DatabaseManager
-from settings import *
-from secrets import *
+from flood_model.dynamicDataDb import DatabaseManager
+from flood_model.settings import *
+#from flood_model.secrets import *
+import os
 
+API_SERVICE_URL = os.environ["API_SERVICE_URL"]
+API_LOGIN_URL = os.environ["API_LOGIN_URL"]
+GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
+GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
+GLOFAS_USER = os.environ["GLOFAS_USER"]
+ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
+GLOFAS_PW = os.environ["GLOFAS_PW"]
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+GLOFAS_FTP = os.environ["GLOFAS_FTP"]
+DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
+DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
+DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
+
+ 
+ 
 
 class GlofasData:
 

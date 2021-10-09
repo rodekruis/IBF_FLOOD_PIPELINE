@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 import json
-from settings import *
+from flood_model.settings import *
 import os
 
 

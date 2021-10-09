@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  ibfflood:
+    build:  .
+    image: rodekruis510/floodmodel:latest
+    ports:
+      - "587:587"
+    env_file:
+      - secrets
+    volumes: 
+      #- "C:/Users/ATeklesadik/Documents/IBF_FLOOD_PIPELINE/pipeline:/home/ibf"
+      - $fllod_model:/home/ibf
+    command: run-flood-model

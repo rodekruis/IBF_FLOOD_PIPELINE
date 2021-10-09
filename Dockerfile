@@ -1,5 +1,9 @@
 FROM ubuntu:18.04
 
+RUN mkdir --parents /home/ibf
+ENV HOME /home/ibf
+WORKDIR $HOME
+
 RUN apt-get update && apt-get install -y \
     software-properties-common \
     nano \
@@ -36,19 +40,14 @@ RUN python3 -m pip install --no-cache-dir \
     --upgrade \
     && python3 -m pip install --no-cache-dir numpy
 
-# copy files
-RUN mkdir --parents /home/ibf/pipeline
-WORKDIR /home/ibf/pipeline/
-
+ 
 # install dependencies
-COPY requirements.txt /home/ibf/pipeline/
-RUN pip install -r requirements.txt
+COPY requirements.txt /home/ibf
+RUN pip install --no-cache-dir -r requirements.txt
 
-# set up cronjob
-COPY entrypoint.sh /home/ibf/pipeline/entrypoint.sh
-COPY crontab /etc/cron.d/crontab
-RUN chmod 0644 /etc/cron.d/crontab
-RUN crontab /etc/cron.d/crontab
-RUN touch /var/log/cron.log
 
-CMD tail -f /dev/null
+# Copy code and install
+ADD pipeline .
+RUN pip install .
+
+ 

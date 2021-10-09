@@ -34,7 +34,7 @@ docker run --name=ibf-pipeline-floods -v ${PWD}:/home/ibf -it ibf-pipeline-flood
 ```
 For windows ${PWD} might not work so try the followng command after editing the path
 ```
-docker run --name=ibf-pipeline-floods -v C:/../IBF_FLOOD_PIPELINE:/home/ibf -it ibf-pipeline-floods
+docker run --name=ibf-pipeline-floods -v C:/Users/ATeklesadik/Documents/IBF_FLOOD_PIPELINE:/home/ibf -it ibf-pipeline-floods
 ```
 access container (if the previous command didn't get you in already): 
 ```

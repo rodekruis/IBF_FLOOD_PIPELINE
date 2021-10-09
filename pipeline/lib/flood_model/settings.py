@@ -53,6 +53,42 @@ SETTINGS = {
     }
 }
 
+##################
+## RUN SETTINGS ##
+##################
+ 
+# Countries to include
+COUNTRY_CODES = ['ETH','ZMB']#'ETH','ZMB','KEN','UGA']
+
+# COUNTRY SETTINGS
+SETTINGS_SECRET = {
+    "ZMB": {
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": False
+    },
+    "UGA": {
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": False
+    },
+    "KEN": {
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": False
+    },
+    "ETH": {
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": False
+    }
+}
+# Change this date only in case of specific testing purposes
+from datetime import date, timedelta
+CURRENT_DATE = date.today()
+# CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+
+
 
 
 ####################

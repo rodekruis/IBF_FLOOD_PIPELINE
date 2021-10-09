@@ -5,7 +5,8 @@ import json
 import geopandas as gpd
 import rasterio
 from rasterio.merge import merge
-from settings import *
+from flood_model.settings import *
+import os
 
 class FloodExtent:
 

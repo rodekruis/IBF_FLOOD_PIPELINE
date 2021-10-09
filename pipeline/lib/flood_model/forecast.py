@@ -1,11 +1,12 @@
-from lib.pipeline.glofasdata import GlofasData
-from lib.pipeline.floodExtent import FloodExtent
-from lib.pipeline.exposure import Exposure
-from lib.pipeline.dynamicDataDb import DatabaseManager
+from flood_model.glofasdata import GlofasData
+from flood_model.floodExtent import FloodExtent
+from flood_model.exposure import Exposure
+from flood_model.dynamicDataDb import DatabaseManager
 import pandas as pd
 import json
 from shapely import wkb, wkt
 import geopandas
+import os
 
 
 class Forecast:
