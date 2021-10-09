@@ -19,10 +19,9 @@ jobs:
         sudo add-apt-repository ppa:ubuntugis/ppa \
           && apt-get update \
           && apt-get install --no-install-recommends -y \
-          python-numpy \
-          gdal-bin \
           software-properties-common\
           build-essential \
+          gdal-bin \
           libproj-dev \
           libgeos-dev \
           postgresql-client \
