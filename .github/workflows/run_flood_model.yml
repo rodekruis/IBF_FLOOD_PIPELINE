@@ -17,9 +17,9 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo add-apt-repository ppa:ubuntugis/ppa \
-          && apt-get update \
-          && apt-get install --no-install-recommends -y \
-          software-properties-common\
+        sudo  && apt-get update \
+        sudo  && apt-get install --no-install-recommends -y \
+        sudo  software-properties-common\
           build-essential \
           gdal-bin \
           libproj-dev \
