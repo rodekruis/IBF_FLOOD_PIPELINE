@@ -30,6 +30,7 @@ jobs:
          gfortran \
          kmod \
          wget \
+         gfortran \
          apache2
          
     - name: Install system dependencies2
@@ -37,15 +38,15 @@ jobs:
        sudo add-apt-repository ppa:ubuntugis/ppa
        sudo apt-get update
        sudo apt-get install -y \
-         python-numpy \
          gdal-bin \  
          libgdal-dev \
+         postgresql \
+         postgresql-contrib \
          postgresql-client \
          libgnutls28-dev \
          libgnutls28-dev \
          libspatialindex-dev \
-         libeccodes0 \
-         gfortran 
+         libeccodes0 
          
     - name: Install system dependencies
       run: |
