@@ -33,6 +33,7 @@ jobs:
          libgnutls28-dev \
          libspatialindex-dev \
          libeccodes0 \
+         libgirepository1.0-dev\
          gfortran \
          gdal-bin \
          kmod \
