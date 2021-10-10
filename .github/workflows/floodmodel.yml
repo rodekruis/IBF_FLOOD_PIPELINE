@@ -6,7 +6,7 @@ jobs:
   run-flood-model:
     runs-on: ubuntu-latest
     env:
-      running-directory: ./IBF_FLOOD_PIPELINE/pipeline
+      running-directory: ./pipeline
     steps:  
     - uses: actions/checkout@v2
     - name: Set up Python 3.x
