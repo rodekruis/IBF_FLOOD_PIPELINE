@@ -23,13 +23,15 @@ jobs:
          libproj-dev \
          libgeos-dev \
          libspatialindex-dev \
+         libgnutls28-dev \
          libudunits2-dev \
+         libspatialindex-dev \
+         libeccodes0 
          libssl-dev \
          libgdal-dev \
          libxml2-utils\
          gfortran \
          kmod \
-         wget \
          gfortran \
          apache2
          
@@ -43,10 +45,7 @@ jobs:
          postgresql \
          postgresql-contrib \
          postgresql-client \
-         libgnutls28-dev \
-         libgnutls28-dev \
-         libspatialindex-dev \
-         libeccodes0 
+
          
     - name: Install system dependencies
       run: |
