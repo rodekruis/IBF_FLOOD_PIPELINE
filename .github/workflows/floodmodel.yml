@@ -38,9 +38,9 @@ jobs:
          wget \
          apache2
          
-    - name: Install system dependencies
+    - name: Install system dependencies2
       run: |
-       sudo add-apt-repository ppa:ubuntugis/ppa\
+       sudo add-apt-repository ppa:ubuntugis/ppa \
        sudo apt-get update
        sudo apt-get install -y \
          python-numpy \
@@ -51,6 +51,12 @@ jobs:
          libgnutls28-dev \
          libspatialindex-dev \
          libeccodes0 \
+         gfortran 
+         
+    - name: Install system dependencies
+      run: |
+       sudo apt-get update
+       sudo apt-get install -y \
          libgirepository1.0-dev\
          gcc\
          pkg-config\
