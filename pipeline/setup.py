@@ -6,8 +6,8 @@ For development:        "pip install -e .[dev]"
 import setuptools
 
 
-with open("requirements.txt") as f:
-    install_requires = f.read().splitlines()
+#with open("requirements.txt") as f:
+#    install_requires = f.read().splitlines()
 
 PROJECT_NAME = "flood_model"
 
