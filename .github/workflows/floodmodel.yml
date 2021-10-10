@@ -7,13 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-        
+    steps:       
     - name: Install system dependencies1
       run: |
        sudo apt-get update
