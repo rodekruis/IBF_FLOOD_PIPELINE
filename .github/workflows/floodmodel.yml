@@ -33,20 +33,20 @@ jobs:
     - name: Instal2
       run: |
        sudo add-apt-repository ppa:ubuntugis/ppa \
-       && apt-get update \
-       && apt-get install --no-install-recommends -y \
-       python-numpy \
-       gdal-bin \
-       libgdal-dev \
-       postgresql-client \
-       libgnutls28-dev \
-       libgnutls28-dev \
-       libspatialindex-dev \
-       libeccodes0 \
-       gfortran \
-       && rm -rf /var/lib/apt/lists/* \
-       && apt-get purge --auto-remove \
-       && apt-get clean
+       sudo apt-get update\
+       sudo apt-get install --no-install-recommends -y \
+         python-numpy \
+         gdal-bin \
+         libgdal-dev \
+         postgresql-client \
+         libgnutls28-dev \
+         libgnutls28-dev \
+         libspatialindex-dev \
+         libeccodes0 \
+         gfortran \
+         && rm -rf /var/lib/apt/lists/* \
+         && apt-get purge --auto-remove \
+         && apt-get clean
     - name: Install3
       run: |
        python3 -m pip install --no-cache-dir \
