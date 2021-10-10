@@ -25,7 +25,6 @@ jobs:
          libspatialindex-dev \
          libudunits2-dev \
          libspatialindex-dev \
-         libeccodes0 
          libssl-dev \
          libgdal-dev \
          libxml2-utils\
