@@ -23,7 +23,6 @@ jobs:
          libproj-dev \
          libgeos-dev \
          libspatialindex-dev \
-         libgnutls28-dev \
          libudunits2-dev \
          libspatialindex-dev \
          libeccodes0 
