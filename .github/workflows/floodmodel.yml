@@ -35,11 +35,11 @@ jobs:
          
     - name: Install system dependencies2
       run: |
-       sudo add-apt-repository ppa:ubuntugis/ppa
+       sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
        sudo apt-get update
        sudo apt-get install -y postgresql postgresql-contrib  
        sudo apt-get install -y libproj-dev libgeos++-dev
-       sudo apt-get install -y gdal-bin libgdal-dev
+       sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev
 
 
          
