@@ -32,6 +32,7 @@ pycrypto==2.6.1
 pycurl==7.43.0.6
 PyJWT==1.7.1
 pyparsing==2.4.7
+pycairo==1.20.1
 pygobject==3.27.0
 pyproj==3.0.0.post1
 PySocks==1.7.1
@@ -54,5 +55,4 @@ twilio==6.51.1
 urllib3==1.26.4
 Werkzeug==1.0.1
 xarray==0.16.2
-pycairo==1.20.1
 googledrivedownloader==0.4
