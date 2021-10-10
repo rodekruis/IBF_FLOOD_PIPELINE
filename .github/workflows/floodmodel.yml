@@ -27,16 +27,6 @@ jobs:
          libssl-dev \
          libgdal-dev \
          libxml2-utils\
-         kmod \
-         wget \
-         apache2
-    - name: Instal2
-      run: |
-       sudo add-apt-repository ppa:ubuntugis/ppa \
-       sudo apt-get update\
-       sudo apt-get install -y \
-         python-numpy \
-         gdal-bin \
          libgdal-dev \
          postgresql-client \
          libgnutls28-dev \
@@ -44,9 +34,10 @@ jobs:
          libspatialindex-dev \
          libeccodes0 \
          gfortran \
-         && rm -rf /var/lib/apt/lists/* \
-         && apt-get purge --auto-remove \
-         && apt-get clean
+         gdal-bin \
+         kmod \
+         wget \
+         apache2
          
     - name: Install more Python dependencies
       run: |
