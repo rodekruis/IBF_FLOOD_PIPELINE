@@ -4,7 +4,7 @@ on:
   
 jobs:
   run-flood-model:
-    runs-on: ubuntu:18.04
+    runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
     steps:
