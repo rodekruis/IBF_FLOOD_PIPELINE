@@ -68,8 +68,9 @@ jobs:
         
     - name: Install script
       run: |
-        python3 -m pip install .
+        python -m pip install .
       working-directory: ${{ env.running-directory }}
+      
     - name: Run script
       env:
         IBF_API_URL: ${{ secrets.IBF_API_URL }}
