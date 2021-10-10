@@ -19,7 +19,7 @@ setuptools.setup(
     description="flood trigger model",
     package_dir={"": "lib"},
     packages=setuptools.find_packages(where="lib"),
-    install_requires=install_requires,
+    #install_requires=install_requires,
     extras_require={
         "dev": [  # Place NON-production dependencies in this list - so for DEVELOPMENT ONLY!
             "black",
