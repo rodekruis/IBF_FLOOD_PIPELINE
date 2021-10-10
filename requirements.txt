@@ -54,4 +54,5 @@ twilio==6.51.1
 urllib3==1.26.4
 Werkzeug==1.0.1
 xarray==0.16.2
+pycairo==1.20.1
 googledrivedownloader==0.4
