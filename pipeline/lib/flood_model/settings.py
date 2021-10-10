@@ -58,7 +58,7 @@ SETTINGS = {
 ##################
  
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB']#'ETH','ZMB','KEN','UGA']
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA']
 
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
