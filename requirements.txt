@@ -55,4 +55,3 @@ urllib3==1.26.4
 Werkzeug==1.0.1
 xarray==0.16.2
 googledrivedownloader==0.4
-unattended-upgrades
