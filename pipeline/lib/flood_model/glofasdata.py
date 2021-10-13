@@ -16,24 +16,9 @@ import time
 #import cdsapi
 from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
-#from flood_model.secrets import *
+from flood_model.secrets import *
 import os
 
-API_SERVICE_URL = os.environ["API_SERVICE_URL"]
-API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
-GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
-GLOFAS_USER = os.environ["GLOFAS_USER"]
-ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
-GLOFAS_PW = os.environ["GLOFAS_PW"]
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
-
- 
- 
 
 class GlofasData:
 
@@ -94,7 +79,7 @@ class GlofasData:
                             str(timeToTryDownload/3600) + ' hours, no new dataset was found')
     def makeFtpRequest(self):
             filename = GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
-            ftp_path = 'ftp://'+GLOFAS_USER+':'+GLOFAS_PW + '@' + GLOFAS_FTP
+            ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + GLOFAS_FTP
             urllib.request.urlretrieve(ftp_path + filename,self.inputPath + filename)
             
     def start_download_loop(self):

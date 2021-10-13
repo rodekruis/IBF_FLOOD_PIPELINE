@@ -3,23 +3,23 @@ import traceback
 import time
 import datetime
 from flood_model.settings import *
-#from flood_model.secrets import *
+from flood_model.secrets import *
 import resource
 import os
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
-GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
-GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
-GLOFAS_USER = os.environ["GLOFAS_USER"]
-ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
-GLOFAS_PW = os.environ["GLOFAS_PW"]
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
-API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-API_SERVICE_URL = os.environ["API_SERVICE_URL"]
+#GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
+#GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
+#GLOFAS_USER = os.environ["GLOFAS_USER"]
+#ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
+#GLOFAS_PW = os.environ["GLOFAS_PW"]
+#ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+#GLOFAS_FTP = os.environ["GLOFAS_FTP"]
+#DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
+#DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
+#DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
+#API_LOGIN_URL = os.environ["API_LOGIN_URL"]
+#API_SERVICE_URL = os.environ["API_SERVICE_URL"]
 
 def main():
     soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
@@ -53,7 +53,7 @@ def main():
                 print('--------Finished exposure')
                 fc.db.upload()
                 print('--------Finished upload')
-                fc.db.sendNotification()
+                #fc.db.sendNotification()
                 print('--------Finished notification')
 
     except Exception as e:
