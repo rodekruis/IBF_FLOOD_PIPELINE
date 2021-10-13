@@ -7,7 +7,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'admin_level': 2,
+        'admin_level': 3,
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_zmb_pop_resized_100",
@@ -19,7 +19,7 @@ SETTINGS = {
         'lead_times': {
             "5-day": 5
         },
-        'admin_level': 2,
+        'admin_level': 3,
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_uga_pop_resized_100",
@@ -31,7 +31,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'admin_level': 1,
+        'admin_level': 3,
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_ken_pop_resized_100",
@@ -58,7 +58,7 @@ SETTINGS = {
 ##################
  
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA']
+COUNTRY_CODES = ['ETH','ZMB','UGA']
 
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
@@ -116,10 +116,14 @@ RASTER_OUTPUT = RASTER_DATA + 'output/'
 PIPELINE_DATA = 'data/other/'
 PIPELINE_INPUT = PIPELINE_DATA + 'input/'
 PIPELINE_OUTPUT = PIPELINE_DATA + 'output/'
+TRIGGER_DATA_FOLDER='data/trigger_data/triggers_rp_per_station/'
+TRIGGER_DATA_FOLDER_TR='data/trigger_data/glofas_trigger_levels/'
+STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
 
 #########################
 ## INPUT DATA SETTINGS ##
 #########################
+
 
 # Glofas input
 GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'

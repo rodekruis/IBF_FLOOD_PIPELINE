@@ -2,21 +2,9 @@ import pandas as pd
 import requests
 import json
 from flood_model.settings import *
-#from flood_model.secrets import *
+from flood_model.secrets import *
 import os
 
-API_SERVICE_URL = os.environ["API_SERVICE_URL"]
-API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
-GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
-GLOFAS_USER = os.environ["GLOFAS_USER"]
-ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
-GLOFAS_PW = os.environ["GLOFAS_PW"]
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
 
 
 class DatabaseManager:
@@ -85,6 +73,7 @@ class DatabaseManager:
         dfStation['forecastProbability'] = df['fc_prob']
         dfStation['forecastTrigger'] = df['fc_trigger']
         dfStation['forecastReturnPeriod'] = df['fc_rp']
+        dfStation['triggerLevel'] = df['trigger_level']
         stationForecasts = json.loads(dfStation.to_json(orient='records'))
         body = {
             'countryCodeISO3': self.countryCodeISO3,
