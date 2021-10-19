@@ -58,7 +58,10 @@ SETTINGS = {
 ##################
  
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA']
+
+COUNTRY_CODES = ['ETH','UGA','ZMB']
+
+GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
@@ -85,8 +88,8 @@ SETTINGS_SECRET = {
 }
 # Change this date only in case of specific testing purposes
 from datetime import date, timedelta
-CURRENT_DATE = date.today()
-# CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+#CURRENT_DATE = date.today()
+CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 
 
 
@@ -116,10 +119,14 @@ RASTER_OUTPUT = RASTER_DATA + 'output/'
 PIPELINE_DATA = 'data/other/'
 PIPELINE_INPUT = PIPELINE_DATA + 'input/'
 PIPELINE_OUTPUT = PIPELINE_DATA + 'output/'
+TRIGGER_DATA_FOLDER='data/trigger_data/triggers_rp_per_station/'
+TRIGGER_DATA_FOLDER_TR='data/trigger_data/glofas_trigger_levels/'
+STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
 
 #########################
 ## INPUT DATA SETTINGS ##
 #########################
+
 
 # Glofas input
 GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'

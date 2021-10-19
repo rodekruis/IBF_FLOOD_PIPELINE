@@ -8,6 +8,6 @@ services:
     env_file:
       - secrets
     volumes: 
-      #- "C:/Users/ATeklesadik/Documents/IBF_FLOOD_PIPELINE/pipeline:/home/ibf"
-      - $fllod_model:/home/ibf
+      - "C:/Users/ATeklesadik/Documents/IBF_FLOOD_PIPELINE/pipeline:/home/ibf"
+      #- $fllod_model:/home/ibf
     command: run-flood-model
