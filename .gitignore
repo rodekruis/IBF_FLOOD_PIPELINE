@@ -30,7 +30,6 @@ npm-debug.log*
 .npm
 
 # Secrets
-#pipeline/lib/flood_model/secrets.py
 secrets
 
 # Byte-compiled / optimized / DLL files

@@ -73,7 +73,7 @@ class DatabaseManager:
         dfStation['forecastProbability'] = df['fc_prob']
         dfStation['forecastTrigger'] = df['fc_trigger']
         dfStation['forecastReturnPeriod'] = df['fc_rp']
-        dfStation['triggerLevel'] = df['trigger_level']
+        dfStation['triggerLevel'] = df['triggerLevel']
         stationForecasts = json.loads(dfStation.to_json(orient='records'))
         body = {
             'countryCodeISO3': self.countryCodeISO3,
