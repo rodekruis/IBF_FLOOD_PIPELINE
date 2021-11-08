@@ -112,10 +112,12 @@ class Exposure:
             #stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'],admin_level)
             #df=pd.DataFrame(stats) 
             #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
-            for adm_level in self.levels: #adm_level in range(1,max_iteration):
+            for adm_level in SETTINGS[self.countryCodeISO3]['levels']: #adm_level in range(1,max_iteration):
                 stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'],adm_level)
                 #df_stats=stats_dff.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
                 #df_stats.reset_index(inplace=True)
+                print(adm_level)
+                print(stats)
  
                 #df_stats.rename(columns={f'placeCode_{adm_level}': "placeCode",},inplace=True)
                 df_stats=stats#df_stats[['amount','placeCode']].to_dict(orient='records')
@@ -170,7 +172,7 @@ class Exposure:
             max_iteration=self.admin_level+1
         #for adm_level in range(1,self.admin_level+1):
             #for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
-            for adm_level in self.levels: #adm_level in range(1,max_iteration):
+            for adm_level in  SETTINGS[self.countryCodeISO3]['levels']:#adm_level in range(1,max_iteration):
                 population_df_ = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
  
                 #population_df=pd.DataFrame(population_df)
