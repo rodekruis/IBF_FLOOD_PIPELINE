@@ -5,18 +5,21 @@ from flood_model.settings import *
 from flood_model.secrets import *
 import os
 
-
+ 
 
 class DatabaseManager:
 
     """ Class to upload and process data in the database """
 
-    def __init__(self, leadTimeLabel, countryCodeISO3):
+    def __init__(self, leadTimeLabel, countryCodeISO3,admin_level):
         self.countryCodeISO3 = countryCodeISO3
         self.leadTimeLabel = leadTimeLabel
         self.triggerFolder = PIPELINE_OUTPUT + "triggers_rp_per_station/"
         self.affectedFolder = PIPELINE_OUTPUT + "calculated_affected/"
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
+        self.API_SERVICE_URL = SETTINGS[countryCodeISO3]['IBF_API_URL']
+        self.levels = SETTINGS[countryCodeISO3]['levels']        
+        self.admin_level = admin_level
 
     def upload(self):
         self.uploadTriggersPerLeadTime()
@@ -39,22 +42,60 @@ class DatabaseManager:
     def getDisasterType(self):
         disasterType = 'floods'
         return disasterType
-
-    def uploadCalculatedAffected(self):
+    def uploadCalculatedAffected2(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+            adminlevels=self.admin_level
             with open(self.affectedFolder +
-                      'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + indicator + '.json') as json_file:
+                      'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
                 body = json.load(json_file)
                 body['disasterType'] = self.getDisasterType()
+                #body['adminLevel'] = self.admin_level
                 self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-            print('Uploaded calculated_affected for indicator: ' + indicator)
+            print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
             if indicator == 'population':
                 with open(self.affectedFolder +
-                        'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + 'population_affected_percentage' + '.json') as json_file:
+                        'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + 'population_affected_percentage' + '.json') as json_file:
                     body = json.load(json_file)
                     body['disasterType'] = self.getDisasterType()
+                    #body['adminLevel'] = self.admin_level
                     self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage')
+                print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+
+    def uploadCalculatedAffected(self):
+        for adminlevels in self.levels:#range(1,self.admin_level+1):            
+            for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+                with open(self.affectedFolder +
+                          'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
+                    body = json.load(json_file)
+                    body['disasterType'] = self.getDisasterType()
+                    #body['adminLevel'] = self.admin_level
+                    self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                if indicator == 'population':
+                    with open(self.affectedFolder +
+                            'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + 'population_affected_percentage' + '.json') as json_file:
+                        body = json.load(json_file)
+                        body['disasterType'] = self.getDisasterType()
+                        #body['adminLevel'] = self.admin_level
+                        self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                    print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+
+        # for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+        #     with open(self.affectedFolder +
+        #               'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + indicator + '.json') as json_file:
+        #         body = json.load(json_file)
+        #         body['disasterType'] = self.getDisasterType()
+        #         #body['adminLevel'] = self.admin_level
+        #         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+        #     print('Uploaded calculated_affected for indicator: ' + indicator)
+        #     if indicator == 'population':
+        #         with open(self.affectedFolder +
+        #                 'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + 'population_affected_percentage' + '.json') as json_file:
+        #             body = json.load(json_file)
+        #             body['disasterType'] = self.getDisasterType()
+        #             #body['adminLevel'] = self.admin_level
+        #             self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+        #         print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage')
 
     def uploadRasterFile(self):
         disasterType = self.getDisasterType()
@@ -105,7 +146,7 @@ class DatabaseManager:
         TOKEN = self.apiAuthenticate()
 
         response = requests.get(
-            API_SERVICE_URL + path + '/' + countryCodeISO3,
+            self.API_SERVICE_URL + path + '/' + countryCodeISO3,
             headers={'Authorization': 'Bearer ' + TOKEN}
         )
         data = response.json()
@@ -120,7 +161,7 @@ class DatabaseManager:
             headers={'Authorization': 'Bearer ' + TOKEN}
 
         r = requests.post(
-            API_SERVICE_URL + path,
+            self.API_SERVICE_URL + path,
             json=body,
             files=files,
             headers=headers
@@ -130,6 +171,7 @@ class DatabaseManager:
             raise ValueError()
 
     def apiAuthenticate(self):
+        API_LOGIN_URL=self.API_SERVICE_URL+'user/login'
         login_response = requests.post(API_LOGIN_URL, data=[(
             'email', ADMIN_LOGIN), ('password', ADMIN_PASSWORD)])
         return login_response.json()['user']['token']

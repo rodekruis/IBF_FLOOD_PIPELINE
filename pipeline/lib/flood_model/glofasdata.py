@@ -16,14 +16,14 @@ import time
 #import cdsapi
 from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
-from flood_model.secrets import *
+#from flood_model.secrets import *
 import os
 
 
 class GlofasData:
 
     def __init__(self, leadTimeLabel, leadTimeValue, countryCodeISO3, glofas_stations, district_mapping):
-        self.db = DatabaseManager(leadTimeLabel, countryCodeISO3)
+        #self.db = DatabaseManager(leadTimeLabel, countryCodeISO3)
         self.leadTimeLabel = leadTimeLabel
         self.leadTimeValue = leadTimeValue
         self.countryCodeISO3 = countryCodeISO3

@@ -7,7 +7,9 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'admin_level': 2,
+        'IBF_API_URL':'https://ibf-test.510.global/api/',
+        'admin_level': 3,
+        'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_zmb_pop_resized_100",
@@ -19,7 +21,9 @@ SETTINGS = {
         'lead_times': {
             "5-day": 5
         },
-        'admin_level': 2,
+        'IBF_API_URL':'https://ibf-test.510.global/api/',
+        'admin_level': 4,
+        'levels':[4,3,2,1],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_uga_pop_resized_100",
@@ -31,7 +35,9 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
+        'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 1,
+        'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_ken_pop_resized_100",
@@ -43,7 +49,9 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
+        'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 3,
+        'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/worldpop_eth",
@@ -59,7 +67,7 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ETH','UGA','ZMB']
+COUNTRY_CODES = ['UGA','ZMB','ETH']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
