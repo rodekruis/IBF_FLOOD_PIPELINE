@@ -51,7 +51,7 @@ SETTINGS = {
         },
         'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 3,
-        'levels':[3,2,1],
+        'levels':[3],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/worldpop_eth",
@@ -67,29 +67,29 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['UGA','ZMB','ETH']
+COUNTRY_CODES = ['ETH']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
     "ZMB": {
-        "mock": False,
+        "mock": True,
         "if_mock_trigger": False,
         "notify_email": False
     },
     "UGA": {
-        "mock": False,
+        "mock": True,
         "if_mock_trigger": False,
         "notify_email": False
     },
     "KEN": {
-        "mock": False,
+        "mock": True,
         "if_mock_trigger": False,
         "notify_email": False
     },
     "ETH": {
-        "mock": False,
+        "mock": True,
         "if_mock_trigger": False,
         "notify_email": False
     }
