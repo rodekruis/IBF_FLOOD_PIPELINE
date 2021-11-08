@@ -10,8 +10,9 @@ from pandas import DataFrame
 import json
 from flood_model.settings import *
 import os
-
-
+import functools
+from flood_model.dynamicDataDb import DatabaseManager
+import geopandas
 class Exposure:
 
     """Class used to calculate the exposure per exposure type"""
@@ -28,10 +29,41 @@ class Exposure:
         self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         self.admin_level = admin_level
+        self.levels = SETTINGS[countryCodeISO3]['levels']
+        self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
         if "population" in self.EXPOSURE_DATA_SOURCES:
             self.population_total = population_total
+        admin_area_json = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
+        #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
 
-    def callAllExposure(self):
+                
+        for index in range(len(admin_area_json)):
+            admin_area_json[index]['geometry'] = admin_area_json[index]['geom']
+            admin_area_json[index]['properties'] = {
+                'placeCode': admin_area_json[index]['placeCode'], 
+                'placeCodeParent': admin_area_json[index]['placeCodeParent'],                   
+                'name': admin_area_json[index]['name'],
+                'adminLevel': admin_area_json[index]['adminLevel']
+                }
+        self.ADMIN_AREA_GDF_ADM_LEL =geopandas.GeoDataFrame.from_features(admin_area_json)
+        df_admin=pd.DataFrame(admin_area_json) 
+        df_admin=df_admin.filter(['adminLevel','placeCode','placeCodeParent','geometry'])
+        # df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
+        # df_list=[]        
+        # for adm_level in self.levels: #adm_level in range(1,max_iteration):
+            # df_=df_admin2.query(f'adminLevel == {adm_level}')
+            
+            # df_list.append(df_)
+        # df_=df_list[0]
+        # for i in range (1,len(df_list)):
+            # lev=len(df_list)-i+1
+            # df_ = pd.merge(df_,df_list[i],  how='left',left_on='placeCodeParent', right_on = 'placeCode')
+            # df_=df_.filter(['placeCodeParent_y','placeCode_y','placeCode_x','placeCode_1','placeCode_2','placeCode_3','placeCode_4'])
+            # df_.rename(columns={"placeCodeParent_y": "placeCodeParent", "placeCode_y": "placeCode","placeCode_x": f"placeCode_{str(lev)}"},inplace=True)
+        # df_.rename(columns={"placeCode": "placeCode_1",},inplace=True)
+        # self.pcode_df=df_
+
+    def callAllExposure_old(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
             print('indicator: ', indicator)
             self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
@@ -47,31 +79,178 @@ class Exposure:
                 'dynamicIndicator': indicator + '_affected',
                 'adminLevel': self.admin_level
             }
-
+            
             self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
-                self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + indicator + '.json'
-
+                self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(self.admin_level) + '_' + indicator + '.json'
             with open(self.statsPath, 'w') as fp:
                 json.dump(result, fp)
-
+                
             if self.population_total:
                 population_affected_percentage = list(map(self.get_population_affected_percentage, stats))
-
+                
                 population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
-                    self.leadTimeLabel + '_' + self.countryCodeISO3 + '_' + 'population_affected_percentage' + '.json'
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' +str(self.admin_level)+ '_' + 'population_affected_percentage' + '.json'
+                    
 
                 population_affected_percentage_records = {
                     'countryCodeISO3': self.countryCodeISO3,
-                    'exposurePlaceCodes': population_affected_percentage,
+                    'exposurePlaceCodes': population_affected_percentage,  
                     'leadTime': self.leadTimeLabel,
                     'dynamicIndicator': 'population_affected_percentage',
                     'adminLevel': self.admin_level
                 }
-
+                
                 with open(population_affected_percentage_file_path, 'w') as fp:
                     json.dump(population_affected_percentage_records, fp)
 
-    def get_population_affected_percentage(self, population_affected):
+                    
+    def callAllExposure(self):
+        for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+            print('indicator: ', indicator)
+            self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
+            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
+            #stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'],admin_level)
+            #df=pd.DataFrame(stats) 
+            #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
+            for adm_level in self.levels: #adm_level in range(1,max_iteration):
+                stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'],adm_level)
+                #df_stats=stats_dff.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
+                #df_stats.reset_index(inplace=True)
+ 
+                #df_stats.rename(columns={f'placeCode_{adm_level}': "placeCode",},inplace=True)
+                df_stats=stats#df_stats[['amount','placeCode']].to_dict(orient='records')
+                #population_df=pd.DataFrame(population_df)
+ 
+                self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.json'
+
+                result = {
+                    'countryCodeISO3': self.countryCodeISO3,
+                    'exposurePlaceCodes': df_stats,
+                    'leadTime': self.leadTimeLabel,
+                    'dynamicIndicator': indicator + '_affected',
+                    'adminLevel': adm_level
+                }
+                
+                with open(self.statsPath, 'w') as fp:
+                    json.dump(result, fp)
+
+                if self.population_total:
+                    get_population_affected_percentage_ = functools.partial(self.get_population_affected_percentage, adm_level=adm_level)
+                    population_affected_percentage = list(map(get_population_affected_percentage_, df_stats))
+                    #population_affected_percentage = list(map(self.get_population_affected_percentage, df_stats,adm_level))
+     
+                    population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' +str(adm_level)+ '_' + 'population_affected_percentage' + '.json'
+                        
+                    population_affected_percentage_records = {
+                        'countryCodeISO3': self.countryCodeISO3,
+                        'exposurePlaceCodes': population_affected_percentage, 
+                        'leadTime': self.leadTimeLabel,
+                        'dynamicIndicator': 'population_affected_percentage',
+                        'adminLevel': self.admin_level
+                    }
+
+                    with open(population_affected_percentage_file_path, 'w') as fp:
+                        json.dump(population_affected_percentage_records, fp)
+
+    def callAllExposure2(self):
+        for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+            print('indicator: ', indicator)
+            self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
+            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
+            stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'])
+            df=pd.DataFrame(stats) 
+            df2=pd.DataFrame(self.ADMIN_AREA_GDF)
+ 
+            df2=df2.filter(['placeCode','placeCodeParent'])
+            #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
+            stats_dff = pd.merge(df,df2,  how='left',left_on='placeCode', right_on = 'placeCode')
+            stats = stats_dff.to_dict(orient='records')
+            max_iteration=self.admin_level+1
+        #for adm_level in range(1,self.admin_level+1):
+            #for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
+            for adm_level in self.levels: #adm_level in range(1,max_iteration):
+                population_df_ = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
+ 
+                #population_df=pd.DataFrame(population_df)
+                print(population_df_)
+                self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.json'
+                if adm_level == 4:                    
+                    df_stats=pd.DataFrame(stats) 
+                    df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')
+                elif adm_level==3:
+                    df_stats=pd.DataFrame(stats) 
+                    if self.countryCodeISO3 in ['UGN']: 
+                        df_stats['placeCode']=df_stats['placeCode'].apply(lambda x:x[:-2])
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')
+                    else:
+                        df_stats['placeCode']=df_stats['placeCode']
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')            
+                elif adm_level==2:
+                    df_stats=pd.DataFrame(stats) 
+                    if self.countryCodeISO3 in ['UGN']: 
+                        df_stats['placeCode']=df_stats['placeCode'].apply(lambda x:x[:-4])
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')
+                    else:
+                        df_stats['placeCode']=df_stats['placeCodeParent']
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')  
+                    
+                elif adm_level==1:
+                    df_stats=pd.DataFrame(stats) 
+                    if self.countryCodeISO3 in ['UGN']: 
+                        df_stats['placeCode']=df_stats['placeCode'].apply(lambda x:x[:-6])
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')
+                    else:
+                        df_stats['placeCode']=df_stats['placeCodeParent'].apply(lambda x:x[:-2])
+                        df_stats=df_stats.groupby('placeCode').agg({'amount': 'sum'})
+                        df_stats.reset_index(inplace=True)
+                        df_stats=df_stats[['amount','placeCode']].to_dict(orient='records')
+                    
+                result = {
+                    'countryCodeISO3': self.countryCodeISO3,
+                    'exposurePlaceCodes': df_stats,
+                    'leadTime': self.leadTimeLabel,
+                    'dynamicIndicator': indicator + '_affected',
+                    'adminLevel': adm_level
+                }
+                
+                with open(self.statsPath, 'w') as fp:
+                    json.dump(result, fp)
+
+                if self.population_total:
+                    get_population_affected_percentage_ = functools.partial(self.get_population_affected_percentage, adm_level=adm_level)
+                    population_affected_percentage = list(map(get_population_affected_percentage_, df_stats))
+                    #population_affected_percentage = list(map(self.get_population_affected_percentage, df_stats,adm_level))
+     
+                    population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' +str(adm_level)+ '_' + 'population_affected_percentage' + '.json'
+                        
+                    population_affected_percentage_records = {
+                        'countryCodeISO3': self.countryCodeISO3,
+                        'exposurePlaceCodes': population_affected_percentage, 
+                        'leadTime': self.leadTimeLabel,
+                        'dynamicIndicator': 'population_affected_percentage',
+                        'adminLevel': self.admin_level
+                    }
+
+                    with open(population_affected_percentage_file_path, 'w') as fp:
+                        json.dump(population_affected_percentage_records, fp)
+
+
+
+    def get_population_affected_percentage_old(self, population_affected):
         population_total = next((x for x in self.population_total if x['placeCode'] == population_affected['placeCode']), None)
         population_affected_percentage = 0.0
         if population_total and population_total['value'] > 0:
@@ -80,8 +259,75 @@ class Exposure:
             'amount': population_affected_percentage,
             'placeCode': population_total['placeCode']
         }
+        
+    def get_population_affected_percentage(self, population_affected,adm_level):
+        ##get population for admin level 
+        df_stats = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
+        population_total = next((x for x in df_stats if x['placeCode'] == population_affected['placeCode']), None)
+        population_affected_percentage = 0.0
+        if population_total and population_total['value'] > 0:
+            population_affected_percentage = population_affected['amount'] / population_total['value']
+        return {
+            'amount': population_affected_percentage,
+            'placeCode': population_total['placeCode']
+        }
+    def get_population_affected_percentage_2(self, population_affected,adm_level):
+        if adm_level==4:                    
+            population_total_=[{'value':x['value'],'placeCode':x['placeCode']} for x in self.population_total] 
+            df_stats=pd.DataFrame(population_total_) 
+            df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+            df_stats.reset_index(inplace=True)
+            df_stats=df_stats[['value','placeCode']].to_dict(orient='records')
+        elif adm_level==3:
+            if self.countryCodeISO3 in ['UGN']: 
+                population_total_=[{'value':x['value'],'placeCode':x['placeCode'][:-2]} for x in self.population_total]
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')
+            else:
+                population_total_=[{'value':x['value'],'placeCode':x['placeCode']} for x in self.population_total]
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')            
+        elif adm_level==2:
+            if self.countryCodeISO3 in ['UGN']: 
+                population_total_=[{'value':x['value'],'placeCode':x['placeCode'][:-4]} for x in self.population_total] 
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')                
+            else:
+                population_total_=[{'value':x['value'],'placeCode':x['placeCodeParent']} for x in self.population_total]
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')                
+        elif adm_level==1:
+            if self.countryCodeISO3 in ['UGN']: 
+                population_total_=[{'value':x['value'],'placeCode':x['placeCode'][:-6]} for x in self.population_total]
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')                
+            else:
+                population_total_=[{'value':x['value'],'placeCode':x['placeCodeParent'][:-2]} for x in self.population_total]
+                df_stats=pd.DataFrame(population_total_) 
+                df_stats=df_stats.groupby('placeCode').agg({'value': 'sum'})
+                df_stats.reset_index(inplace=True)
+                df_stats=df_stats[['value','placeCode']].to_dict(orient='records')                
+     
+        population_total = next((x for x in df_stats if x['placeCode'] == population_affected['placeCode']), None)
+        population_affected_percentage = 0.0
+        if population_total and population_total['value'] > 0:
+            population_affected_percentage = population_affected['amount'] / population_total['value']
+        return {
+            'amount': population_affected_percentage,
+            'placeCode': population_total['placeCode']
+        }
 
-    def calcAffected(self, disasterExtentRaster, indicator, rasterValue):
+    def calcAffected(self, disasterExtentRaster, indicator, rasterValue,adm_level):
         disasterExtentShapes = self.loadTiffAsShapes(disasterExtentRaster)
         if disasterExtentShapes != []:
             try:
@@ -91,7 +337,9 @@ class Exposure:
                     dest.write(affectedImage)
             except ValueError:
                 print('Rasters do not overlap')
-        self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
+        self.ADMIN_AREA_GDF_ADM_LEL_=self.ADMIN_AREA_GDF_ADM_LEL.query(f'adminLevel == {adm_level}')
+        self.ADMIN_AREA_GDF_ADM_LEL_.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
+        #self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
         stats = self.calcStatsPerAdmin(
             indicator, disasterExtentShapes, rasterValue)
 

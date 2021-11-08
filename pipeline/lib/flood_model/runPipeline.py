@@ -40,6 +40,7 @@ def main():
 
             COUNTRY_SETTINGS = SETTINGS[COUNTRY_CODE]
             LEAD_TIMES = COUNTRY_SETTINGS['lead_times']
+            #IBF_API_URL = SETTINGS[COUNTRY_CODE]['IBF_API_URL']
 
             for leadTimeLabel, leadTimeValue in LEAD_TIMES.items():
                 print('--------STARTING: ' + leadTimeLabel +

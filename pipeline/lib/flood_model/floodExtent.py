@@ -7,7 +7,7 @@ import rasterio
 from rasterio.merge import merge
 from flood_model.settings import *
 import os
-
+import geopandas
 class FloodExtent:
 
     """Class used to calculate flood extent"""
@@ -46,6 +46,7 @@ class FloodExtent:
             gdf_dist = admin_gdf[admin_gdf['placeCode'] == pcode]
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)
             
+            
             #If trigger, find the right flood extent and clip it for the area and save it
             trigger = rows['fc_trigger']
             if trigger == 1:
@@ -81,6 +82,10 @@ class FloodExtent:
 
         #Load assigned station per district
         df_district_mapping = pd.read_json(json.dumps(self.district_mapping))
+        
+        if self.countryCodeISO3=='ZMB':
+            #df_district_mapping['placeCode']=self.zmpcode(df_district_mapping['placeCode'])
+            df_district_mapping['placeCode']=df_district_mapping['placeCode'].apply(lambda x:self.zmpcode(x))
 
         #Load (static) threshold values per station
         path = PIPELINE_DATA+'output/triggers_rp_per_station/triggers_rp_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '.json'
@@ -120,7 +125,12 @@ class FloodExtent:
                             "transform": out_trans,
                         })
         return mosaic, out_meta
-
+    def zmpcode(self,x):
+        if len(str(x))==9:
+            pcoded=str(x)
+        else:
+            pcoded='0'+str(x)
+        return pcoded
 
 
             

@@ -1,7 +1,7 @@
 import os
-API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-API_SERVICE_URL = os.environ["API_SERVICE_URL"]
-IBF_API_URL=os.environ["IBF_API_URL"]
+#API_LOGIN_URL = os.environ["API_LOGIN_URL"]
+#API_SERVICE_URL = os.environ["API_SERVICE_URL"]
+#IBF_API_URL=os.environ["IBF_API_URL"]
 ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 ##glofas
