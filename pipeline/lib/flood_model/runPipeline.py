@@ -45,16 +45,16 @@ def main():
             for leadTimeLabel, leadTimeValue in LEAD_TIMES.items():
                 print('--------STARTING: ' + leadTimeLabel +
                       '--------------------------')
-                #fc = Forecast(leadTimeLabel, leadTimeValue, COUNTRY_CODE,COUNTRY_SETTINGS['admin_level'])
-                #fc.glofasData.process()
+                fc = Forecast(leadTimeLabel, leadTimeValue, COUNTRY_CODE,COUNTRY_SETTINGS['admin_level'])
+                fc.glofasData.process()
                 print('--------Finished GLOFAS data Processing')
-                #fc.floodExtent.calculate()
+                fc.floodExtent.calculate()
                 print('--------Finished flood extent')
-                #fc.exposure.callAllExposure()
+                fc.exposure.callAllExposure()
                 print('--------Finished exposure')
-                #fc.db.upload()
+                fc.db.upload()
                 print('--------Finished upload')
-                #fc.db.sendNotification()
+                fc.db.sendNotification()
                 print('--------Finished notification')
 
     except Exception as e:
