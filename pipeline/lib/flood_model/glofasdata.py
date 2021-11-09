@@ -16,7 +16,7 @@ import time
 #import cdsapi
 from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
-#from flood_model.secrets import *
+from flood_model.secrets import *
 import os
 
 

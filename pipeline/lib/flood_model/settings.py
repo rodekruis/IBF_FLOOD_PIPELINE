@@ -67,19 +67,19 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ETH']
+COUNTRY_CODES = ['ZMB','UGA','ETH']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
     "ZMB": {
-        "mock": True,
+        "mock": False,
         "if_mock_trigger": False,
         "notify_email": False
     },
     "UGA": {
-        "mock": True,
+        "mock": False,
         "if_mock_trigger": False,
         "notify_email": False
     },
@@ -89,15 +89,15 @@ SETTINGS_SECRET = {
         "notify_email": False
     },
     "ETH": {
-        "mock": True,
+        "mock": False,
         "if_mock_trigger": False,
         "notify_email": False
     }
 }
 # Change this date only in case of specific testing purposes
 from datetime import date, timedelta
-#CURRENT_DATE = date.today()
-CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+CURRENT_DATE = date.today()
+#CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 
 
 

@@ -116,9 +116,6 @@ class Exposure:
                 stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'],adm_level)
                 #df_stats=stats_dff.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
                 #df_stats.reset_index(inplace=True)
-                print(adm_level)
-                print(stats)
- 
                 #df_stats.rename(columns={f'placeCode_{adm_level}': "placeCode",},inplace=True)
                 df_stats=stats#df_stats[['amount','placeCode']].to_dict(orient='records')
                 #population_df=pd.DataFrame(population_df)
@@ -150,7 +147,7 @@ class Exposure:
                         'exposurePlaceCodes': population_affected_percentage, 
                         'leadTime': self.leadTimeLabel,
                         'dynamicIndicator': 'population_affected_percentage',
-                        'adminLevel': self.admin_level
+                        'adminLevel': adm_level
                     }
 
                     with open(population_affected_percentage_file_path, 'w') as fp:

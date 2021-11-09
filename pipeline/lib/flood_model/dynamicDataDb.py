@@ -62,15 +62,15 @@ class DatabaseManager:
                 print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
 
     def uploadCalculatedAffected(self):
-        for adminlevels in self.levels:#range(1,self.admin_level+1):            
+        for adminlevels in SETTINGS[self.countryCodeISO3]['levels']:#range(1,self.admin_level+1):            
             for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
-                with open(self.affectedFolder +
-                          'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
-                    body = json.load(json_file)
-                    body['disasterType'] = self.getDisasterType()
-                    #body['adminLevel'] = self.admin_level
-                    self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                #with open(self.affectedFolder +
+                #          'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
+                #    body = json.load(json_file)
+                #    body['disasterType'] = self.getDisasterType()
+                #    #body['adminLevel'] = self.admin_level
+                #    self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                #print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
                 if indicator == 'population':
                     with open(self.affectedFolder +
                             'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + 'population_affected_percentage' + '.json') as json_file:
@@ -79,6 +79,21 @@ class DatabaseManager:
                         #body['adminLevel'] = self.admin_level
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
                     print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+                    with open(self.affectedFolder+'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
+                        body = json.load(json_file)
+                        body['disasterType'] = self.getDisasterType()
+                        #body['adminLevel'] = self.admin_level
+                        self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                    print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                else:
+                    with open(self.affectedFolder +'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
+                        body = json.load(json_file)
+                        body['disasterType'] = self.getDisasterType()
+                        #body['adminLevel'] = self.admin_level
+                        self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                    print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                                    
+                    
 
         # for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
         #     with open(self.affectedFolder +
