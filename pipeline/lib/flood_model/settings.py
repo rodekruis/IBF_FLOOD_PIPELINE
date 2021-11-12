@@ -75,11 +75,7 @@ GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_Koa
 SETTINGS_SECRET = {
     "ZMB": {
         "mock": True,
-<<<<<<< HEAD
         "if_mock_trigger": True,
-=======
-        "if_mock_trigger": False,
->>>>>>> 48d3ad0463eabeaec8029e93480dd0c3da23fe5e
         "notify_email": False
     },
     "UGA": {
