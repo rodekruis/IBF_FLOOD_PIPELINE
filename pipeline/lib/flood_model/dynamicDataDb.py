@@ -4,6 +4,7 @@ import json
 from flood_model.settings import *
 from flood_model.secrets import *
 import os
+import numpy as np
 
  
 
@@ -125,11 +126,11 @@ class DatabaseManager:
                           'triggers_rp_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + ".json", orient='records')
         dfStation = pd.DataFrame(index=df.index)
         dfStation['stationCode'] = df['stationCode']
-        dfStation['forecastLevel'] = df['fc']
-        dfStation['forecastProbability'] = df['fc_prob']
-        dfStation['forecastTrigger'] = df['fc_trigger']
-        dfStation['forecastReturnPeriod'] = df['fc_rp']
-        dfStation['triggerLevel'] = df['triggerLevel']
+        dfStation['forecastLevel'] = df['fc'].astype(np.float64,errors='ignore')
+        dfStation['forecastProbability'] = df['fc_prob'].astype(np.float64,errors='ignore')
+        dfStation['forecastTrigger'] = df['fc_trigger'].astype(np.int32,errors='ignore')
+        dfStation['forecastReturnPeriod'] = df['fc_rp'].astype(np.int32,errors='ignore')
+        dfStation['triggerLevel'] = df['triggerLevel'].astype(np.int32,errors='ignore')
         stationForecasts = json.loads(dfStation.to_json(orient='records'))
         body = {
             'countryCodeISO3': self.countryCodeISO3,

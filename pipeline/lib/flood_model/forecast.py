@@ -39,6 +39,22 @@ class Forecast:
                 
 
         df_admin=pd.DataFrame(admin_area_json) 
+        # df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
+        # df_list={}       
+ 
+        # for adm_level in self.levels:
+            # df_=df_admin2.query(f'adminLevel == {adm_level}')
+            # df_.rename(columns={"placeCode": f"placeCode_{adm_level}","placeCodeParent": f"placeCodeParent_{adm_level}"},inplace=True)            
+            # df_list[adm_level]=df_
+        # df=df_list[self.admin_level]
+        # for adm_level in self.levels:
+            # j=adm_level-1
+            # if j >0:
+                # df=pd.merge(df,df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}') 
+        # df=df[[f"placeCode_{i}" for i in self.levels]]
+        # self.pcode_df=df
+ 
+        
  
 
         #population_df_ = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
