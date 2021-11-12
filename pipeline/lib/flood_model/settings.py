@@ -49,7 +49,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'IBF_API_URL':'https://ibf-test.510.global/api/',
+        'IBF_API_URL':'https://ibf-ethiopia.510.global/api/',
         'admin_level': 3,
         'levels':[3],
         'EXPOSURE_DATA_SOURCES': {
@@ -74,13 +74,13 @@ GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_Koa
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
     "ZMB": {
-        "mock": False,
-        "if_mock_trigger": False,
+        "mock": True,
+        "if_mock_trigger": True,
         "notify_email": False
     },
     "UGA": {
-        "mock": False,
-        "if_mock_trigger": False,
+        "mock": True,
+        "if_mock_trigger": True,
         "notify_email": False
     },
     "KEN": {
