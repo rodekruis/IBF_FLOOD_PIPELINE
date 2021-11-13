@@ -67,7 +67,7 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ZMB']
+COUNTRY_CODES = ['ETH']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
@@ -89,8 +89,8 @@ SETTINGS_SECRET = {
         "notify_email": False
     },
     "ETH": {
-        "mock": False,
-        "if_mock_trigger": False,
+        "mock": True,
+        "if_mock_trigger": True,
         "notify_email": False
     }
 }

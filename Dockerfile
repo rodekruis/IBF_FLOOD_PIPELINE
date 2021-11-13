@@ -27,6 +27,8 @@ RUN add-apt-repository ppa:ubuntugis/ppa \
     libgnutls28-dev \
     libspatialindex-dev \
     libeccodes0 \
+	libcairo2-dev\
+	libgirepository1.0-dev\
     gfortran \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get purge --auto-remove \
