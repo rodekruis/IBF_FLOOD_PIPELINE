@@ -1,7 +1,7 @@
 name: run-flood-model2
 on:
-  workflow_dispatch
-  
+  schedule:
+    - cron:  '30 12 * * *'
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
