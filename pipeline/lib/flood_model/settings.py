@@ -89,8 +89,8 @@ SETTINGS_SECRET = {
         "notify_email": False
     },
     "ETH": {
-        "mock": True,
-        "if_mock_trigger": True,
+        "mock": False,
+        "if_mock_trigger": False,
         "notify_email": False
     }
 }
