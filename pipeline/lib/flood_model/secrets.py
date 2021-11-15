@@ -1,18 +1,21 @@
-import os
-#API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-#API_SERVICE_URL = os.environ["API_SERVICE_URL"]
-#IBF_API_URL=os.environ["IBF_API_URL"]
-ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-##glofas
-GLOFAS_USER = os.environ["GLOFAS_USER"]
-GLOFAS_API_KEY=os.environ["GLOFAS_API_KEY"]
-GLOFAS_API_URL=os.environ["GLOFAS_API_URL"]
-GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-GLOFAS_PW = os.environ["GLOFAS_PW"]
-##google
-GOOGLE_DRIVE_DATA_URL=os.environ["GOOGLE_DRIVE_DATA_URL"]
-##datalake
-DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
+#API_SERVICE_URL = 'https://ibf-test.510.global/api/'
+#IBF_API_URL = 'https://ibf-test.510.global/api/'
+#API_LOGIN_URL = IBF_API_URL+'user/login'
+#API_SERVICE_URL = IBF_API_URL
+#ADMIN_LOGIN = 'dunant@redcross.nl'
+#ADMIN_PASSWORD = 'password'
+#API_SERVICE_URL = 'https://ibf-ethiopia.510.global/api/'
+#IBF_API_URL = 'https://ibf-ethiopia.510.global/api/'
+#API_LOGIN_URL =API_LOGIN_URL# 'https://ibf-ethiopia.510.global/api/user/login'
+ADMIN_LOGIN = 'dunant@redcross.nl'
+#ADMIN_PASSWORD = 'sLuE6V6ExyqEppZw'
+ADMIN_PASSWORD = 'password'
+GLOFAS_API_KEY='67259:2636f069-273b-4e2a-858e-70d67c629c0c'
+GLOFAS_API_URL='https://cds.climate.copernicus.eu/api/v2'
+GLOFAS_USER='safer'
+GLOFAS_PW = 'neo2008'
+GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
+DATALAKE_STORAGE_ACCOUNT_NAME = '510datalakestorage'
+DATALAKE_STORAGE_ACCOUNT_KEY = 'RnPSnWqM6sDvTMxMyYVu9cKhqN1yJ6Q5PcqC6WEIzXBtyLOojaoLt71e4VhMfohDTE2NMZ2fwJ6hxT69JD6Fig=='
+DATALAKE_API_VERSION = '2018-11-09'
+GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'

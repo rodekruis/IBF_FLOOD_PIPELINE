@@ -44,6 +44,7 @@ class FloodExtent:
             #Filter the catchment-area GDF per area
             pcode = rows['placeCode']
             gdf_dist = admin_gdf[admin_gdf['placeCode'] == pcode]
+            
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)
             
             
@@ -81,11 +82,14 @@ class FloodExtent:
     def loadGlofasData(self):
 
         #Load assigned station per district
-        df_district_mapping = pd.read_json(json.dumps(self.district_mapping))
+        #df_district_mapping = pd.read_json(json.dumps(self.district_mapping))
+        #df_district_mapping = pd.read_csv('',dtype={'placeCode': str})
+        #df_district_mapping=df_district_mapping.to_dict(orient='records')
+        df_district_mapping=pd.DataFrame(self.district_mapping)
         
-        if self.countryCodeISO3=='ZMB':
+        #if self.countryCodeISO3=='ZMB1':
             #df_district_mapping['placeCode']=self.zmpcode(df_district_mapping['placeCode'])
-            df_district_mapping['placeCode']=df_district_mapping['placeCode'].apply(lambda x:self.zmpcode(x))
+            #df_district_mapping['placeCode']=df_district_mapping['placeCode'].apply(lambda x:self.zmpcode(x))
 
         #Load (static) threshold values per station
         path = PIPELINE_DATA+'output/triggers_rp_per_station/triggers_rp_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '.json'
