@@ -7,7 +7,6 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 3,
         'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
@@ -21,7 +20,6 @@ SETTINGS = {
         'lead_times': {
             "5-day": 5
         },
-        'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 4,
         'levels':[4,3,2,1],
         'EXPOSURE_DATA_SOURCES': {
@@ -35,7 +33,6 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'IBF_API_URL':'https://ibf-test.510.global/api/',
         'admin_level': 1,
         'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
@@ -49,7 +46,6 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'IBF_API_URL':'https://ibf-ethiopia.510.global/api/',
         'admin_level': 3,
         'levels':[3],
         'EXPOSURE_DATA_SOURCES': {
@@ -67,33 +63,11 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ZMB']
+COUNTRY_CODES = ['zmb']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
-# COUNTRY SETTINGS
-SETTINGS_SECRET = {
-    "ZMB": {
-        "mock": True,
-        "if_mock_trigger": True,
-        "notify_email": False
-    },
-    "UGA": {
-        "mock": True,
-        "if_mock_trigger": True,
-        "notify_email": False
-    },
-    "KEN": {
-        "mock": True,
-        "if_mock_trigger": False,
-        "notify_email": False
-    },
-    "ETH": {
-        "mock": False,
-        "if_mock_trigger": False,
-        "notify_email": False
-    }
-}
+
 # Change this date only in case of specific testing purposes
 from datetime import date, timedelta
 CURRENT_DATE = date.today()
