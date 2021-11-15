@@ -67,7 +67,7 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ETH']
+COUNTRY_CODES = ['ZMB']
 
 GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 

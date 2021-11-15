@@ -26,7 +26,8 @@ class Exposure:
         self.outputPath = PIPELINE_OUTPUT + "out.tif"
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
-        self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"
+        self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.geojson"  #s.geojson', driver='GeoJSON')
+        #self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         self.admin_level = admin_level
         self.levels = SETTINGS[countryCodeISO3]['levels']
@@ -87,7 +88,6 @@ class Exposure:
                 else:
                     df_stats_levl =df_stats.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
                     df_stats_levl.reset_index(inplace=True)
-                    print(df_stats_levl)
                     df_stats_levl['placeCode']=df_stats_levl[f'placeCode_{adm_level}']
                     df_stats_levl=df_stats_levl[['amount','placeCode']].to_dict(orient='records')
 
@@ -151,8 +151,8 @@ class Exposure:
             except ValueError:
                 print('Rasters do not overlap')
         #self.ADMIN_AREA_GDF_ADM_LEL_=self.ADMIN_AREA_GDF_ADM_LEL.query(f'adminLevel == {adm_level}')
-        #self.ADMIN_AREA_GDF_ADM_LEL_.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
-        self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
+        #self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
+        self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH,driver='GeoJSON')
         stats = self.calcStatsPerAdmin(indicator, disasterExtentShapes, rasterValue)
         return stats
 
@@ -163,10 +163,9 @@ class Exposure:
         df_triggers = pd.read_json(path, orient='records')
         df_triggers = df_triggers.set_index("stationCode", drop=False)
         # Load assigned station per district
-        df_district_mapping = pd.read_json(
-            json.dumps(self.district_mapping))
-        df_district_mapping = df_district_mapping.set_index(
-            "placeCode", drop=False)
+        #df_district_mapping = pd.read_json(json.dumps(self.district_mapping))
+        df_district_mapping=pd.DataFrame(self.district_mapping)
+        df_district_mapping = df_district_mapping.set_index("placeCode", drop=False)
 
         stats = []
         with fiona.open(self.ADMIN_AREA_GDF_TMP_PATH, "r") as shapefile:
