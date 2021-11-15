@@ -19,7 +19,8 @@ class DatabaseManager:
         self.affectedFolder = PIPELINE_OUTPUT + "calculated_affected/"
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         #self.API_SERVICE_URL = SETTINGS[countryCodeISO3]['IBF_API_URL']  
-        self.API_SERVICE_URL = SETTINGS_SECRET[countryCodeISO3]['IBF_API_URL']  
+        self.API_SERVICE_URL = SETTINGS_SECRET[countryCodeISO3]['IBF_API_URL']   
+        self.ADMIN_PASSWORD = SETTINGS_SECRET[countryCodeISO3]['PASSWORD']   
         self.levels = SETTINGS[countryCodeISO3]['levels']        
         self.admin_level = admin_level
 
@@ -190,7 +191,7 @@ class DatabaseManager:
     def apiAuthenticate(self):
         API_LOGIN_URL=self.API_SERVICE_URL+'user/login'
         login_response = requests.post(API_LOGIN_URL, data=[(
-            'email', ADMIN_LOGIN), ('password', ADMIN_PASSWORD)])
+            'email', ADMIN_LOGIN), ('password', self.ADMIN_PASSWORD)])
         return login_response.json()['user']['token']
 
     def getDataFromDatalake(self, path):
