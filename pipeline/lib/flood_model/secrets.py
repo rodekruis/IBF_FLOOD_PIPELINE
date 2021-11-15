@@ -20,26 +20,26 @@ DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
     "ZMB": {
-        "IBF_API_URL":'https://ibf-test.510.global/api/',
+        "IBF_API_URL":'https://ibf-zambia.510.global/api/',
         "mock": True,
         "if_mock_trigger": True,
         "notify_email": False
     },
     "UGA": {
-        "IBF_API_URL":'https://ibf-test.510.global/api/',
+        "IBF_API_URL":'https://ibf-uganda.510.global/api/',
         "mock": True,
         "if_mock_trigger": True,
         "notify_email": False
     },
     "KEN": {
-        "IBF_API_URL":'https://ibf-test.510.global/api/',
+        "IBF_API_URL":'https://ibf-kenya.510.global/api/',
         "mock": True,
         "if_mock_trigger": False,
         "notify_email": False,
         
     },
     "ETH": {
-        "IBF_API_URL":'https://ibf-test.510.global/api/',
+        "IBF_API_URL":'https://ibf-ethiopia.510.global/api/',
         "mock": False,
         "if_mock_trigger": False,
         "notify_email": False
