@@ -28,6 +28,7 @@ ZMB_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
 ETH_PASSWORD=secret_client.get_secret("ETH-PASSWORD").value
 KEN_PASSWORD=secret_client.get_secret("KEN-PASSWORD").value
 
+
 # COUNTRY SETTINGS
 SETTINGS_SECRET = {
     "ZMB": {
@@ -54,7 +55,7 @@ SETTINGS_SECRET = {
     },
     "ETH": {
         "IBF_API_URL":'https://ibf-ethiopia.510.global/api/',
-        "PASSWORD": ETH_PASSWORD,
+        "PASSWORD": ETH_PASSWORD, 
         "mock": False,
         "if_mock_trigger": False,
         "notify_email": False
