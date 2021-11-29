@@ -13,6 +13,8 @@ import os
 import functools
 from flood_model.dynamicDataDb import DatabaseManager
 import geopandas
+import logging
+logger = logging.getLogger(__name__)
 class Exposure:
 
     """Class used to calculate the exposure per exposure type"""
@@ -72,7 +74,7 @@ class Exposure:
                    
     def callAllExposure(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
-            print('indicator: ', indicator)
+            logger.info(f'indicator: {indicator}')
             self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
             self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
             
@@ -149,7 +151,7 @@ class Exposure:
                 with rasterio.open(self.outputRaster, "w", **affectedMeta) as dest:
                     dest.write(affectedImage)
             except ValueError:
-                print('Rasters do not overlap')
+                logger.info('Rasters do not overlap')
         #self.ADMIN_AREA_GDF_ADM_LEL_=self.ADMIN_AREA_GDF_ADM_LEL.query(f'adminLevel == {adm_level}')
         #self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
         self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH,driver='GeoJSON')

@@ -5,7 +5,9 @@ from flood_model.settings import *
 from flood_model.secrets import *
 import os
 import numpy as np
-
+import logging
+logger = logging.getLogger(__name__)
+ 
  
 
 class DatabaseManager:
@@ -54,7 +56,7 @@ class DatabaseManager:
                 body['disasterType'] = self.getDisasterType()
                 #body['adminLevel'] = self.admin_level
                 self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-            print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+            logger.info(f'Uploaded calculated_affected for indicator: {indicator} for admin level: ' + str(adminlevels))
             if indicator == 'population':
                 with open(self.affectedFolder +
                         'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + 'population_affected_percentage' + '.json') as json_file:
@@ -62,7 +64,7 @@ class DatabaseManager:
                     body['disasterType'] = self.getDisasterType()
                     #body['adminLevel'] = self.admin_level
                     self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+                logger.info('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
 
     def uploadCalculatedAffected(self):
         for adminlevels in SETTINGS[self.countryCodeISO3]['levels']:#range(1,self.admin_level+1):            
@@ -81,20 +83,20 @@ class DatabaseManager:
                         body['disasterType'] = self.getDisasterType()
                         #body['adminLevel'] = self.admin_level
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                    print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+                    logger.info('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
                     with open(self.affectedFolder+'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
                         body = json.load(json_file)
                         body['disasterType'] = self.getDisasterType()
                         #body['adminLevel'] = self.admin_level
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                    print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +'for admin level: ' + str(adminlevels))
                 else:
                     with open(self.affectedFolder +'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
                         body = json.load(json_file)
                         body['disasterType'] = self.getDisasterType()
                         #body['adminLevel'] = self.admin_level
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                    print('Uploaded calculated_affected for indicator: ' + indicator +'for admin level: ' + str(adminlevels))
+                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +'for admin level: ' + str(adminlevels))
                                     
                     
 
@@ -120,7 +122,7 @@ class DatabaseManager:
         rasterFile = RASTER_OUTPUT + '0/flood_extents/flood_extent_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '.tif'
         files = {'file': open(rasterFile,'rb')}
         self.apiPostRequest('admin-area-dynamic-data/raster/' + disasterType, files=files)
-        print('Uploaded raster-file: ' + rasterFile)
+        logger.info(f'Uploaded raster-file: {rasterFile}')
 
 
     def uploadTriggerPerStation(self):
@@ -140,7 +142,7 @@ class DatabaseManager:
             'stationForecasts': stationForecasts
         }
         self.apiPostRequest('glofas-stations/triggers', body=body)
-        print('Uploaded triggers per station')
+        logger.info('Uploaded triggers per station')
 
     def uploadTriggersPerLeadTime(self):
         with open(self.triggerFolder +
@@ -158,7 +160,7 @@ class DatabaseManager:
             }
             body['disasterType'] = self.getDisasterType()
             self.apiPostRequest('event/triggers-per-leadtime', body=body)
-        print('Uploaded triggers per leadTime')
+        logger.info('Uploaded triggers per leadTime')
 
     def apiGetRequest(self, path, countryCodeISO3):
         TOKEN = self.apiAuthenticate()
@@ -185,7 +187,8 @@ class DatabaseManager:
             headers=headers
         )
         if r.status_code >= 400:
-            print(r.text)
+            #logger.info(r.text)
+            logger.error("PIPELINE ERROR")
             raise ValueError()
 
     def apiAuthenticate(self):
@@ -203,7 +206,7 @@ class DatabaseManager:
 
         request_time = datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
         file_system_name = 'ibf/' + path
-        print('Downloading from datalake: ', file_system_name)
+        logger.info(f'Downloading from datalake: {file_system_name}')
 
         string_params = {
             'verb': 'GET',

@@ -8,6 +8,9 @@ from rasterio.merge import merge
 from flood_model.settings import *
 import os
 import geopandas
+import logging
+logger = logging.getLogger(__name__)
+
 class FloodExtent:
 
     """Class used to calculate flood extent"""
@@ -36,7 +39,7 @@ class FloodExtent:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
             except Exception as e:
-                print(e)
+                logger.info(e)
         
 
         #Loop through catchment-areas and clip right flood extent
@@ -68,13 +71,13 @@ class FloodExtent:
         
         with rasterio.open(self.outputPathMerge, "w", **out_meta) as dest:
             dest.write(mosaic)
-            print("Total flood extent file written")
+            logger.info("Total flood extent file written")
             
 
         
     def reproject_file(self, gdf, file_name, force_epsg):
 
-        print("Reprojecting %s to EPSG %i...\n" % (file_name, force_epsg), end="", flush=True)
+        logger.info("Reprojecting %s to EPSG %i...\n" % (file_name, force_epsg), end="", flush=True)
         gdf = gdf.to_crs(epsg=force_epsg)
 
         return gdf

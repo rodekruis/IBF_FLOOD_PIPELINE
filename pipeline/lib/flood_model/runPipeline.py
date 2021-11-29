@@ -22,19 +22,19 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 #API_LOGIN_URL = os.environ["API_LOGIN_URL"]
 #API_SERVICE_URL = os.environ["API_SERVICE_URL"]
 
-def setup_logger():
-    # Set up logger
-    logging.root.handlers = []
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG, filename='ex.log')
-    # set up logging to console
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
-    # set a format which is simpler for console use
-    formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
-    console.setFormatter(formatter)
-    logging.getLogger("").addHandler(console)
 
-setup_logger()
+# Set up logger
+logging.root.handlers = []
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG, filename='ex.log')
+# set up logging to console
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# set a format which is simpler for console use
+formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s')
+console.setFormatter(formatter)
+logging.getLogger("").addHandler(console)
+
+
 logger = logging.getLogger(__name__)
  
 
@@ -46,25 +46,23 @@ def main():
     logger.info(str(datetime.datetime.now()))
     gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
-    print(str(datetime.datetime.now()))
+    logger.info(str(datetime.datetime.now()))
     gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',
                                     dest_path='./data/data_flood.zip',
                                     overwrite=True,
                                     unzip=True)
-    print('finished data download')
+    logger.info('finished data download')
 
 
     try:
         for COUNTRY_CODE in COUNTRY_CODES:
-            logger.info('--------STARTING: ' + COUNTRY_CODE +
-                  '--------------------------')
-
+            logger.info(f'--------STARTING: {COUNTRY_CODE}' +'--------------------------')
             COUNTRY_SETTINGS = SETTINGS[COUNTRY_CODE]
             LEAD_TIMES = COUNTRY_SETTINGS['lead_times']
             #IBF_API_URL = SETTINGS[COUNTRY_CODE]['IBF_API_URL']
 
             for leadTimeLabel, leadTimeValue in LEAD_TIMES.items():
-                logger.info('--------STARTING: ' + leadTimeLabel +
+                logger.info(f'--------STARTING: {leadTimeLabel}' +
                       '--------------------------')
                 fc = Forecast(leadTimeLabel, leadTimeValue, COUNTRY_CODE,COUNTRY_SETTINGS['admin_level'])
                 fc.glofasData.process()
@@ -79,11 +77,10 @@ def main():
                 logger.info('--------Finished notification')
 
     except Exception as e:
-        print(e)
-        logger.error("PIPELINE EROR")
+        logger.warning("Check Flood Data PIPELINE")
 
     elapsedTime = str(time.time() - startTime)
-    print(elapsedTime)
+    logger.info(str(elapsedTime))
 
 if __name__ == "__main__":
     main()
