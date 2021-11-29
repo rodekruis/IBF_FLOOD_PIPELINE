@@ -18,6 +18,8 @@ from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
 from flood_model.secrets import *
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 
 class GlofasData:
@@ -72,7 +74,7 @@ class GlofasData:
                 downloadDone = True
             except Exception as exception:
                 error = 'Download data failed. Trying again in {} minutes.\n{}'.format(timeToRetry//60, exception)
-                print(error)
+                logger.error(error)
                 time.sleep(timeToRetry)
         if downloadDone == False:
             raise ValueError('GLofas download failed for ' +
@@ -95,11 +97,14 @@ class GlofasData:
               downloadDone = True
           except:
               error = 'Download data failed. Will be trying again in ' + str(timeToRetry/60) + ' minutes.'
-              print(error)
+              logger.error(error)
               time.sleep(timeToRetry)
       if downloadDone == False:
+          logger.error('GLofas download failed for ' +
+                          str(timeToTryDownload/3600) + ' hours, no new dataset was found')
           raise ValueError('GLofas download failed for ' +
                           str(timeToTryDownload/3600) + ' hours, no new dataset was found')
+                          
     def getGlofasData(self):
         filename = GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
         path = 'glofas/' + filename
@@ -113,7 +118,7 @@ class GlofasData:
         tar.close()
 
     def extractGlofasData(self):
-        print('\nExtracting Glofas (FTP) Data\n')
+        logger.info('\nExtracting Glofas (FTP) Data\n')
 
         files = [f for f in listdir(self.inputPath) if isfile(
             join(self.inputPath, f)) and f.endswith('.nc')]
@@ -149,7 +154,7 @@ class GlofasData:
             # Get threshold for this specific station
             if station['code'] in df_thresholds['stationCode'] and station['code'] in df_district_mapping['glofasStation']:
                 
-                print(Filename)
+                logger.info(Filename)
                 threshold = df_thresholds[df_thresholds['stationCode'] ==
                                           station['code']][TRIGGER_LEVEL][0]
 
@@ -199,14 +204,14 @@ class GlofasData:
 
         with open(self.extractedGlofasPath, 'w') as fp:
             json.dump(stations, fp)
-            print('Extracted Glofas data - File saved')
+            logger.info('Extracted Glofas data - File saved')
 
         with open(self.triggerPerDay, 'w') as fp:
             json.dump([trigger_per_day], fp)
-            print('Extracted Glofas data - Trigger per day File saved')
+            logger.info('Extracted Glofas data - Trigger per day File saved')
 
     def extractMockData(self):
-        print('\nExtracting Glofas (mock) Data\n')
+        logger.info('\nExtracting Glofas (mock) Data\n')
 
         # Load input data
         df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
@@ -231,7 +236,7 @@ class GlofasData:
             station['code'] = row['stationCode']
 
             if station['code'] in df_district_mapping['glofasStation'] and station['code'] != 'no_station':
-                print(station['code'])
+                logger.info(station['code'])
                 threshold = df_thresholds[df_thresholds['stationCode'] ==
                                           station['code']][TRIGGER_LEVEL][0]
 
@@ -296,11 +301,11 @@ class GlofasData:
 
         with open(self.extractedGlofasPath, 'w') as fp:
             json.dump(stations, fp)
-            print('Extracted Glofas data - File saved')
+            logger.info('Extracted Glofas data - File saved')
 
         with open(self.triggerPerDay, 'w') as fp:
             json.dump([trigger_per_day], fp)
-            print('Extracted Glofas data - Trigger per day File saved')
+            logger.info('Extracted Glofas data - Trigger per day File saved')
 
     def findTrigger(self):
         # Load (static) threshold values per station
@@ -352,4 +357,4 @@ class GlofasData:
         out = df.to_json(orient='records')
         with open(self.triggersPerStationPath, 'w') as fp:
             fp.write(out)
-            print('Processed Glofas data - File saved')
+            logger.info('Processed Glofas data - File saved')

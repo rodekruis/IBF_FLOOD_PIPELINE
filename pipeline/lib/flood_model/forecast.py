@@ -8,6 +8,8 @@ import json
 from shapely import wkb, wkt
 import geopandas
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Forecast:
