@@ -19,7 +19,7 @@ class Exposure:
 
     """Class used to calculate the exposure per exposure type"""
 
-    def __init__(self, leadTimeLabel, countryCodeISO3, admin_area_gdf, population_total, admin_level, district_mapping=None):
+    def __init__(self, leadTimeLabel, countryCodeISO3, admin_area_gdf, population_total, admin_level, district_mapping,pcodes):
         self.leadTimeLabel = leadTimeLabel
         self.countryCodeISO3 = countryCodeISO3
         self.disasterExtentRaster = RASTER_OUTPUT + \
@@ -33,44 +33,11 @@ class Exposure:
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         self.admin_level = admin_level
         self.levels = SETTINGS[countryCodeISO3]['levels']
+        self.pcode_df=pcodes
         self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
         if "population" in self.EXPOSURE_DATA_SOURCES:
             self.population_total = population_total
-        admin_area_json = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
-        #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
-
-                
-        for index in range(len(admin_area_json)):
-            admin_area_json[index]['geometry'] = admin_area_json[index]['geom']
-            admin_area_json[index]['properties'] = {
-                'placeCode': admin_area_json[index]['placeCode'], 
-                'placeCodeParent': admin_area_json[index]['placeCodeParent'],                   
-                'name': admin_area_json[index]['name'],
-                'adminLevel': admin_area_json[index]['adminLevel']
-                }
-        self.ADMIN_AREA_GDF_ADM_LEL =geopandas.GeoDataFrame.from_features(admin_area_json)
-        df_admin=pd.DataFrame(admin_area_json) 
-        df_admin=df_admin.filter(['adminLevel','placeCode','placeCodeParent','geometry'])        
-        df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
-
-        df_list={}       
-        max_iteration=self.admin_level+1
-        for adm_level in self.levels:
-            df_=df_admin2.query(f'adminLevel == {adm_level}')
-            df_.rename(columns={"placeCode": f"placeCode_{adm_level}","placeCodeParent": f"placeCodeParent_{adm_level}"},inplace=True)            
-            df_list[adm_level]=df_
-        df=df_list[self.admin_level]
-        
-        ################# Create a dataframe with pcodes for each admin level 
-        
-        for adm_level in self.levels:
-            j=adm_level-1
-            if j >0 and len(self.levels)>1:
-                df=pd.merge(df,df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
-        #df=df[['placeCode_1','placeCode_2','placeCode_3','placeCode_4']]
-        df=df[[f"placeCode_{i}" for i in self.levels]]      
-        self.pcode_df=df
-
+              
                    
     def callAllExposure(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
@@ -84,7 +51,7 @@ class Exposure:
  
   
             #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
-            for adm_level in SETTINGS[self.countryCodeISO3]['levels']: #adm_level in range(1,max_iteration):
+            for adm_level in SETTINGS[self.countryCodeISO3]['levels']:  
                 if adm_level==self.admin_level:
                     df_stats_levl=stats
                 else:

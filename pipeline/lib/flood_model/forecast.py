@@ -41,6 +41,24 @@ class Forecast:
                 
 
         df_admin=pd.DataFrame(admin_area_json) 
+        
+        df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
+        df_list={}       
+        max_iteration=self.admin_level+1
+        for adm_level in self.levels:
+            df_=df_admin2.query(f"adminLevel == {adm_level}")
+            df_.rename(columns={"placeCode": f"placeCode_{adm_level}","placeCodeParent": f"placeCodeParent_{adm_level}"},inplace=True)            
+            df_list[adm_level]=df_            
+        
+        df=df_list[self.admin_level]        
+        ################# Create a dataframe with pcodes for each admin level         
+        for adm_level in self.levels:
+            j=adm_level-1
+            if j >0 and len(self.levels)>1:
+                df=pd.merge(df.copy(),df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
+     
+        df=df[[f"placeCode_{i}" for i in self.levels]]      
+        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]      
         # df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
         # df_list={}       
  
@@ -70,10 +88,8 @@ class Forecast:
         df_admin1=geopandas.GeoDataFrame.from_features(admin_area_json)
         self.admin_area_gdf2 = df_admin1
         df_admin1=df_admin1.query(f'adminLevel == {self.admin_level}')
-        if countryCodeISO3=='ZMBT' and self.admin_level==3:
-            df_admin1['placeCode']=self.pcode(df_admin1['placeCode'])
-            df_admin['placeCode']=self.pcode(df_admin['placeCode'])
-            population_df['placeCode']=self.pcode(population_df['placeCode'])
+
+            
         df_admin=df_admin.filter(['placeCode','placeCodeParent','name','geometry'])
 
     
@@ -120,7 +136,7 @@ class Forecast:
         #self.district_mapping = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
         self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping)
         self.floodExtent = FloodExtent(leadTimeLabel, leadTimeValue, countryCodeISO3, self.district_mapping, self.admin_area_gdf)
-        self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping)
+        self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping,self.pcode_df)
         
     def pcode1(self,x):
         len_x=len(x)-2

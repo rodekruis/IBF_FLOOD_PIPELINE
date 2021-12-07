@@ -4,6 +4,7 @@ import time
 import datetime
 from flood_model.settings import *
 from flood_model.secrets import *
+from flood_model.exposure import Exposure
 import resource
 import os
 import logging
@@ -39,21 +40,13 @@ logger = logging.getLogger(__name__)
  
 
 def main():
-    soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
-    resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
+    #soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
+    #resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
 
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
-    gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
-    logger.info('finished data download')
-    logger.info(str(datetime.datetime.now()))
-    gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',
-                                    dest_path='./data/data_flood.zip',
-                                    overwrite=True,
-                                    unzip=True)
-    logger.info('finished data download')
-
-
+    #gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
+    #logger.info('finished data download')
     try:
         for COUNTRY_CODE in COUNTRY_CODES:
             logger.info(f'--------STARTING: {COUNTRY_CODE}' +'--------------------------')
@@ -76,9 +69,9 @@ def main():
                 fc.db.sendNotification()
                 logger.info('--------Finished notification')
 
-    except Exception as e:
-        logger.warning("Check Flood Data PIPELINE")
-
+    #except Exception as e:
+    except:
+        logger.error("Flood Data PIPELINE ERROR")
     elapsedTime = str(time.time() - startTime)
     logger.info(str(elapsedTime))
 
