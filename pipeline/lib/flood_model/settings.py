@@ -63,9 +63,9 @@ SETTINGS = {
  
 # Countries to include
 
-COUNTRY_CODES = ['ZMB','ETH','UGA'] #['ZMB','ETH','UGA',
+COUNTRY_CODES = ['ZMB', 'ETH', 'UGA'] #['ZMB','ETH','UGA',
 
-GOOGLE_DRIVE_DATA_URL='https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
+GOOGLE_DRIVE_DATA_URL = 'https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
 
 # Change this date only in case of specific testing purposes
