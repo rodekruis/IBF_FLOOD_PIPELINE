@@ -32,9 +32,15 @@ class GlofasData:
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.triggerPerDay = PIPELINE_OUTPUT + \
             'triggers_rp_per_station/trigger_per_day_' + countryCodeISO3 + '.json'
+        self.extractedGlofasDir = PIPELINE_OUTPUT + 'glofas_extraction'
+        if not os.path.exists(self.extractedGlofasDir):
+            os.makedirs(self.extractedGlofasDir)
         self.extractedGlofasPath = PIPELINE_OUTPUT + \
             'glofas_extraction/glofas_forecast_' + \
             self.leadTimeLabel + '_' + countryCodeISO3 + '.json'
+        self.triggersPerStationDir = PIPELINE_OUTPUT + 'triggers_rp_per_station'
+        if not os.path.exists(self.triggersPerStationDir):
+            os.makedirs(self.triggersPerStationDir)
         self.triggersPerStationPath = PIPELINE_OUTPUT + \
             'triggers_rp_per_station/triggers_rp_' + \
             self.leadTimeLabel + '_' + countryCodeISO3 + '.json'
@@ -55,8 +61,11 @@ class GlofasData:
         self.findTrigger()
 
     def removeOldGlofasData(self):
-        for f in [f for f in os.listdir(self.inputPath)]:
-            os.remove(os.path.join(self.inputPath, f))
+        if os.path.exists(self.inputPath):
+            for f in [f for f in os.listdir(self.inputPath)]:
+                os.remove(os.path.join(self.inputPath, f))
+        else:
+            os.makedirs(self.inputPath)
 
     def download(self):
         downloadDone = False
