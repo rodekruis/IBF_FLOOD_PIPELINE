@@ -13,6 +13,7 @@ import os
 import functools
 from flood_model.dynamicDataDb import DatabaseManager
 import geopandas
+import time
 import logging
 logger = logging.getLogger(__name__)
 class Exposure:
@@ -98,8 +99,24 @@ class Exposure:
 
         
     def get_population_affected_percentage(self, population_affected,adm_level):
-        ##get population for admin level 
-        df_stats = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
+        ##get population for admin level
+        try:
+            df_stats = self.db.apiGetRequest(
+                'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
+                countryCodeISO3='')
+        except Exception as e:
+            logger.info(f'connection error while getting population data, waiting 60 seconds then trying again (1/2)')
+            time.sleep(60)
+            try:
+                df_stats = self.db.apiGetRequest(
+                    'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
+                    countryCodeISO3='')
+            except Exception as e:
+                logger.info(f'connection error while getting population data, waiting 60 seconds then trying again (2/2)')
+                time.sleep(60)
+                df_stats = self.db.apiGetRequest(
+                    'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
+                    countryCodeISO3='')
         population_total = next((x for x in df_stats if x['placeCode'] == population_affected['placeCode']), None)
         population_affected_percentage = 0.0
         if population_total and population_total['value'] > 0:
