@@ -28,3 +28,8 @@ When you are finished,to remove any docker container(s) run
 docker-compose down
 ```
 
+### Versions
+You can find the versions in the [tags](https://github.com/rodekruis/IBF_FLOOD_PIPELINE/tags) of the commits. See below table to find which version of the pipeline corresponds to which version of IBF-Portal.
+| Flood Pipeline version  | IBF-Portal version |
+| --- | --- |
+| 0.0.1  | 0.103.1  |
