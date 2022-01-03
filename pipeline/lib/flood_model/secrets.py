@@ -36,21 +36,21 @@ SETTINGS_SECRET = {
         "PASSWORD": ZMB_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
-        "notify_email": False
+        "notify_email": True
     },
     "UGA": {
         "IBF_API_URL":'https://ibf-uganda.510.global/api/',
         "PASSWORD": UGA_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
-        "notify_email": False
+        "notify_email": True
     },
     "KEN": {
         "IBF_API_URL":'https://ibf-kenya.510.global/api/',
         "PASSWORD": KEN_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
-        "notify_email": False,
+        "notify_email": True,
         
     },
     "ETH": {
@@ -58,6 +58,6 @@ SETTINGS_SECRET = {
         "PASSWORD": ETH_PASSWORD, 
         "mock": False,
         "if_mock_trigger": False,
-        "notify_email": False
+        "notify_email": True
     }
 }
