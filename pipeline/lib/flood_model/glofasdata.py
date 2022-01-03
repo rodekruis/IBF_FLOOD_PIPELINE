@@ -334,7 +334,7 @@ class GlofasData:
         del df['lat']
         del df['lon']
 
-        # Dtermine trigger + return period per water station
+        # Determine trigger + return period per water station
         for index, row in df.iterrows():
             fc = float(row['fc'])
             trigger = int(row['fc_trigger'])
