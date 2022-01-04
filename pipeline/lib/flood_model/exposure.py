@@ -82,7 +82,7 @@ class Exposure:
                     #population_affected_percentage = list(map(self.get_population_affected_percentage, df_stats,adm_level))
      
                     population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
-                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' +str(adm_level)+ '_' + 'population_affected_percentage' + '.json'
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'population_affected_percentage' + '.json'
                         
                     population_affected_percentage_records = {
                         'countryCodeISO3': self.countryCodeISO3,
@@ -95,8 +95,35 @@ class Exposure:
                     with open(population_affected_percentage_file_path, 'w') as fp:
                         json.dump(population_affected_percentage_records, fp)
 
+                    # define alert_threshold layer
+                alert_threshold = list(map(self.get_alert_threshold, df_stats_levl))
+
+                alert_threshold_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'alert_threshold' + '.json'
+
+                alert_threshold_records = {
+                    'countryCodeISO3': self.countryCodeISO3,
+                    'exposurePlaceCodes': alert_threshold,
+                    'leadTime': self.leadTimeLabel,
+                    'dynamicIndicator': 'alert_threshold',
+                    'adminLevel': adm_level
+                }
+
+                with open(alert_threshold_file_path, 'w') as fp:
+                    json.dump(alert_threshold_records, fp)
 
 
+    def get_alert_threshold(self, population_affected):
+        # population_total = next((x for x in self.population_total if x['placeCode'] == population_affected['placeCode']), None)
+        alert_threshold = 0
+        if (population_affected['amount'] > 0):
+            alert_threshold = 1
+        else:
+            alert_threshold = 0
+        return {
+            'amount': alert_threshold,
+            'placeCode': population_affected['placeCode']
+        }
         
     def get_population_affected_percentage(self, population_affected,adm_level):
         ##get population for admin level
