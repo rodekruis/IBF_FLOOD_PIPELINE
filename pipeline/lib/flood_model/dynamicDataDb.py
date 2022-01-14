@@ -2,7 +2,10 @@ import pandas as pd
 import requests
 import json
 from flood_model.settings import *
-from flood_model.secrets import *
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
 import os
 import numpy as np
 import logging
