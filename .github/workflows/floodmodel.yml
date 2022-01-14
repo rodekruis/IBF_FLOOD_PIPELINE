@@ -1,7 +1,7 @@
 name: run-flood-model2
 on:
   schedule:
-    - cron:  '52 14 * * *'
+    - cron:  '54 13 * * *'
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
