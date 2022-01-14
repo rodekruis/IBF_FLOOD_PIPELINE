@@ -4,6 +4,7 @@ import time
 import datetime
 from flood_model.settings import *
 from flood_model.secrets import *
+from flood_model.exposure import Exposure
 import resource
 import os
 import logging
@@ -25,8 +26,8 @@ logger = logging.getLogger(__name__)
  
 
 def main():
-    soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
-    resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
+    #soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
+    #resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
 
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
@@ -37,13 +38,12 @@ def main():
 
     try:
         for COUNTRY_CODE in COUNTRY_CODES:
-            logger.info(f'--------STARTING: {COUNTRY_CODE}' +'--------------------------')
+            logger.info(f'--------STARTING: {COUNTRY_CODE}' + '--------------------------')
             COUNTRY_SETTINGS = SETTINGS[COUNTRY_CODE]
             LEAD_TIMES = COUNTRY_SETTINGS['lead_times']
 
             for leadTimeLabel, leadTimeValue in LEAD_TIMES.items():
-                logger.info(f'--------STARTING: {leadTimeLabel}' +
-                      '--------------------------')
+                logger.info(f'--------STARTING: {leadTimeLabel}' + '--------------------------')
                 fc = Forecast(leadTimeLabel, leadTimeValue, COUNTRY_CODE,COUNTRY_SETTINGS['admin_level'])
                 fc.glofasData.process()
                 logger.info('--------Finished GLOFAS data Processing')
@@ -55,12 +55,12 @@ def main():
                 logger.info('--------Finished upload')
                 fc.db.sendNotification()
                 logger.info('--------Finished notification')
-
     except Exception as e:
-        logger.warning("Check Flood Data PIPELINE")
-
+        logger.error("Flood Data PIPELINE ERROR")
+        logger.error(e)
     elapsedTime = str(time.time() - startTime)
     logger.info(str(elapsedTime))
+
 
 if __name__ == "__main__":
     main()

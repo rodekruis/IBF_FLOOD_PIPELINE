@@ -113,17 +113,19 @@ class FloodExtent:
     def mergeRasters(self):
         src_files_to_mosaic = []
         for fp in os.listdir(self.outputPathAreas):
-            src = rasterio.open(self.outputPathAreas+fp)
-            src_files_to_mosaic.append(src)
+            if len(src_files_to_mosaic) == 0:
+                with rasterio.open(self.outputPathAreas+fp) as src:
+                    out_meta = src.meta.copy()
+            src_files_to_mosaic.append(self.outputPathAreas+fp)
         if len(src_files_to_mosaic) > 0:
             mosaic, out_trans = merge(src_files_to_mosaic)
-            out_meta = src.meta.copy()
             out_meta.update({"driver": "GTiff",
                             "height": mosaic.shape[1],
                             "width": mosaic.shape[2],
                             "transform": out_trans,
                         })
         return mosaic, out_meta
+
     def zmpcode(self,x):
         if len(str(x))==9:
             pcoded=str(x)
