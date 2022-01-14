@@ -4,6 +4,11 @@
 
 SETTINGS = {
     "ZMB": {
+        'IBF_API_URL': 'https://ibf-test.510.global/api/',
+        'PASSWORD': 'password',
+        'mock': False,
+        'if_mock_trigger': False,
+        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
@@ -17,6 +22,11 @@ SETTINGS = {
         }
     },
     "UGA": {
+        'IBF_API_URL': 'https://ibf-test.510.global/api/',
+        'PASSWORD': 'password',
+        'mock': False,
+        'if_mock_trigger': False,
+        'notify_email': True,
         'lead_times': {
             "5-day": 5
         },
@@ -30,6 +40,11 @@ SETTINGS = {
         }
     },
     "KEN": {
+        'IBF_API_URL': 'https://ibf-test.510.global/api/',
+        'PASSWORD': 'password',
+        'mock': False,
+        'if_mock_trigger': False,
+        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
@@ -43,6 +58,11 @@ SETTINGS = {
         }
     },
     "ETH": {
+        'IBF_API_URL': 'https://ibf-test.510.global/api/',
+        'PASSWORD': 'password',
+        'mock': False,
+        'if_mock_trigger': False,
+        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
