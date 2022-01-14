@@ -4,11 +4,6 @@
 
 SETTINGS = {
     "ZMB": {
-        'IBF_API_URL': 'https://ibf-test.510.global/api/',
-        'PASSWORD': 'password',
-        'mock': False,
-        'if_mock_trigger': False,
-        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
@@ -22,11 +17,6 @@ SETTINGS = {
         }
     },
     "UGA": {
-        'IBF_API_URL': 'https://ibf-test.510.global/api/',
-        'PASSWORD': 'password',
-        'mock': False,
-        'if_mock_trigger': False,
-        'notify_email': True,
         'lead_times': {
             "5-day": 5
         },
@@ -40,11 +30,6 @@ SETTINGS = {
         }
     },
     "KEN": {
-        'IBF_API_URL': 'https://ibf-test.510.global/api/',
-        'PASSWORD': 'password',
-        'mock': False,
-        'if_mock_trigger': False,
-        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
@@ -58,11 +43,6 @@ SETTINGS = {
         }
     },
     "ETH": {
-        'IBF_API_URL': 'https://ibf-test.510.global/api/',
-        'PASSWORD': 'password',
-        'mock': False,
-        'if_mock_trigger': False,
-        'notify_email': True,
         'lead_times': {
             "7-day": 7
         },
@@ -77,15 +57,7 @@ SETTINGS = {
     }
 }
 
-##################
-## RUN SETTINGS ##
-##################
- 
-# Countries to include
 
-COUNTRY_CODES = ['ZMB', 'ETH', 'UGA'] #['ZMB','ETH','UGA',
-
-GOOGLE_DRIVE_DATA_URL = 'https://drive.google.com/file/d/1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc/view?usp=sharing'
 
 
 # Change this date only in case of specific testing purposes
@@ -129,8 +101,8 @@ STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
 ## INPUT DATA SETTINGS ##
 #########################
 
-
 # Glofas input
+GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
 GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
 
 
