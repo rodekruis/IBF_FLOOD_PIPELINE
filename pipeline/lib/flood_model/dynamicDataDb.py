@@ -20,9 +20,9 @@ class DatabaseManager:
         self.triggerFolder = PIPELINE_OUTPUT + "triggers_rp_per_station/"
         self.affectedFolder = PIPELINE_OUTPUT + "calculated_affected/"
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
-        self.API_SERVICE_URL = SETTINGS_SECRET[countryCodeISO3]['IBF_API_URL']   
-        self.ADMIN_PASSWORD = SETTINGS_SECRET[countryCodeISO3]['PASSWORD']   
-        self.levels = SETTINGS[countryCodeISO3]['levels']        
+        self.API_SERVICE_URL = SETTINGS[countryCodeISO3]['IBF_API_URL']
+        self.ADMIN_PASSWORD = SETTINGS[countryCodeISO3]['PASSWORD']
+        self.levels = SETTINGS[countryCodeISO3]['levels']
         self.admin_level = admin_level
 
     def upload(self):
@@ -35,7 +35,7 @@ class DatabaseManager:
         leadTimes = SETTINGS[self.countryCodeISO3]['lead_times']
         max_leadTime = max(leadTimes, key=leadTimes.get)
 
-        if SETTINGS_SECRET[self.countryCodeISO3]["notify_email"] and self.leadTimeLabel == max_leadTime:
+        if SETTINGS[self.countryCodeISO3]["notify_email"] and self.leadTimeLabel == max_leadTime:
             body = {
                 'countryCodeISO3': self.countryCodeISO3,
                 'disasterType': self.getDisasterType()
@@ -200,8 +200,6 @@ class DatabaseManager:
 
     def apiAuthenticate(self):
         API_LOGIN_URL=self.API_SERVICE_URL+'user/login'
-        print('ADMIN_LOGIN')
-        print('ADMIN_LOGIN',ADMIN_LOGIN)
         login_response = requests.post(API_LOGIN_URL, data=[(
             'email', ADMIN_LOGIN), ('password', self.ADMIN_PASSWORD)])
         return login_response.json()['user']['token']

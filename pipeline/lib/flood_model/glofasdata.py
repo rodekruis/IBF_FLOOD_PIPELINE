@@ -49,12 +49,12 @@ class GlofasData:
         self.current_date = CURRENT_DATE.strftime('%Y%m%d')
 
     def process(self):
-        if SETTINGS_SECRET[self.countryCodeISO3]['mock'] == False:
+        if SETTINGS[self.countryCodeISO3]['mock'] == False:
             self.removeOldGlofasData()
             self.download()
             self.getGlofasData()
             #self.start_download_loop()
-        if SETTINGS_SECRET[self.countryCodeISO3]['mock'] == True:
+        if SETTINGS[self.countryCodeISO3]['mock'] == True:
             self.extractMockData()
         else:
             self.extractGlofasData()
@@ -258,7 +258,7 @@ class GlofasData:
                     for ensemble in range(1, ensemble_options):
 
                         # MOCK OVERWRITE DEPENDING ON COUNTRY SETTING
-                        if SETTINGS_SECRET[self.countryCodeISO3]['if_mock_trigger'] == True:
+                        if SETTINGS[self.countryCodeISO3]['if_mock_trigger'] == True:
                             if step < 5: # Only dummy trigger for 5-day and above
                                 discharge = 0
                             elif station['code'] == 'G5220':  # UGA dummy flood station 1
