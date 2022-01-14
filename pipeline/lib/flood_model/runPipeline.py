@@ -26,12 +26,9 @@ logger = logging.getLogger(__name__)
  
 
 def main():
-    #soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
-    #resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
-
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
-    gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
+    gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
     logger.info(str(datetime.datetime.now()))
 

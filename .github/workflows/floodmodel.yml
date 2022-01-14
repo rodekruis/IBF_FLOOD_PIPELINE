@@ -1,7 +1,7 @@
 name: run-flood-model2
 on:
   schedule:
-    - cron:  '30 12 * * *'
+    - cron:  '0 8 * * *'
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
@@ -73,23 +73,21 @@ jobs:
       
     - name: Run script
       env:
-        IBF_API_URL: ${{ secrets.IBF_API_URL }}
-        API_SERVICE_URL: ${{ secrets.API_SERVICE_URL }}
-        API_LOGIN_URL: ${{ secrets.API_LOGIN_URL }}
         ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
-        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
         PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        GLOFAS_API_KEY: ${{ secrets.GLOFAS_API_KEY }}
         CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-        GLOFAS_API_URL: ${{ secrets.GLOFAS_API_URL }}
         GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
-        GLOFAS_FTP: ${{ secrets.GLOFAS_FTP }}
         GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
-        DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
-        DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
-        DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
-        GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}
+        GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}    
+        UGA_URL: ${{ secrets.UGA_URL }}    
+        ZMB_URL: ${{ secrets.ZMB_URL }}    
+        ETH_URL: ${{ secrets.ETH_URL }}    
+        KEN_URL: ${{ secrets.KEN_URL }}    
+        UGA_PASSWORD: ${{ secrets.UGA_PASSWORD }}    
+        ZMB_PASSWORD: ${{ secrets.ZMB_PASSWORD }}   
+        ETH_PASSWORD: ${{ secrets.ETH_PASSWORD }}   
+        KEN_PASSWORD: ${{ secrets.KEN_PASSWORD }}   
       run: |
         run-flood-model
       working-directory: ${{ env.running-directory }}

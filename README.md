@@ -5,24 +5,20 @@ This is a series of scripts (which are running daily) which extracts all input d
 ## Prerequisites
 
 1. Install Docker
-2. Upload data-floods.zip file to a google drive, then update GOOGLE_DRIVE_DATA_URL in pipeline/lib/flood_model/settings.py 
 
-
-
-### Installation
+### Local installation
 
 1. Clone this directory to `<your_local_directory>`/IBF_FLOOD_PIPELINE/
-2. Change `secrets_template` to `secrets` and fill in the necessary passwords.
+2. Change `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and fill in the necessary secrets.
 
-### Set up Data pipeline
+### Build and run
 
-1. Build Docker image (from the IBF-pipeline root folder) and run container with volume. ${PWD} should take automatically your Present Working Directory as the local folder to attach the volume though; if this fails, you can always replace it by the literal path (e.g. "C:/IBF-system/services/IBF-pipeline:/home/ibf" instead of "${PWD}:/home/ibf")
-
-To build and run the image, ensure you are in the top-level directory and execute:
+Build and run Docker image (from the IBF-pipeline root folder).
 
 ```
 docker-compose up --build
 ```
+
 When you are finished,to remove any docker container(s) run
 ```
 docker-compose down
