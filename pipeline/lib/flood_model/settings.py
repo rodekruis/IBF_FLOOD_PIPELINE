@@ -1,4 +1,8 @@
-from flood_model.secrets import *
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
+
 
 ######################
 ## COUNTRY SETTINGS ##

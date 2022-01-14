@@ -16,7 +16,10 @@ import time
 #import cdsapi
 from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
-from flood_model.secrets import *
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
 import os
 import logging
 logger = logging.getLogger(__name__)

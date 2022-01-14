@@ -3,7 +3,10 @@ import traceback
 import time
 import datetime
 from flood_model.settings import *
-from flood_model.secrets import *
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
 from flood_model.exposure import Exposure
 import resource
 import os
