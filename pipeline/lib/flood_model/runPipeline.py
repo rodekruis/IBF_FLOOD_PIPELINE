@@ -3,26 +3,15 @@ import traceback
 import time
 import datetime
 from flood_model.settings import *
-from flood_model.secrets import *
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
 from flood_model.exposure import Exposure
 import resource
 import os
 import logging
 from google_drive_downloader import GoogleDriveDownloader as gdd
-
-#GLOFAS_API_KEY = os.environ["GLOFAS_API_KEY"]
-#GLOFAS_API_URL = os.environ.get("GLOFAS_API_URL")
-#GLOFAS_USER = os.environ["GLOFAS_USER"]
-#ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
-#GLOFAS_PW = os.environ["GLOFAS_PW"]
-#ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-#GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-#DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-#DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-#DATALAKE_API_VERSION = os.environ["DATALAKE_API_VERSION"]
-#API_LOGIN_URL = os.environ["API_LOGIN_URL"]
-#API_SERVICE_URL = os.environ["API_SERVICE_URL"]
-
 
 # Set up logger
 logging.root.handlers = []
@@ -40,19 +29,18 @@ logger = logging.getLogger(__name__)
  
 
 def main():
-    #soft_limit,hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
-    #resource.setrlimit(resource.RLIMIT_NOFILE, (SOFT_LIMIT, hard_limit))
-
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
-    gdd.download_file_from_google_drive(file_id='1vptMfC_IVm4EwEC67G1Q_KoapxeQCiCc',dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
+    gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
+    logger.info(str(datetime.datetime.now()))
+
+
     try:
         for COUNTRY_CODE in COUNTRY_CODES:
             logger.info(f'--------STARTING: {COUNTRY_CODE}' + '--------------------------')
             COUNTRY_SETTINGS = SETTINGS[COUNTRY_CODE]
             LEAD_TIMES = COUNTRY_SETTINGS['lead_times']
-            #IBF_API_URL = SETTINGS[COUNTRY_CODE]['IBF_API_URL']
 
             for leadTimeLabel, leadTimeValue in LEAD_TIMES.items():
                 logger.info(f'--------STARTING: {leadTimeLabel}' + '--------------------------')
