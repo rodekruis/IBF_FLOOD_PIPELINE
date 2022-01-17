@@ -1,17 +1,9 @@
-try:
-    from flood_model.secrets import *
-except ImportError:
-    print('No secrets file found.')
 
+##################
+## LOAD SECRETS ##
+##################
 
-######################
-## COUNTRY SETTINGS ##
-######################
-
-# Countries to include
-COUNTRY_CODES = ['ZMB','ETH','UGA']
-
-# Load secrets from Azure key vault if user has access, otherwise skips and then assumes these secrets otherwise (in secrets.py or via Github secrets)
+# 1. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
@@ -34,6 +26,39 @@ try:
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
 
+# 2. Try to load secrets from env-variables (i.e. when using Github Actions)
+try:
+    import os
+    
+    ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
+    GLOFAS_USER = os.environ['GLOFAS_USER']
+    GLOFAS_PW = os.environ['GLOFAS_PW']
+    GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
+    UGA_URL=os.environ['UGA_URL']
+    ZMB_URL=os.environ['ZMB_URL']
+    ETH_URL=os.environ['ETH_URL']
+    KEN_URL=os.environ['KEN_URL']
+    UGA_PASSWORD=os.environ['UGA_PASSWORD']
+    ZMB_PASSWORD=os.environ['ZMB_PASSWORD']
+    ETH_PASSWORD=os.environ['ETH_PASSWORD']
+    KEN_PASSWORD=os.environ['KEN_PASSWORD']
+
+except Exception as e:
+    print('No environment variables found.')
+
+# 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print('No secrets file found.')
+
+
+######################
+## COUNTRY SETTINGS ##
+######################
+
+# Countries to include
+COUNTRY_CODES = ['ZMB','ETH','UGA']
 
 SETTINGS = {
     "ZMB": {
