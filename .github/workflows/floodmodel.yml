@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
+    if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
       with:
