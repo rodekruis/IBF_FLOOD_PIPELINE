@@ -5,8 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
-      RUN_PIPELINE: ${{ secrets.RUN_PIPELINE}}
-    if: ${RUN_PIPELINE} == 'True'
+    if: ${{ github.repository_owner == 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
     - name: Set up Python 3.x
