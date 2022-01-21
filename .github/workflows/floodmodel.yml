@@ -3,9 +3,10 @@ on: workflow_dispatch
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
-    if: ${{ env.RUN_PIPELINE == 'True'}}
     env:
       running-directory: ./pipeline
+      RUN_PIPELINE: ${{ env.RUN_PIPELINE}}
+    if: ${RUN_PIPELINE} == 'True'
     steps:  
     - uses: actions/checkout@v2
     - name: Set up Python 3.x
