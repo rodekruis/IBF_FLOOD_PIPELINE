@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
-      RUN_PIPELINE: ${{ env.RUN_PIPELINE}}
+      RUN_PIPELINE: ${{ secrets.RUN_PIPELINE}}
     if: ${RUN_PIPELINE} == 'True'
     steps:  
     - uses: actions/checkout@v2
