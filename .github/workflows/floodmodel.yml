@@ -5,12 +5,11 @@ on:
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
+    if: ${{ env.RUN_PIPELINE == 'True'}}
     env:
       running-directory: ./pipeline
     steps:  
     - uses: actions/checkout@v2
-      with:
-        ref: feat.handover-changes
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
