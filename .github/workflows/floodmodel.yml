@@ -10,6 +10,8 @@ jobs:
     if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.repository.default_branch }}
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
