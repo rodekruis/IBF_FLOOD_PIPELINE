@@ -1,5 +1,7 @@
 name: run-flood-model2
-on: workflow_dispatch
+on:
+  schedule:
+    - cron:  '0 8 * * *'
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
