@@ -1,0 +1,4 @@
+stationCode,stationName,triggerLevel,threshold2Year,threshold5Year,threshold10Year,threshold20Year,lat,lon
+G5142,Athi Munyu 3Da02,469.236,,469.236,,,-1.15,37.15
+G5195,Nzoia At Ruambwa Ferry 1Ef01,469.8,,469.8,,,0.15,34.05
+G5305,Tana Hola 4G04,1191.6,,1191.6,,,-1.45,40.05
