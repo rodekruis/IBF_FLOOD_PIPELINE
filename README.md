@@ -53,6 +53,6 @@ Getting its secrets from Azure Key Vault.
 You can find the versions in the [tags](https://github.com/rodekruis/IBF_FLOOD_PIPELINE/tags) of the commits. See below table to find which version of the pipeline corresponds to which version of IBF-Portal.
 | Flood Pipeline version  | IBF-Portal version | Changes |
 | --- | --- | --- |
-| 0.0.1 | 0.103.1 | initial number |
-| 0.1.0 | 0.129.0 | alert_threshold upload to API | 
-| 0.2.0 | 0.129.0 | rearranged and set up for github actions |
+| v0.0.1 | 0.103.1 | initial number |
+| v0.1.0 | 0.129.0 | alert_threshold upload to API | 
+| v0.2.0 | 0.129.0 | rearranged and set up for github actions |
