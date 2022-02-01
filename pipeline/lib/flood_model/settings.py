@@ -58,7 +58,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ZMB','ETH','UGA']
+COUNTRY_CODES = ['KEN','ZMB','ETH','UGA']
 
 SETTINGS = {
     "ZMB": {
@@ -106,8 +106,8 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'admin_level': 1,
-        'levels':[3,2,1],
+        'admin_level': 3,
+        'levels':[3],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_ken_pop_resized_100",
