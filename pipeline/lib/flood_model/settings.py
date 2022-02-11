@@ -58,7 +58,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ZMB','ETH','UGA']
+COUNTRY_CODES = ['ZMB','ETH','UGA','KEN']
 
 SETTINGS = {
     "ZMB": {
@@ -100,13 +100,13 @@ SETTINGS = {
     "KEN": {
         "IBF_API_URL": KEN_URL,
         "PASSWORD": KEN_PASSWORD,
-        "mock": False,
-        "if_mock_trigger": False,
+        "mock": True,
+        "if_mock_trigger": True,
         "notify_email": True,
         'lead_times': {
             "7-day": 7
         },
-        'admin_level': 1,
+        'admin_level': 3,
         'levels':[3,2,1],
         'EXPOSURE_DATA_SOURCES': {
             "population": {
