@@ -58,7 +58,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ZMB','ETH','UGA','KEN']
+COUNTRY_CODES = ['KEN']#,'ZMB','ETH','UGA']
 
 SETTINGS = {
     "ZMB": {
