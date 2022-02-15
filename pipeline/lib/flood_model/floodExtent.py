@@ -27,6 +27,9 @@ class FloodExtent:
 
     def calculate(self):
         admin_gdf = self.ADMIN_AREA_GDF
+        #admin_gdf.crs = "EPSG:4326"
+        #if self.countryCodeISO3=='KEN':
+        #    admin_gdf=admin_gdf.to_crs(4210)
 
         df_glofas = self.loadGlofasData()
 
@@ -67,6 +70,7 @@ class FloodExtent:
 
         #Merge all clipped flood extents back together and Save
         mosaic, out_meta = self.mergeRasters()
+        
 
         
         with rasterio.open(self.outputPathMerge, "w", **out_meta) as dest:
