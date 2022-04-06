@@ -32,6 +32,8 @@ class GlofasData:
         self.leadTimeLabel = leadTimeLabel
         self.leadTimeValue = leadTimeValue
         self.countryCodeISO3 = countryCodeISO3
+        self.GLOFAS_FILENAME=SETTINGS[countryCodeISO3]['GLOFAS_FILENAME']
+        self.GLOFAS_FTP=SETTINGS[countryCodeISO3]['GLOFAS_FTP']
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.triggerPerDay = PIPELINE_OUTPUT + \
             'triggers_rp_per_station/trigger_per_day_' + countryCodeISO3 + '.json'
@@ -92,8 +94,8 @@ class GlofasData:
             raise ValueError('GLofas download failed for ' +
                             str(timeToTryDownload/3600) + ' hours, no new dataset was found')
     def makeFtpRequest(self):
-            filename = GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
-            ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + GLOFAS_FTP
+            filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
+            ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + self.GLOFAS_FTP
             urllib.request.urlretrieve(ftp_path + filename,self.inputPath + filename)
             
     def start_download_loop(self):
@@ -118,7 +120,7 @@ class GlofasData:
                           str(timeToTryDownload/3600) + ' hours, no new dataset was found')
                           
     def getGlofasData(self):
-        filename = GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
+        filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
         path = 'glofas/' + filename
         
         #glofasDataFile = self.db.getDataFromDatalake(path)
