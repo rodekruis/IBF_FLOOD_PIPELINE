@@ -18,10 +18,12 @@ try:
     ZMB_URL=secret_client.get_secret("ZMB-URL").value
     ETH_URL=secret_client.get_secret("ETH-URL").value
     KEN_URL=secret_client.get_secret("KEN-URL").value
+    PHL_URL=secret_client.get_secret("PHL-URL").value
     UGA_PASSWORD=secret_client.get_secret("UGA-PASSWORD").value
     ZMB_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
     ETH_PASSWORD=secret_client.get_secret("ETH-PASSWORD").value
     KEN_PASSWORD=secret_client.get_secret("KEN-PASSWORD").value
+    PHL_PASSWORD=secret_client.get_secret("PHL-PASSWORD").value
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
@@ -38,10 +40,12 @@ try:
     ZMB_URL=os.environ['ZMB_URL']
     ETH_URL=os.environ['ETH_URL']
     KEN_URL=os.environ['KEN_URL']
+    PHL_URL=os.environ['PHL_URL']
     UGA_PASSWORD=os.environ['UGA_PASSWORD']
     ZMB_PASSWORD=os.environ['ZMB_PASSWORD']
     ETH_PASSWORD=os.environ['ETH_PASSWORD']
     KEN_PASSWORD=os.environ['KEN_PASSWORD']
+    PHL_PASSWORD=os.environ['PHL_PASSWORD']
 
 except Exception as e:
     print('No environment variables found.')
@@ -58,7 +62,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['KEN']#,'ZMB','ETH','UGA']
+COUNTRY_CODES = ['PHL']#,'KEN','ZMB','ETH','UGA']
 
 SETTINGS = {
     "ZMB": {
@@ -72,6 +76,8 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_zmb_pop_resized_100",
@@ -90,6 +96,8 @@ SETTINGS = {
         },
         'admin_level': 4,
         'levels':[4,3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_uga_pop_resized_100",
@@ -100,14 +108,16 @@ SETTINGS = {
     "KEN": {
         "IBF_API_URL": KEN_URL,
         "PASSWORD": KEN_PASSWORD,
-        "mock": True,
-        "if_mock_trigger": True,
+        "mock": False,
+        "if_mock_trigger": False,
         "notify_email": True,
         'lead_times': {
             "7-day": 7
         },
         'admin_level': 3,
         'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/hrsl_ken_pop_resized_100",
@@ -126,9 +136,31 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
                 "source": "population/worldpop_eth",
+                "rasterValue": 1
+            }
+        }
+    },
+    "PHL": {
+        "IBF_API_URL": PHL_URL,
+        "PASSWORD": PHL_PASSWORD,
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": True,
+        'lead_times': {
+            "3-day": 3
+        },
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/RedcrossPhilippines_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_phl_pop_resized_30",
                 "rasterValue": 1
             }
         }
@@ -141,8 +173,8 @@ SETTINGS = {
 
 # Change this date only in case of specific testing purposes
 from datetime import date, timedelta
-CURRENT_DATE = date.today()
-#CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+#CURRENT_DATE = date.today()
+CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 
 
 
@@ -177,8 +209,8 @@ STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
 #########################
 
 # Glofas input
-GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
-GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
+#GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
+#GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
 
 
 #####################
