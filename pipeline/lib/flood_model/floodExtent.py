@@ -63,6 +63,7 @@ class FloodExtent:
                 input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
 
             out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
+            
 
             with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
                 dest.write(out_image)
@@ -71,7 +72,7 @@ class FloodExtent:
         #Merge all clipped flood extents back together and Save
         mosaic, out_meta = self.mergeRasters()
         
-
+        out_meta.update({"compress": "lzw"}) #"dtype": 'int16',
         
         with rasterio.open(self.outputPathMerge, "w", **out_meta) as dest:
             dest.write(mosaic)
@@ -110,7 +111,9 @@ class FloodExtent:
         outMeta.update({"driver": "GTiff",
                     "height": outImage.shape[1],
                     "width": outImage.shape[2],
-                    "transform": out_transform})
+                    "transform": out_transform,
+                    #"dtype": 'int16',
+                    "compress": "lzw"}) #
 
         return outImage, outMeta
 

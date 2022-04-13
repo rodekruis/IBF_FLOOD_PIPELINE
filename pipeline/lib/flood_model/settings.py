@@ -13,17 +13,23 @@ try:
     ADMIN_LOGIN = secret_client.get_secret("ADMIN-LOGIN").value
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
     GLOFAS_PW = secret_client.get_secret("GLOFAS-PW").value
-    GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
+    #GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
     UGA_URL=secret_client.get_secret("UGA-URL").value
     ZMB_URL=secret_client.get_secret("ZMB-URL").value
     ETH_URL=secret_client.get_secret("ETH-URL").value
     KEN_URL=secret_client.get_secret("KEN-URL").value
-    PHL_URL=secret_client.get_secret("PHL-URL").value
+    PHL_URL=secret_client.get_secret("PHL-URL-test").value
     UGA_PASSWORD=secret_client.get_secret("UGA-PASSWORD").value
     ZMB_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
     ETH_PASSWORD=secret_client.get_secret("ETH-PASSWORD").value
     KEN_PASSWORD=secret_client.get_secret("KEN-PASSWORD").value
-    PHL_PASSWORD=secret_client.get_secret("PHL-PASSWORD").value
+    PHL_PASSWORD=secret_client.get_secret("PHL-PASSWORD-test").value
+    
+    DATALAKE_STORAGE_ACCOUNT_NAME = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-NAME").value
+    DATALAKE_STORAGE_ACCOUNT_KEY = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-KEY").value
+    DATALAKE_API_VERSION = '2018-11-09'
+ 
+
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
@@ -35,7 +41,7 @@ try:
     ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
     GLOFAS_USER = os.environ['GLOFAS_USER']
     GLOFAS_PW = os.environ['GLOFAS_PW']
-    GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
+    #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
     UGA_URL=os.environ['UGA_URL']
     ZMB_URL=os.environ['ZMB_URL']
     ETH_URL=os.environ['ETH_URL']
@@ -46,6 +52,9 @@ try:
     ETH_PASSWORD=os.environ['ETH_PASSWORD']
     KEN_PASSWORD=os.environ['KEN_PASSWORD']
     PHL_PASSWORD=os.environ['PHL_PASSWORD']
+    DATALAKE_STORAGE_ACCOUNT_NAME = os.environ['DATALAKE-STORAGE-ACCOUNT-NAME']
+    DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
+    DATALAKE_API_VERSION = '2018-11-09'
 
 except Exception as e:
     print('No environment variables found.')
@@ -62,7 +71,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['PHL']#,'KEN','ZMB','ETH','UGA']
+COUNTRY_CODES = ['ZMB','KEN','ETH','UGA'] #'PHL'
 
 SETTINGS = {
     "ZMB": {
@@ -160,7 +169,7 @@ SETTINGS = {
         'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
         'EXPOSURE_DATA_SOURCES': {
             "population": {
-                "source": "population/hrsl_phl_pop_resized_30",
+                "source": "population/hrsl_phl_pop_resized_10",
                 "rasterValue": 1
             }
         }
@@ -173,8 +182,8 @@ SETTINGS = {
 
 # Change this date only in case of specific testing purposes
 from datetime import date, timedelta
-#CURRENT_DATE = date.today()
-CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+CURRENT_DATE = date.today()
+#CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 
 
 
@@ -182,6 +191,7 @@ CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 ####################
 ## OTHER SETTINGS ##
 ####################
+GOOGLE_DRIVE_DATA_URL = 'https://drive.google.com/file/d/14MbG4uFPGJCduM5aLkvgSGqA8io6Gh9C/view?usp=sharing'
 
 TRIGGER_LEVELS = {
     "minimum": 0.6,
