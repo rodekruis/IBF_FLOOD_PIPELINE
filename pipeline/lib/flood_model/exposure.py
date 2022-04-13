@@ -243,6 +243,7 @@ class Exposure:
         with rasterio.open(tiffLocaction) as dataset:
             # Read the dataset's valid data mask as a ndarray.
             image = dataset.read(1).astype(np.float32)
+            image[image >= 0] = 1
             mask = dataset.dataset_mask()
             theShapes = shapes(image, mask=mask, transform=dataset.transform)
 

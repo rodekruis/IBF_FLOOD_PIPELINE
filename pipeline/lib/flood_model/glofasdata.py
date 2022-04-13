@@ -264,7 +264,7 @@ class GlofasData:
 
                         # MOCK OVERWRITE DEPENDING ON COUNTRY SETTING
                         if SETTINGS[self.countryCodeISO3]['if_mock_trigger'] == True:
-                            if step < 5: # Only dummy trigger for 5-day and above
+                            if step < 3: # Only dummy trigger for 3-day and above
                                 discharge = 0
                             elif station['code'] == 'G5220':  # UGA dummy flood station 1
                                 discharge = 600
@@ -282,6 +282,12 @@ class GlofasData:
                                 discharge = 9000
                             elif station['code'] == 'G1319':  # ZMB dummy flood station 3
                                 discharge = 1400
+                            elif station['code'] == 'G1964':  # PHL dummy flood station 1
+                                discharge = 18000
+                            elif station['code'] == 'G1966':  # PHL dummy flood station 2
+                                discharge = 19000
+                            elif station['code'] == 'G1967':  # PHL dummy flood station 3
+                                discharge = 11400
                             else:
                                 discharge = 0
                         else:
