@@ -1,4 +1,4 @@
-manucipalities,placeCode,adm2_pcode,adm1_pcode,glofasStation
+manucipalities,placeCode,parentCode,adm1_pcode,glofasStation
 Adams,PH012801000,PH012800000,PH010000000,no_station
 Bacarra,PH012802000,PH012800000,PH010000000,no_station
 Badoc,PH012803000,PH012800000,PH010000000,no_station

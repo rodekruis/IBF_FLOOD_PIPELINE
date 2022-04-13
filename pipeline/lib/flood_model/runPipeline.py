@@ -3,16 +3,21 @@ import traceback
 import time
 import datetime
 from flood_model.settings import *
+from flood_model.dynamicDataDb import DatabaseManager as dbm
 try:
     from flood_model.secrets import *
 except ImportError:
     print('No secrets file found.')
-from flood_model.exposure import Exposure
+from flood_model.exposure import Exposure 
 import resource
 import os
 import logging
+import zipfile
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
+
+            
+            
 # Set up logger
 logging.root.handlers = []
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG, filename='ex.log')
@@ -31,7 +36,21 @@ logger = logging.getLogger(__name__)
 def main():
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
-    gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
+    dbm_ = dbm('5-day', 'ETH',3)
+    filename='data.zip'
+    path = 'flood/Gold/datapipeline/'+ filename
+    #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
+    DataFile = dbm_.getDataFromDatalake(path)
+    if DataFile.status_code >= 400:
+        raise ValueError()
+    open('./' + filename, 'wb').write(DataFile.content)
+    path_to_zip_file='./'+filename
+    with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+        zip_ref.extractall('./data')
+    
+    
+
+    #gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
     logger.info(str(datetime.datetime.now()))
 
