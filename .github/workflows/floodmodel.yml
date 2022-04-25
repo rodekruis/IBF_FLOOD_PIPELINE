@@ -94,3 +94,6 @@ jobs:
       run: |
         run-flood-model
       working-directory: ${{ env.running-directory }}
+
+    - name: Prevent repository inactivity
+      uses: gautamkrishnar/keepalive-workflow@master
