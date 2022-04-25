@@ -74,6 +74,8 @@ jobs:
       
     - name: Prevent repository inactivity
       uses: gautamkrishnar/keepalive-workflow@master
+      with: 
+        time_elapsed: 0
       
     - name: Run script
       env:
