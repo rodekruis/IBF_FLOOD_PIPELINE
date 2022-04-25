@@ -1,11 +1,13 @@
 name: run-flood-model2
 on:
-  workflow_dispatch
+  schedule:
+    - cron:  '0 8 * * *'
 jobs:
   run-flood-model:
     runs-on: ubuntu-latest
     env:
       running-directory: ./pipeline
+    if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
       with:
@@ -71,11 +73,6 @@ jobs:
       run: |
         python -m pip install .
       working-directory: ${{ env.running-directory }}
-      
-    - name: Prevent repository inactivity
-      uses: gautamkrishnar/keepalive-workflow@master
-      with: 
-        time_elapsed: -1
       
     - name: Run script
       env:
