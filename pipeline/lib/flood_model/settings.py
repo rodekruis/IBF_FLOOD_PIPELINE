@@ -14,15 +14,15 @@ try:
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
     GLOFAS_PW = secret_client.get_secret("GLOFAS-PW").value
     #GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
-    UGA_URL=secret_client.get_secret("UGA-URL").value
+    UGA_URL=secret_client.get_secret("ZMB-URL").value
     ZMB_URL=secret_client.get_secret("ZMB-URL").value
-    ETH_URL=secret_client.get_secret("ETH-URL").value
-    KEN_URL=secret_client.get_secret("KEN-URL").value
+    ETH_URL=secret_client.get_secret("ZMB-URL").value
+    KEN_URL=secret_client.get_secret("ZMB-URL").value
     PHL_URL=secret_client.get_secret("PHL-URL-test").value
-    UGA_PASSWORD=secret_client.get_secret("UGA-PASSWORD").value
+    UGA_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
     ZMB_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
-    ETH_PASSWORD=secret_client.get_secret("ETH-PASSWORD").value
-    KEN_PASSWORD=secret_client.get_secret("KEN-PASSWORD").value
+    ETH_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
+    KEN_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
     PHL_PASSWORD=secret_client.get_secret("PHL-PASSWORD-test").value
     
     DATALAKE_STORAGE_ACCOUNT_NAME = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-NAME").value
@@ -71,7 +71,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ZMB','KEN','ETH','UGA'] #'PHL'
+COUNTRY_CODES = ['ZMB','KEN','ETH','UGA','PHL'] #
 
 SETTINGS = {
     "ZMB": {
