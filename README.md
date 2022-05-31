@@ -56,3 +56,5 @@ You can find the versions in the [tags](https://github.com/rodekruis/IBF_FLOOD_P
 | v0.0.1 | 0.103.1 | initial number |
 | v0.1.0 | 0.129.0 | alert_threshold upload to API | 
 | v0.2.0 | 0.129.0 | rearranged and set up for github actions |
+| v0.3.0 | 0.159.0 | add ethiopia multi admin |
+
