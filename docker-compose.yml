@@ -3,7 +3,7 @@ services:
   ibfflood:
     build:
       context: .
-    image: ibf-floods-pipeline
+    image: ibf-floods-pipeline_sn2
     ports:
       - "587:587"
     volumes: 

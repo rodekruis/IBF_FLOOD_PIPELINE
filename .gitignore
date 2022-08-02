@@ -11,7 +11,7 @@
 
 # Local data files
 pipeline/data
-pipeline/data2
+
  
 !pipeline/data/README.md
 !pipeline/data/trigger_data

@@ -19,7 +19,7 @@ coverage
 # External code
 node_modules
 
-pipeline/data2
+ 
 
 # Logs / Cache / temporary files
 logs
@@ -34,3 +34,5 @@ __pycache__/
 
 *.py[cod]
 *$py.class
+
+#pipeline/data
