@@ -36,6 +36,9 @@ logger = logging.getLogger(__name__)
 def main():
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
+    ## download data from Datalacke 
+    
+    
     dbm_ = dbm('5-day', 'ETH',3)
     filename='data.zip'
     path = 'flood/Gold/datapipeline/'+ filename
