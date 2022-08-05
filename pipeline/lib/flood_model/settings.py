@@ -13,6 +13,7 @@ try:
     ADMIN_LOGIN = secret_client.get_secret("ADMIN-LOGIN").value
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
     GLOFAS_PW = secret_client.get_secret("GLOFAS-PW").value
+    
     #GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
     IBF_URL=secret_client.get_secret("IBF-URL").value
     IBF_PASSWORD=secret_client.get_secret("IBF-PASSWORD").value
@@ -55,8 +56,8 @@ except ImportError:
 ######################
 
 # Countries to include
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','PHL'] #
-COUNTRY_CODES = ['PHL',] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+#COUNTRY_CODES = ['PHL',] #
 
 SETTINGS = {
     "ZMB": {
