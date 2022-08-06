@@ -56,7 +56,7 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','PHL'] #
 #COUNTRY_CODES = ['PHL',] #
 
 SETTINGS = {
