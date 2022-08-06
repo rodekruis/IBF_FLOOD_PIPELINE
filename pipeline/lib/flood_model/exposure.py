@@ -22,6 +22,7 @@ class Exposure:
 
     def __init__(self, leadTimeLabel, countryCodeISO3, admin_area_gdf, population_total, admin_level, district_mapping,pcodes):
         self.leadTimeLabel = leadTimeLabel
+        self.admin_level = admin_level
         self.countryCodeISO3 = countryCodeISO3
         self.disasterExtentRaster = RASTER_OUTPUT + \
             '0/flood_extents/flood_extent_' + leadTimeLabel + '_' + countryCodeISO3 + '.tif'
@@ -29,10 +30,13 @@ class Exposure:
         self.outputPath = PIPELINE_OUTPUT + "out.tif"
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
+        self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
+        self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_{self.admin_level}_population.json") 
+
         self.ADMIN_AREA_GDF_TMP_PATH = os.path.join(PIPELINE_OUTPUT,"admin-areas_TMP.geojson")  #s.geojson', driver='GeoJSON')
         #self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
-        self.admin_level = admin_level
+        
         self.levels = SETTINGS[countryCodeISO3]['levels']
         self.pcode_df=pcodes
         self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
@@ -128,11 +132,15 @@ class Exposure:
     def get_population_affected_percentage(self, population_affected,adm_level):
         ##get population for admin level
         try:
-            df_stats = self.db.apiGetRequest(
-                'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
-                countryCodeISO3='')
+            #df_stats = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),countryCodeISO3='')
+            self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{self.countryCodeISO3}_{adm_level}_population.json") 
+            with open(self.POPULATION_PATH) as fp:
+                df_stats=json.load(fp)
         except Exception as e:
+            logger.info('file not found')
+            '''
             logger.info(f'connection error while getting population data, waiting 60 seconds then trying again (1/2)')
+            
             time.sleep(60)
             try:
                 df_stats = self.db.apiGetRequest(
@@ -144,6 +152,7 @@ class Exposure:
                 df_stats = self.db.apiGetRequest(
                     'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
                     countryCodeISO3='')
+            '''        
         population_total = next((x for x in df_stats if x['placeCode'] == population_affected['placeCode']), None)
         population_affected_percentage = 0.0
         if population_total and population_total['value'] > 0:

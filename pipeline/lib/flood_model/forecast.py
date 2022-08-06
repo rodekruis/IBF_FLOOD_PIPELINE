@@ -16,33 +16,42 @@ class Forecast:
     def __init__(self, leadTimeLabel, leadTimeValue, countryCodeISO3, admin_level):
         self.leadTimeLabel = leadTimeLabel
         self.leadTimeValue = leadTimeValue
+        self.countryCodeISO3=countryCodeISO3
         self.admin_level = admin_level
         self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
         self.DistrictMappingFolder = STATION_DISTRICT_MAPPING_FOLDER
         self.TriggersFolder = TRIGGER_DATA_FOLDER_TR
         self.levels = SETTINGS[countryCodeISO3]['levels']
+        self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
+        self.ADMIN_AREA_GDF_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_admin_areas.geojson")
 
-        admin_area_json = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
-        #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
-
-        #print(admin_area_json)
-        for index in range(len(admin_area_json)):
-            admin_area_json[index]['geometry'] = admin_area_json[index]['geom']
-            #admin_area_json[index]['placeCodeParent'] = admin_area_json[index]['placeCodeParent'],
-            #admin_area_json[index]['pcode2'] = self.pcode2(admin_area_json[index]['placeCode']),
-            #admin_area_json[index]['admin_level'] = admin_area_json[index]['adminLevel'],
-            #admin_area_json[index]['placeCode'] = self.pcode(admin_area_json[index]['placeCode']),
-            admin_area_json[index]['properties'] = {
-                'placeCode': admin_area_json[index]['placeCode'], 
-                'placeCodeParent': admin_area_json[index]['placeCodeParent'],                   
-                'name': admin_area_json[index]['name'],
-                'adminLevel': admin_area_json[index]['adminLevel']
-                }
-                
-
-        df_admin=pd.DataFrame(admin_area_json) 
+        self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_{self.admin_level}_population.json") 
         
-        df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
+        # download admin boundary data 
+        
+        if not os.path.exists(self.ADMIN_AREA_GDF_PATH):
+            admin_area_json = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
+
+            for index in range(len(admin_area_json)):
+                admin_area_json[index]['geometry'] = admin_area_json[index]['geom']
+                admin_area_json[index]['properties'] = {
+                    'placeCode': admin_area_json[index]['placeCode'], 
+                    'placeCodeParent': admin_area_json[index]['placeCodeParent'],                   
+                    'name': admin_area_json[index]['name'],
+                    'adminLevel': admin_area_json[index]['adminLevel']
+                    }
+                    
+            Admin_DF=geopandas.GeoDataFrame.from_features(admin_area_json)      
+            Admin_DF.to_file(self.ADMIN_AREA_GDF_PATH,driver='GeoJSON')        
+   
+
+        
+        
+        
+        df_admin1=geopandas.read_file(self.ADMIN_AREA_GDF_PATH)
+        df_admin2=df_admin1.filter(['adminLevel','placeCode','placeCodeParent'])
+        
+        df_admin=pd.DataFrame(df_admin1)
         df_list={}       
         max_iteration=self.admin_level+1
         for adm_level in self.levels:
@@ -58,7 +67,8 @@ class Forecast:
                 df=pd.merge(df.copy(),df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
      
         df=df[[f"placeCode_{i}" for i in self.levels]]      
-        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]      
+        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]   
+        
         # df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
         # df_list={}       
  
@@ -81,16 +91,31 @@ class Forecast:
         #population_df=pd.DataFrame(population_df)
         #df_admin['placeCode']=df_admin['placeCode'].apply(lambda x:'ZM'+x)
         #df_admin[['placeCodeParent','placeCode','name']].to_csv('zam_pcod1_pcode3.csv')
+        
         df_admin=df_admin.query(f'adminLevel == {self.admin_level}')
-        population_df = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(countryCodeISO3, self.admin_level, 'populationTotal'), countryCodeISO3='')
+        
+ 
+ 
+        # download population data 
+        for level in self.levels:
+            POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{self.countryCodeISO3}_{level}_population.json") 
+            if not os.path.exists(POPULATION_PATH):
+                population_df = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(countryCodeISO3, level, 'populationTotal'), countryCodeISO3='')
+                with open(POPULATION_PATH, "w") as fp:
+                    json.dump(population_df, fp) 
+   
+ 
+        with open(self.POPULATION_PATH) as fp:
+            population_df=json.load(fp)
+        
         population_df=pd.DataFrame(population_df) 
 
-        df_admin1=geopandas.GeoDataFrame.from_features(admin_area_json)
+        
         self.admin_area_gdf2 = df_admin1
         df_admin1=df_admin1.query(f'adminLevel == {self.admin_level}')
 
             
-        df_admin=df_admin.filter(['placeCode','placeCodeParent','name','geometry'])
+        df_admin=df_admin.filter(['placeCode','placeCodeParent','name'])#,'geometry'])
 
     
 
@@ -104,8 +129,8 @@ class Forecast:
         
 
 
-        #district_mapping_df['pcode']=district_mapping_df['placeCode']
-        #df_admin=pd.DataFrame(admin_area_json) 
+
+        
         df_admin=df_admin.filter(['placeCode','placeCodeParent'])
         population_df = pd.merge(population_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
         #print(population_df)
@@ -122,18 +147,8 @@ class Forecast:
         dic_glofas_stations = df_glofas_stations.to_dict(orient='records')
         self.glofas_stations = dic_glofas_stations
 
-        #self.glofas_trigger_lveles = pd.read_csv(self.DistrictMappingFolder + f'/{countryCodeISO3}_trigger_levels.csv', index_col=False) 
-        #read district mapping
 
-        #district_mapping_df['pcode2']=district_mapping_df['placeCode']
-        #district_mapping_df=district_mapping_df.filter(['pcode2','glofasStation'])
-        #df_admin=df_admin.filter(['placeCode','geometry'])
-        #district_mapping_df = pd.merge(district_mapping_df,df_admin,  how='left', on='placeCode')
         
-        #district_mapping_df=district_mapping_df.filter(['placeCode','name','pcode1','pcode2','glofasStation','geometry']) 
-        #district_mapping_df.to_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping2.csv')
-       
-        #self.district_mapping = self.db.apiGetRequest('admin-areas/raw',countryCodeISO3=countryCodeISO3)
         self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping)
         self.floodExtent = FloodExtent(leadTimeLabel, leadTimeValue, countryCodeISO3, self.district_mapping, self.admin_area_gdf)
         self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping,self.pcode_df)
