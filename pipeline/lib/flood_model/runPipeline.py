@@ -38,7 +38,7 @@ def main():
     logger.info(str(datetime.datetime.now()))
     ## download data from Datalacke 
     
-    
+ 
     dbm_ = dbm('7-day', 'ETH',3)
     filename='data.zip'
     path = 'flood/Gold/datapipeline/'+ filename
@@ -52,9 +52,11 @@ def main():
         zip_ref.extractall('./data')
     
     
+    
 
     #gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
+ 
     logger.info(str(datetime.datetime.now()))
 
 
