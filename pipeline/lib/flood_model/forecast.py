@@ -40,14 +40,10 @@ class Forecast:
                     'name': admin_area_json[index]['name'],
                     'adminLevel': admin_area_json[index]['adminLevel']
                     }
-                    
+               
             Admin_DF=geopandas.GeoDataFrame.from_features(admin_area_json)      
             Admin_DF.to_file(self.ADMIN_AREA_GDF_PATH,driver='GeoJSON')        
-   
-
-        
-        
-        
+  
         df_admin1=geopandas.read_file(self.ADMIN_AREA_GDF_PATH)
         df_admin2=df_admin1.filter(['adminLevel','placeCode','placeCodeParent'])
         
@@ -83,9 +79,6 @@ class Forecast:
                 # df=pd.merge(df,df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}') 
         # df=df[[f"placeCode_{i}" for i in self.levels]]
         # self.pcode_df=df
- 
-        
- 
 
         #population_df_ = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
         #population_df=pd.DataFrame(population_df)
@@ -126,11 +119,6 @@ class Forecast:
         district_mapping_df = pd.merge(district_mapping_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
         district_mapping_df['placeCode'] = district_mapping_df['placeCode'].astype(str)
         self.district_mapping = district_mapping_df.to_dict(orient='records')
-        
-
-
-
-        
         df_admin=df_admin.filter(['placeCode','placeCodeParent'])
         population_df = pd.merge(population_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
         #print(population_df)
@@ -146,9 +134,7 @@ class Forecast:
         df_glofas_stations = pd.merge(df_glofas_stations, df,  how='left', left_on=['stationCode'], right_on = ['stationCode'])
         dic_glofas_stations = df_glofas_stations.to_dict(orient='records')
         self.glofas_stations = dic_glofas_stations
-
-
-        
+     
         self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping)
         self.floodExtent = FloodExtent(leadTimeLabel, leadTimeValue, countryCodeISO3, self.district_mapping, self.admin_area_gdf)
         self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping,self.pcode_df)
