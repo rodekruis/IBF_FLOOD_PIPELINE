@@ -10,7 +10,8 @@ import os
 import numpy as np
 import logging
 logger = logging.getLogger(__name__)
- 
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry 
  
 
 class DatabaseManager:
@@ -174,11 +175,23 @@ class DatabaseManager:
 
     def apiGetRequest(self, path, countryCodeISO3):
         TOKEN = self.apiAuthenticate()
+        
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        response = session.get(
+            self.API_SERVICE_URL + path + '/' + countryCodeISO3,
+            headers={'Authorization': 'Bearer ' + TOKEN}
+        )
 
+        '''
         response = requests.get(
             self.API_SERVICE_URL + path + '/' + countryCodeISO3,
             headers={'Authorization': 'Bearer ' + TOKEN}
         )
+        '''
         data = response.json()
         return(data)
 
@@ -189,13 +202,28 @@ class DatabaseManager:
             headers={'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/json'}
         elif files != None:
             headers={'Authorization': 'Bearer ' + TOKEN}
-
+        '''
         r = requests.post(
             self.API_SERVICE_URL + path,
             json=body,
             files=files,
             headers=headers
         )
+        '''
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+      
+
+        r = session.post(
+            self.API_SERVICE_URL + path,
+            json=body,
+            files=files,
+            headers=headers
+        )
+         
         if r.status_code >= 400:
             #logger.info(r.text)
             logger.error("PIPELINE ERROR")
