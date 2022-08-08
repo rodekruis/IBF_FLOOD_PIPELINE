@@ -4,6 +4,7 @@
 ##################
 
 # 1. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
+ 
 try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
@@ -26,7 +27,7 @@ try:
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
-
+ 
 # # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
 # try:
     # import os
@@ -56,8 +57,8 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','PHL'] #
-#COUNTRY_CODES = ['PHL',] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+#COUNTRY_CODES = ['PHL'] #
 
 SETTINGS = {
     "ZMB": {
