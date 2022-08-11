@@ -6,6 +6,14 @@ jobs:
     runs-on: ubuntu-latest    
     env:
       running-directory: ./pipeline
+      ADMIN_LOGIN: ${{ phl_env.secrets.ADMIN_LOGIN }}
+      GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
+      GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
+      IBF_URL: ${{ secrets.IBF_API_URL }}
+      IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
+      DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
+      DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
+      DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
     #if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
@@ -73,8 +81,7 @@ jobs:
       
     - name: Run script
       env:
-        name:phl_env
-        ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
+        ADMIN_LOGIN: ${{ phl_env.secrets.ADMIN_LOGIN }}
         GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
         GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
         IBF_URL: ${{ secrets.IBF_API_URL }}
