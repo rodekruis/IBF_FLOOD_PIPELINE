@@ -42,7 +42,7 @@ try:
     DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
     DATALAKE_API_VERSION = '2018-11-09'
 
- except Exception as e:
+except Exception as e:
      print('No environment variables found.')
 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
