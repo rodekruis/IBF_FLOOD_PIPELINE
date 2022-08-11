@@ -28,22 +28,22 @@ try:
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
  
-# # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
-# try:
-    # import os
+# 2. Try to load secrets from env-variables (i.e. when using Github Actions)
+try:
+    import os
     
-    # ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
-    # GLOFAS_USER = os.environ['GLOFAS_USER']
-    # GLOFAS_PW = os.environ['GLOFAS_PW']
-    # #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
-    # IBF_URL=os.environ['IBF_API_URL']
-    # IBF_PASSWORD=os.environ['IBF_PASSWORD']
-    # DATALAKE_STORAGE_ACCOUNT_NAME = os.environ['DATALAKE-STORAGE-ACCOUNT-NAME']
-    # DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
-    # DATALAKE_API_VERSION = '2018-11-09'
+    ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
+    GLOFAS_USER = os.environ['GLOFAS_USER']
+    GLOFAS_PW = os.environ['GLOFAS_PW']
+    #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
+    IBF_URL=os.environ['IBF_API_URL']
+    IBF_PASSWORD=os.environ['IBF_PASSWORD']
+    DATALAKE_STORAGE_ACCOUNT_NAME = os.environ['DATALAKE-STORAGE-ACCOUNT-NAME']
+    DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
+    DATALAKE_API_VERSION = '2018-11-09'
 
-# except Exception as e:
-    # print('No environment variables found.')
+ except Exception as e:
+     print('No environment variables found.')
 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
 try:
@@ -57,90 +57,10 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-#COUNTRY_CODES = ['PHL'] #
+#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+COUNTRY_CODES = ['PHL'] #
 
-SETTINGS = {
-    "ZMB": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
-        "mock": False,
-        "if_mock_trigger": False,
-        "notify_email": True,
-        'lead_times': {
-            "7-day": 7
-        },
-        'admin_level': 3,
-        'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
-        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
-        'EXPOSURE_DATA_SOURCES': {
-            "population": {
-                "source": "population/hrsl_zmb_pop_resized_100",
-                "rasterValue": 1
-            }
-        }
-    },
-    "UGA": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
-        "mock": False,
-        "if_mock_trigger": False,
-        "notify_email": True,
-        'lead_times': {
-            "5-day": 5
-        },
-        'admin_level': 4,
-        'levels':[4,3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
-        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
-        'EXPOSURE_DATA_SOURCES': {
-            "population": {
-                "source": "population/hrsl_uga_pop_resized_100",
-                "rasterValue": 1
-            }
-        }
-    },
-    "KEN": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
-        "mock": False,
-        "if_mock_trigger": False,
-        "notify_email": True,
-        'lead_times': {
-            "7-day": 7
-        },
-        'admin_level': 3,
-        'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
-        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
-        'EXPOSURE_DATA_SOURCES': {
-            "population": {
-                "source": "population/hrsl_ken_pop_resized_100",
-                "rasterValue": 1
-            }
-        }
-    },
-    "ETH": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
-        "mock": False,
-        "if_mock_trigger": False,
-        "notify_email": True,
-        'lead_times': {
-            "7-day": 7
-        },
-        'admin_level': 3,
-        'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
-        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
-        'EXPOSURE_DATA_SOURCES': {
-            "population": {
-                "source": "population/worldpop_eth",
-                "rasterValue": 1
-            }
-        }
-    },
+SETTINGS = {    
     "PHL": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
