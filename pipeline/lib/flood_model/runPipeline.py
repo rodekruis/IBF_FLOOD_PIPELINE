@@ -31,7 +31,16 @@ logging.getLogger("").addHandler(console)
 
 
 logger = logging.getLogger(__name__)
- 
+
+ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
+GLOFAS_USER = os.environ["GLOFAS_USER"]
+GLOFAS_PW = os.environ["GLOFAS_PW"]
+IBF_URL=os.environ["IBF_URL"]
+IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE-STORAGE-ACCOUNT-NAME"]
+DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
+DATALAKE_API_VERSION = "2018-11-09"
+    
 
 def main():
     startTime = time.time() 
