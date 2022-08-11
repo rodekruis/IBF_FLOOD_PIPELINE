@@ -18,7 +18,7 @@ except:
      print('No environment variables found.')
      
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
- 
+''' 
 try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
@@ -47,7 +47,7 @@ try:
     from flood_model.secrets import *
 except ImportError:
     print('No secrets file found.')
-
+'''
 
 ######################
 ## COUNTRY SETTINGS ##
