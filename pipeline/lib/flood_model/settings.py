@@ -22,28 +22,24 @@ try:
     DATALAKE_STORAGE_ACCOUNT_NAME = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-NAME").value
     DATALAKE_STORAGE_ACCOUNT_KEY = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-KEY").value
     DATALAKE_API_VERSION = '2018-11-09'
- 
-
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
- 
-# # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
-# try:
-    # import os
-    
-    # ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
-    # GLOFAS_USER = os.environ['GLOFAS_USER']
-    # GLOFAS_PW = os.environ['GLOFAS_PW']
-    # #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
-    # IBF_URL=os.environ['IBF_API_URL']
-    # IBF_PASSWORD=os.environ['IBF_PASSWORD']
-    # DATALAKE_STORAGE_ACCOUNT_NAME = os.environ['DATALAKE-STORAGE-ACCOUNT-NAME']
-    # DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
-    # DATALAKE_API_VERSION = '2018-11-09'
 
-# except Exception as e:
-    # print('No environment variables found.')
+# 2. Try to load secrets from env-variables (i.e. when using Github Actions)
+try:
+    import os    
+    ADMIN_LOGIN = os.environ['ADMIN_LOGIN']
+    GLOFAS_USER = os.environ['GLOFAS_USER']
+    GLOFAS_PW = os.environ['GLOFAS_PW']
+    IBF_URL=os.environ['IBF_API_URL']
+    IBF_PASSWORD=os.environ['IBF_PASSWORD']
+    DATALAKE_STORAGE_ACCOUNT_NAME = os.environ['DATALAKE-STORAGE-ACCOUNT-NAME']
+    DATALAKE_STORAGE_ACCOUNT_KEY = os.environ['DATALAKE-STORAGE-ACCOUNT-KEY']
+    DATALAKE_API_VERSION = '2018-11-09'
+
+except:
+     print('No environment variables found.')
 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
 try:
@@ -57,9 +53,8 @@ except ImportError:
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-#COUNTRY_CODES = ['PHL'] #
-
+#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+COUNTRY_CODES = ['PHL'] #
 SETTINGS = {
     "ZMB": {
         "IBF_API_URL": IBF_URL,
