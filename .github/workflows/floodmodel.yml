@@ -3,9 +3,8 @@ on:
   workflow_dispatch:
 jobs:
   run-flood-model:
-    runs-on: ubuntu-latest
-    environment:phl_env
-    env:
+    runs-on: ubuntu-latest    
+    env:phl_env
       running-directory: ./pipeline
     #if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
