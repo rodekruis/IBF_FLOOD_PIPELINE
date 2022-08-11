@@ -76,9 +76,6 @@ jobs:
     - name: Run script
       env:
         ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
-        #PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
-        #PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        #CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
         GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
         GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
         GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}
@@ -87,10 +84,7 @@ jobs:
         DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
         DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
         DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
-
       run: |
         run-flood-model
       working-directory: ${{ env.running-directory }}
 
-    - name: Prevent repository inactivity
-      uses: gautamkrishnar/keepalive-workflow@master
