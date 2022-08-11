@@ -62,8 +62,8 @@ COUNTRY_CODES = ['PHL'] #
 
 SETTINGS = {    
     "PHL": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
+        "IBF_API_URL": os.environ["IBF_API_URL"],
+        "PASSWORD": os.environ["IBF_PASSWORD"],
         "mock": False,
         "if_mock_trigger": False,
         "notify_email": True,
