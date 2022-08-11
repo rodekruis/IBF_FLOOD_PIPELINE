@@ -67,28 +67,30 @@ jobs:
         
     - name: Install script
       env:
-        ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
-        GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
-        GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
-        IBF_URL: ${{ secrets.IBF_API_URL }}
-        IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
-        DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
-        DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
-        DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
+        ADMIN_LOGIN: "${{ secrets.ADMIN_LOGIN }}"
+        GLOFAS_PW: "${{ secrets.GLOFAS_PW }}"
+        GLOFAS_USER: "${{ secrets.GLOFAS_USER }}"
+        IBF_URL: "${{ secrets.IBF_API_URL }}"
+        IBF_PASSWORD: "${{ secrets.IBF_PASSWORD }}"
+        DATALAKE_STORAGE_ACCOUNT_NAME: "${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}"
+        DATALAKE_STORAGE_ACCOUNT_KEY: "${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}"
+        DATALAKE_API_VERSION: "${{ secrets.DATALAKE_API_VERSION }}"
       run: |
         python -m pip install .
       working-directory: ${{ env.running-directory }}
       
     - name: Run script
-      env:
-        ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
-        GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
-        GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
-        IBF_URL: ${{ secrets.IBF_API_URL }}
-        IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
-        DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
-        DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
-        DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
+      with:
+         ENVIRONMENT: phl_env      
+      secrets:
+        ADMIN_LOGIN: "${{ secrets.ADMIN_LOGIN }}"
+        GLOFAS_PW: "${{ secrets.GLOFAS_PW }}"
+        GLOFAS_USER: "${{ secrets.GLOFAS_USER }}"
+        IBF_URL: "${{ secrets.IBF_API_URL }}"
+        IBF_PASSWORD: "${{ secrets.IBF_PASSWORD }}"
+        DATALAKE_STORAGE_ACCOUNT_NAME: "${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}"
+        DATALAKE_STORAGE_ACCOUNT_KEY: "${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}"
+        DATALAKE_API_VERSION: "${{ secrets.DATALAKE_API_VERSION }}"
         
       run: |
         run-flood-model
