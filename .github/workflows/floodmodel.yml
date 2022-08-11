@@ -3,24 +3,16 @@ on:
   workflow_dispatch:
 jobs:
   run-flood-model:
-    runs-on: ubuntu-18.04    
+    runs-on: ubuntu-18.04 
+    enviroment:phl_env
     env:
       running-directory: ./pipeline
-      ADMIN_LOGIN: ${{secrets.ADMIN_LOGIN }}
-      GLOFAS_PW: ${{secrets.GLOFAS_PW }}
-      GLOFAS_USER: ${{secrets.GLOFAS_USER }}
-      IBF_URL: ${{ secrets.IBF_API_URL }}
-      IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
-      DATALAKE_STORAGE_ACCOUNT_NAME: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_NAME }}
-      DATALAKE_STORAGE_ACCOUNT_KEY: ${{ secrets.DATALAKE_STORAGE_ACCOUNT_KEY }}
-      DATALAKE_API_VERSION: ${{ secrets.DATALAKE_API_VERSION }}
-    #if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.7
         
     - name: Install system dependencies1
       run: |
