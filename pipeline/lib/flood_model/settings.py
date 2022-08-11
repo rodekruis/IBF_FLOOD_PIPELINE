@@ -4,7 +4,7 @@
 ##################
 
 # 1. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
-''' 
+ 
 try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
@@ -25,7 +25,7 @@ try:
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
-''' 
+
 # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
 try:
     import os    
@@ -55,8 +55,87 @@ except ImportError:
 # Countries to include
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
 COUNTRY_CODES = ['PHL'] #
-
-SETTINGS = {    
+SETTINGS = {
+    "ZMB": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": True,
+        'lead_times': {
+            "7-day": 7
+        },
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_zmb_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "UGA": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": True,
+        'lead_times': {
+            "5-day": 5
+        },
+        'admin_level': 4,
+        'levels':[4,3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_uga_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "KEN": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": True,
+        'lead_times': {
+            "7-day": 7
+        },
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_ken_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "ETH": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "if_mock_trigger": False,
+        "notify_email": True,
+        'lead_times': {
+            "7-day": 7
+        },
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/worldpop_eth",
+                "rasterValue": 1
+            }
+        }
+    },
     "PHL": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
