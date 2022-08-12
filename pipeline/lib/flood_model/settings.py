@@ -23,7 +23,7 @@ try:
 
 except:
      print('No environment variables found.')
-DATALAKE_STORAGE_ACCOUNT_KEY='{DATALAKE_STORAGE_ACCOUNT_KEY_}=='.format(**os.environ))    
+DATALAKE_STORAGE_ACCOUNT_KEY=f'{DATALAKE_STORAGE_ACCOUNT_KEY_}=='#.format(**os.environ))    
 '''
     
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
