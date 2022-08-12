@@ -19,11 +19,12 @@ try:
     DATALAKE_STORAGE_ACCOUNT_KEY_ = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
     #DATALAKE_STORAGE_ACCOUNT_KEY_ =os.environ.get("DATALAKE-STORAGE-ACCOUNT-KEY")
     print('Environment variables found.')
+    DATALAKE_STORAGE_ACCOUNT_KEY=f'{DATALAKE_STORAGE_ACCOUNT_KEY_}=='
     
 
 except:
      print('No environment variables found.')
-DATALAKE_STORAGE_ACCOUNT_KEY=f'{DATALAKE_STORAGE_ACCOUNT_KEY_}=='#.format(**os.environ))    
+#.format(**os.environ))    
 '''
     
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
@@ -58,12 +59,12 @@ except ImportError:
     print('No secrets file found.')
 
 DATALAKE_API_VERSION = "2018-11-09"
-
+IBF_URL='https://ibf.510.global/api/'
 
 ######################
 ## COUNTRY SETTINGS ##
 ######################
-IBF_URL='https://ibf.510.global/api/'
+
 # Countries to include
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
 COUNTRY_CODES = ['PHL'] #
