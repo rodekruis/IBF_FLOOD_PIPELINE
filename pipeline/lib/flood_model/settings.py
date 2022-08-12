@@ -19,13 +19,14 @@ try:
     DATALAKE_STORAGE_ACCOUNT_NAME =os.environ.get("DATALAKE-STORAGE-ACCOUNT-NAME")
     #DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
     DATALAKE_STORAGE_ACCOUNT_KEY =os.environ.get("DATALAKE-STORAGE-ACCOUNT-KEY")
+    print('Environment variables found.')
     
 
 except:
      print('No environment variables found.')
      
 DATALAKE_API_VERSION = "2018-11-09"
-DATALAKE_STORAGE_ACCOUNT_KEY=DATALAKE_STORAGE_ACCOUNT_KEY+'=='
+DATALAKE_STORAGE_ACCOUNT_KEY=str(DATALAKE_STORAGE_ACCOUNT_KEY)+'=='
 '''    
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
@@ -162,7 +163,7 @@ SETTINGS = {
         'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
         'EXPOSURE_DATA_SOURCES': {
             "population": {
-                "source": "population/hrsl_phl_pop_resized_10",
+                "source": "population/hrsl_phl_pop_resized_100",
                 "rasterValue": 1
             }
         }
