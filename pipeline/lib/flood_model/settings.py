@@ -5,19 +5,27 @@
 # 1. Try to load secrets from env-variables (i.e. when using Github Actions)
 try:
     import os    
-    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
-    GLOFAS_USER = os.environ["GLOFAS_USER"]
-    GLOFAS_PW = os.environ["GLOFAS_PW"]
-    IBF_URL=os.environ["IBF_URL"]
-    IBF_PASSWORD=os.environ["IBF_PASSWORD"]
-    DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE-STORAGE-ACCOUNT-NAME"]
-    DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
-    DATALAKE_API_VERSION = "2018-11-09"
+    #ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
+    ADMIN_LOGIN =os.environ.get("ADMIN_LOGIN") 
+    #GLOFAS_USER = os.environ["GLOFAS_USER"]
+    GLOFAS_USER =os.environ.get("GLOFAS_USER")
+    #GLOFAS_PW = os.environ["GLOFAS_PW"]
+    GLOFAS_PW =os.environ.get("GLOFAS_PW")
+    #IBF_URL=os.environ["IBF_URL"]
+    #IBF_URL =os.environ.get("IBF_URL")
+    #IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+    IBF_PASSWORD =os.environ.get("IBF_PASSWORD")
+    #DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE-STORAGE-ACCOUNT-NAME"]
+    DATALAKE_STORAGE_ACCOUNT_NAME =os.environ.get("DATALAKE-STORAGE-ACCOUNT-NAME")
+    #DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
+    DATALAKE_STORAGE_ACCOUNT_KEY =os.environ.get("DATALAKE-STORAGE-ACCOUNT-KEY")
+    
 
 except:
      print('No environment variables found.')
-
-DATALAKE_API_VERSION = '2018-11-09'
+     
+DATALAKE_API_VERSION = "2018-11-09"
+DATALAKE_STORAGE_ACCOUNT_KEY=DATALAKE_STORAGE_ACCOUNT_KEY+'=='
 '''    
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
@@ -54,7 +62,7 @@ except ImportError:
 ######################
 ## COUNTRY SETTINGS ##
 ######################
-
+IBF_URL='https://ibf.510.global/api/'
 # Countries to include
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
 COUNTRY_CODES = ['PHL'] #
