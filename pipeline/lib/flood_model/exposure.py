@@ -56,7 +56,8 @@ class Exposure:
  
   
             #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
-            for adm_level in SETTINGS[self.countryCodeISO3]['levels']:  
+            for adm_level in SETTINGS[self.countryCodeISO3]['levels']:
+                logger.info(f'processing indicator: {indicator} for admin level{adm_level}')         
                 if adm_level==self.admin_level:
                     df_stats_levl=stats
                 else:
