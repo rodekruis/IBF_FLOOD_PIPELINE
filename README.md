@@ -48,7 +48,6 @@ Getting its secrets from Azure Key Vault.
 - The Azure logic app needs to be set up separately, based on this repository.
 - The logic to get the secrets from the Azure Key Vault is already included in the code. 
 
-
 ## Versions
 You can find the versions in the [tags](https://github.com/rodekruis/IBF_FLOOD_PIPELINE/tags) of the commits. See below table to find which version of the pipeline corresponds to which version of IBF-Portal.
 | Flood Pipeline version  | IBF-Portal version | Changes |
