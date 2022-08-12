@@ -67,7 +67,7 @@ class FloodExtent:
 
             with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
                 dest.write(out_image)
-
+            logger.info(f"flood extent file written for {pcode}")
 
         #Merge all clipped flood extents back together and Save
         mosaic, out_meta = self.mergeRasters()
