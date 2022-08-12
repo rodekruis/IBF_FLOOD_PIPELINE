@@ -54,6 +54,7 @@ class FloodExtent:
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)
             
             ### to save time process only districts with GLOFAS stations 
+            
             if pcode in Areas_With_GlofasStation:
                 #If trigger, find the right flood extent and clip it for the area and save it
                 trigger = rows['fc_trigger']
