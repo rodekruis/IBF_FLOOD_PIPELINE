@@ -83,7 +83,7 @@ jobs:
         working-directory: ${{ env.running-directory }}
       
       - name: Run script
-        env:
+        enviroment:
            ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
            GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
            GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
