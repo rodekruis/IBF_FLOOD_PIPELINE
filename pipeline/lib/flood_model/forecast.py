@@ -64,28 +64,8 @@ class Forecast:
                 df=pd.merge(df.copy(),df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
      
         df=df[[f"placeCode_{i}" for i in self.levels]]      
-        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]   
-        
-        # df_admin2=df_admin.filter(['adminLevel','placeCode','placeCodeParent'])
-        # df_list={}       
- 
-        # for adm_level in self.levels:
-            # df_=df_admin2.query(f'adminLevel == {adm_level}')
-            # df_.rename(columns={"placeCode": f"placeCode_{adm_level}","placeCodeParent": f"placeCodeParent_{adm_level}"},inplace=True)            
-            # df_list[adm_level]=df_
-        # df=df_list[self.admin_level]
-        # for adm_level in self.levels:
-            # j=adm_level-1
-            # if j >0:
-                # df=pd.merge(df,df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}') 
-        # df=df[[f"placeCode_{i}" for i in self.levels]]
-        # self.pcode_df=df
-
-        #population_df_ = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'), countryCodeISO3='')
-        #population_df=pd.DataFrame(population_df)
-        #df_admin['placeCode']=df_admin['placeCode'].apply(lambda x:'ZM'+x)
-        #df_admin[['placeCodeParent','placeCode','name']].to_csv('zam_pcod1_pcode3.csv')
-        
+        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]           
+       
         df_admin=df_admin.query(f'adminLevel == {self.admin_level}')
         
  
@@ -105,15 +85,12 @@ class Forecast:
         population_df=pd.DataFrame(population_df) 
 
         
-        self.admin_area_gdf2 = df_admin1
+        #self.admin_area_gdf2 = df_admin1
         df_admin1=df_admin1.query(f'adminLevel == {self.admin_level}')
 
             
         df_admin=df_admin.filter(['placeCode','placeCodeParent','name'])#,'geometry'])
 
-    
-
- 
         self.admin_area_gdf = df_admin1#geopandas.GeoDataFrame.from_features(admin_area_json)
         district_mapping_df = pd.read_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping.csv', index_col=False,dtype={'placeCode': str, 'ADM2_PCODE': str}) 
         district_mapping_df=district_mapping_df.filter(['placeCode','glofasStation'])
