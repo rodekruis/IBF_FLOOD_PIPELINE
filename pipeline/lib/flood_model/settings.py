@@ -18,7 +18,7 @@ except:
      print('No environment variables found.')
 
 DATALAKE_API_VERSION = '2018-11-09'
-     
+'''    
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
 try:
@@ -49,7 +49,7 @@ try:
     from flood_model.secrets import *
 except ImportError:
     print('No secrets file found.')
-
+'''
 
 ######################
 ## COUNTRY SETTINGS ##
