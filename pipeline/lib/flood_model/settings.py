@@ -1,33 +1,31 @@
-
+import os 
 ##################
 ## LOAD SECRETS ##
 ##################
 # 1. Try to load secrets from env-variables (i.e. when using Github Actions)
 try:
-    import os    
-    #ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
-    ADMIN_LOGIN =os.environ.get("ADMIN_LOGIN") 
-    #GLOFAS_USER = os.environ["GLOFAS_USER"]
-    GLOFAS_USER =os.environ.get("GLOFAS_USER")
-    #GLOFAS_PW = os.environ["GLOFAS_PW"]
-    GLOFAS_PW =os.environ.get("GLOFAS_PW")
+    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
+    #ADMIN_LOGIN =os.environ.get("ADMIN_LOGIN") 
+    GLOFAS_USER = os.environ["GLOFAS_USER"]
+    #GLOFAS_USER =os.environ.get("GLOFAS_USER")
+    GLOFAS_PW = os.environ["GLOFAS_PW"]
+    #GLOFAS_PW =os.environ.get("GLOFAS_PW")
     #IBF_URL=os.environ["IBF_URL"]
     #IBF_URL =os.environ.get("IBF_URL")
-    #IBF_PASSWORD=os.environ["IBF_PASSWORD"]
-    IBF_PASSWORD =os.environ.get("IBF_PASSWORD")
-    #DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE-STORAGE-ACCOUNT-NAME"]
-    DATALAKE_STORAGE_ACCOUNT_NAME =os.environ.get("DATALAKE-STORAGE-ACCOUNT-NAME")
-    #DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
-    DATALAKE_STORAGE_ACCOUNT_KEY =os.environ.get("DATALAKE-STORAGE-ACCOUNT-KEY")
+    IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+    #IBF_PASSWORD =os.environ.get("IBF_PASSWORD")
+    DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE-STORAGE-ACCOUNT-NAME"]
+    #DATALAKE_STORAGE_ACCOUNT_NAME =os.environ.get("DATALAKE-STORAGE-ACCOUNT-NAME")
+    DATALAKE_STORAGE_ACCOUNT_KEY_ = os.environ["DATALAKE-STORAGE-ACCOUNT-KEY"]
+    #DATALAKE_STORAGE_ACCOUNT_KEY_ =os.environ.get("DATALAKE-STORAGE-ACCOUNT-KEY")
     print('Environment variables found.')
     
 
 except:
      print('No environment variables found.')
-     
-DATALAKE_API_VERSION = "2018-11-09"
-DATALAKE_STORAGE_ACCOUNT_KEY=str(DATALAKE_STORAGE_ACCOUNT_KEY)+'=='
-'''    
+DATALAKE_STORAGE_ACCOUNT_KEY='{DATALAKE_STORAGE_ACCOUNT_KEY_}=='.format(**os.environ))    
+'''
+    
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
 try:
@@ -51,14 +49,16 @@ try:
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
 
-
+'''
 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
 try:
     from flood_model.secrets import *
 except ImportError:
     print('No secrets file found.')
-'''
+
+DATALAKE_API_VERSION = "2018-11-09"
+
 
 ######################
 ## COUNTRY SETTINGS ##
