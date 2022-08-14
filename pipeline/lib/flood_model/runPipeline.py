@@ -40,8 +40,8 @@ def main():
     ## download data from Datalacke 
     
  
-    dbm_ = dbm('3-day', 'PHL',3)
-    filename='data_phl.zip'
+    dbm_ = dbm('7-day', 'ETH',3)
+    filename='data.zip'
     path = 'flood/Gold/datapipeline/'+ filename
     #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
     DataFile = dbm_.getDataFromDatalake(path)
