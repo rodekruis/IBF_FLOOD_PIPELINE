@@ -66,8 +66,8 @@ IBF_URL='https://ibf.510.global/api/'
 ######################
 
 # Countries to include
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+#COUNTRY_CODES = ['PHL'] #
 SETTINGS = {
     "ZMB": {
         "IBF_API_URL": IBF_URL,
