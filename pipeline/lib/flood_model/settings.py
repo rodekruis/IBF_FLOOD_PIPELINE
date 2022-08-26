@@ -3,6 +3,7 @@ import os
 ## LOAD SECRETS ##
 ##################
 # 1. Try to load secrets from env-variables (i.e. when using Github Actions)
+ 
 try:
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
     #ADMIN_LOGIN =os.environ.get("ADMIN_LOGIN") 
@@ -49,7 +50,7 @@ try:
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
-
+ 
 
 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
@@ -59,16 +60,37 @@ except ImportError:
     print('No secrets file found.')
 
 DATALAKE_API_VERSION = "2018-11-09"
-IBF_URL='https://ibf.510.global/api/'
+#IBF_URL='https://ibf-test.510.global/api/'
 
 ######################
 ## COUNTRY SETTINGS ##
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-#COUNTRY_CODES = ['PHL'] #
+#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+COUNTRY_CODES = ['ETH'] # 
 SETTINGS = {
+    "MWI": {
+            "IBF_API_URL": IBF_URL,
+            "PASSWORD": IBF_PASSWORD,
+            "mock": False,
+            "if_mock_trigger": False,
+            "notify_email": False,
+            'lead_times': {
+                "7-day": 7
+            },
+            'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+            'admin_level': 3,
+            'levels':[3,2,1],
+            'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+            'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',  
+            'EXPOSURE_DATA_SOURCES': {
+                "population": {
+                    "source": "population/population_mwi",
+                    "rasterValue": 1
+               }
+          }
+     },
     "ZMB": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
@@ -78,6 +100,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -98,6 +121,7 @@ SETTINGS = {
         'lead_times': {
             "5-day": 5
         },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'admin_level': 4,
         'levels':[4,3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -118,6 +142,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -138,6 +163,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
+        'TRIGGER_LEVELS':{"minimum": 0.5,"medium": 0.7,"maximum": 0.8},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -158,6 +184,7 @@ SETTINGS = {
         'lead_times': {
             "3-day": 3
         },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/RedcrossPhilippines_glofas_point/',
@@ -188,6 +215,8 @@ CURRENT_DATE = date.today()
 ####################
 GOOGLE_DRIVE_DATA_URL = 'https://drive.google.com/file/d/14MbG4uFPGJCduM5aLkvgSGqA8io6Gh9C/view?usp=sharing'
 
+
+# Trigger probability 
 TRIGGER_LEVELS = {
     "minimum": 0.6,
     "medium": 0.7,

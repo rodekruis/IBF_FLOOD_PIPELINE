@@ -34,6 +34,7 @@ class GlofasData:
         self.countryCodeISO3 = countryCodeISO3
         self.GLOFAS_FILENAME=SETTINGS[countryCodeISO3]['GLOFAS_FILENAME']
         self.GLOFAS_FTP=SETTINGS[countryCodeISO3]['GLOFAS_FTP']
+        self.TRIGGER_LEVELS=SETTINGS[countryCodeISO3]['TRIGGER_LEVELS']
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.triggerPerDay = PIPELINE_OUTPUT + \
             'triggers_rp_per_station/trigger_per_day_' + countryCodeISO3 + '.json'
@@ -193,9 +194,9 @@ class GlofasData:
                     prob = count/ensemble_options
                     dis_avg = dis_sum/ensemble_options
                     station['fc'] = dis_avg
-                    station['fc_prob'] = prob
-                    station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
-
+                    station['fc_prob'] = prob 
+                    station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
+                    #station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
                     if station['fc_trigger'] == 1:
                         trigger_per_day[str(step)+'-day'] = True
 
@@ -301,7 +302,8 @@ class GlofasData:
                     dis_avg = dis_sum/ensemble_options
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob
-                    station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
+                    station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
+                    #station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
 
                     if station['fc_trigger'] == 1:
                         trigger_per_day[str(step)+'-day'] = True
