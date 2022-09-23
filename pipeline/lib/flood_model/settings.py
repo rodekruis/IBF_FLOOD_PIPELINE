@@ -163,7 +163,7 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'TRIGGER_LEVELS':{"minimum": 0.5,"medium": 0.7,"maximum": 0.8},
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
