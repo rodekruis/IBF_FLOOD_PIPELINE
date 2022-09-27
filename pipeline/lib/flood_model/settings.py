@@ -67,8 +67,8 @@ DATALAKE_API_VERSION = "2018-11-09"
 ######################
 
 # Countries to include
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-COUNTRY_CODES = ['ETH'] # 
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+#COUNTRY_CODES = ['ETH'] # 
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
