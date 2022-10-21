@@ -111,7 +111,7 @@ STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
 #########################
 
 # Glofas input
-GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
+GLOFAS_FTP = 'aux.ecmwf.int/ZambiaRedcross_glofas_point/'
 GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
 
 
