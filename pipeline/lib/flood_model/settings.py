@@ -67,7 +67,7 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -87,7 +87,7 @@ SETTINGS = {
         },
         'admin_level': 4,
         'levels':[4,3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -107,7 +107,7 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -127,7 +127,7 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -147,7 +147,7 @@ SETTINGS = {
         },
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'data-portal.ecmwf.int/RedcrossPhilippines_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
         'EXPOSURE_DATA_SOURCES': {
             "population": {
