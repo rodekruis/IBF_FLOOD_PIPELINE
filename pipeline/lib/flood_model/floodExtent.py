@@ -24,6 +24,7 @@ class FloodExtent:
         self.outputPathMerge = RASTER_OUTPUT + '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
+        self.Areas_With_GlofasStation=Areas_With_GlofasStation
 
     def calculate(self):
         admin_gdf = self.ADMIN_AREA_GDF.copy()
@@ -55,20 +56,24 @@ class FloodExtent:
             
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)
             
+            ### for PHL to save time process only districts with GLOFAS stations 
             
-            #If trigger, find the right flood extent and clip it for the area and save it
-            trigger = rows['fc_trigger']
-            if trigger == 1:
-                return_period = rows['fc_rp_flood_extent'] 
-                input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
-            else:
-                input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
+            if pcode in self.Areas_With_GlofasStation:
+                logger.info(f'procssing {pcode}')
+                
+                #If trigger, find the right flood extent and clip it for the area and save it
+                trigger = rows['fc_trigger']
+                if trigger == 1:
+                    return_period = rows['fc_rp_flood_extent'] 
+                    input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
+                else:
+                    input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
 
-            out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
-            
+                out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
+                
 
-            with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
-                dest.write(out_image)
+                with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
+                    dest.write(out_image)
 
 
         #Merge all clipped flood extents back together and Save
