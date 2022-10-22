@@ -26,7 +26,7 @@ class FloodExtent:
         self.ADMIN_AREA_GDF = admin_area_gdf
 
     def calculate(self):
-        admin_gdf = self.ADMIN_AREA_GDF
+        admin_gdf = self.ADMIN_AREA_GDF.copy()
         #admin_gdf.crs = "EPSG:4326"
         #if self.countryCodeISO3=='KEN':
         #    admin_gdf=admin_gdf.to_crs(4210)
@@ -48,7 +48,9 @@ class FloodExtent:
         #Loop through catchment-areas and clip right flood extent
         for index, rows in df_glofas.iterrows():
             #Filter the catchment-area GDF per area
+            
             pcode = rows['placeCode']
+            logger.info(f'procssing {pcode}')
             gdf_dist = admin_gdf[admin_gdf['placeCode'] == pcode]
             
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)

@@ -104,7 +104,7 @@ class Forecast:
         population_df=pd.DataFrame(population_df) 
 
         
-        self.admin_area_gdf2 = df_admin1
+        self.admin_area_gdf2 = df_admin1.copy()
         df_admin1=df_admin1.query(f'adminLevel == {self.admin_level}')
 
             
@@ -113,7 +113,7 @@ class Forecast:
     
 
  
-        self.admin_area_gdf = df_admin1#geopandas.GeoDataFrame.from_features(admin_area_json)
+        self.admin_area_gdf = df_admin1.copy()#geopandas.GeoDataFrame.from_features(admin_area_json)
         district_mapping_df = pd.read_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping.csv', index_col=False,dtype={'placeCode': str, 'ADM2_PCODE': str}) 
         district_mapping_df=district_mapping_df.filter(['placeCode','glofasStation'])
         district_mapping_df = pd.merge(district_mapping_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
@@ -124,7 +124,7 @@ class Forecast:
         #print(population_df)
         
         population_df=population_df.to_dict(orient='records')
-        self.population_total =population_df
+        self.population_total =population_df.copy()
 
         #read glofas trigger levels from file
         glofas_stations = self.db.apiGetRequest('glofas-stations',countryCodeISO3=countryCodeISO3)
