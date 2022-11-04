@@ -92,7 +92,7 @@ class Forecast:
         df_admin=df_admin.filter(['placeCode','placeCodeParent','name'])#,'geometry'])
 
         self.admin_area_gdf = df_admin1#geopandas.GeoDataFrame.from_features(admin_area_json)
-        district_mapping_df = pd.read_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping.csv', index_col=False,dtype={'placeCode': str, 'ADM2_PCODE': str}) 
+        district_mapping_df = pd.read_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping.csv', index_col=False,dtype={'placeCode': str, 'ADM2_PCODE': str,'ADM3_PCODE': str}) 
         district_mapping_df=district_mapping_df.filter(['placeCode','glofasStation'])
         district_mapping_df = pd.merge(district_mapping_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
         district_mapping_df['placeCode'] = district_mapping_df['placeCode'].astype(str)
@@ -107,13 +107,15 @@ class Forecast:
         #read glofas trigger levels from file
         glofas_stations = self.db.apiGetRequest('glofas-stations',countryCodeISO3=countryCodeISO3)
         df=pd.read_csv(self.TriggersFolder + f'{countryCodeISO3}_glofas_stations.csv', index_col=False)
+        
         df_glofas_stations= pd.DataFrame(glofas_stations)        
         df_glofas_stations = df_glofas_stations.filter(['id', 'stationCode','geom'])
+        
         df_glofas_stations = pd.merge(df_glofas_stations, df,  how='left', left_on=['stationCode'], right_on = ['stationCode'])
         dic_glofas_stations = df_glofas_stations.to_dict(orient='records')
         self.glofas_stations = dic_glofas_stations
      
-        self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping)
+        self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping,self.admin_area_gdf)
         self.floodExtent = FloodExtent(leadTimeLabel, leadTimeValue, countryCodeISO3, self.district_mapping, self.admin_area_gdf)
         self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping,self.pcode_df)
         

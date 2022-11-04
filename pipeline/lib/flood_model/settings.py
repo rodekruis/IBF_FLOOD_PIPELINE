@@ -2,6 +2,7 @@ import os
 ##################
 ## LOAD SECRETS ##
 ##################
+ 
 # 1. Try to load secrets from env-variables (i.e. when using Github Actions)
  
 try:
@@ -52,7 +53,7 @@ except Exception as e:
     print('No access to Azure Key vault, skipping.')
  
 
-
+ 
 # 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
 try:
     from flood_model.secrets import *
@@ -67,14 +68,17 @@ DATALAKE_API_VERSION = "2018-11-09"
 ######################
 
 # Countries to include
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-#COUNTRY_CODES = ['ETH'] # 
+#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
+COUNTRY_CODES = ['SSD'] # 
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
             "PASSWORD": IBF_PASSWORD,
             "mock": False,
             "if_mock_trigger": False,
+            "placeCodeInitial": 'MWI',
+            "glofasReturnPeriod":'rl5',
+            "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
             "notify_email": False,
             'lead_times': {
                 "7-day": 7
@@ -96,6 +100,9 @@ SETTINGS = {
         "PASSWORD": IBF_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
+        "placeCodeInitial": 'ZMB',
+        "glofasReturnPeriod":'rl10',
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         'lead_times': {
             "7-day": 7
@@ -116,8 +123,11 @@ SETTINGS = {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
         "mock": False,
+        "placeCodeInitial": 'UGA',
         "if_mock_trigger": False,
         "notify_email": True,
+        "glofasReturnPeriod":'rl5',
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
             "5-day": 5
         },
@@ -137,8 +147,11 @@ SETTINGS = {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
         "mock": False,
+        "placeCodeInitial": 'KEN',
         "if_mock_trigger": False,
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
+        "glofasReturnPeriod":'rl5',
         'lead_times': {
             "7-day": 7
         },
@@ -157,9 +170,12 @@ SETTINGS = {
     "ETH": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
+        "placeCodeInitial": 'ETH',
         "mock": False,
         "if_mock_trigger": False,
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
+        "glofasReturnPeriod":'rl10',
         'lead_times': {
             "7-day": 7
         },
@@ -179,8 +195,11 @@ SETTINGS = {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
         "mock": False,
+        "placeCodeInitial": 'PHL',
         "if_mock_trigger": False,
         "notify_email": True,
+        "placecodeLen":9, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        "glofasReturnPeriod":'rl5',
         'lead_times': {
             "3-day": 3
         },
@@ -195,16 +214,44 @@ SETTINGS = {
                 "rasterValue": 1
             }
         }
+    },
+    "SSD": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "placeCodeInitial": 'SS',
+        "if_mock_trigger": False,
+        "notify_email": True,
+        "glofasReturnPeriod":'rl5',
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        'lead_times': {
+            "7-day": 7
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'admin_level': 3,
+        'levels':[3],
+        'GLOFAS_FTP':'aux.ecmwf.int/for_JBA/',
+        'GLOFAS_FILENAME':'glofas_areagrid_for_JBA_in_Global', 
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/ssd_ppp_2020_adjusted",
+                "rasterValue": 1
+            }
+        }
     }
 }
 
 
 
 
+GLOFAS_GRID_FILENAME='glofas_areagrid_for_JBA_in_Global'
 
 # Change this date only in case of specific testing purposes
+
 from datetime import date, timedelta
+
 CURRENT_DATE = date.today()
+
 #CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
 
 
