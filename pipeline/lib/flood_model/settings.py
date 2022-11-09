@@ -61,7 +61,8 @@ except ImportError:
     print('No secrets file found.')
 
 DATALAKE_API_VERSION = "2018-11-09"
-#IBF_URL='https://ibf-test.510.global/api/'
+# IBF_URL='https://ibf-test.510.global/api/'
+# IBF_PASSWORD = 'password'
 
 ######################
 ## COUNTRY SETTINGS ##
@@ -69,7 +70,7 @@ DATALAKE_API_VERSION = "2018-11-09"
 
 # Countries to include
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] #
-COUNTRY_CODES = ['SSD'] # 
+COUNTRY_CODES = ['MWI'] # 
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
@@ -93,8 +94,18 @@ SETTINGS = {
                     "source": "population/population_mwi",
                     "rasterValue": 1
                }
-          }
-     },
+            },
+            'EXPOSURE_DATA_UBR_SOURCES': {
+                "pop_u18": {
+                    "source": "mwi_3_population_ubr",
+                    "col_name": "ubr_pop_u18"
+                },
+                "pop_65": {
+                    "source": "mwi_3_population_ubr",
+                    "col_name": "ubr_pop_65"
+                }
+            }
+    },
     "ZMB": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
