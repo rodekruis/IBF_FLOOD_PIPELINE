@@ -36,6 +36,8 @@ class Exposure:
         #self.ADMIN_AREA_GDF_TMP_PATH = os.path.join(PIPELINE_OUTPUT,"admin-areas_TMP.geojson")  #s.geojson', driver='GeoJSON')
         self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
+        if self.countryCodeISO3 == 'MWI':
+            self.EXPOSURE_DATA_UBR_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_UBR_SOURCES']
         
         self.levels = SETTINGS[countryCodeISO3]['levels']
         self.pcode_df=pcodes
@@ -116,6 +118,52 @@ class Exposure:
 
                 with open(alert_threshold_file_path, 'w') as fp:
                     json.dump(alert_threshold_records, fp)
+        
+        if self.countryCodeISO3 == 'MWI':
+            try:
+                self.UBR_ADM_PATH = os.path.join(self.PIPELINE_INPUT_COD, \
+                    f"{self.countryCodeISO3}_population_ubr.csv") 
+                with open(self.UBR_ADM_PATH) as fp:
+                    population_ubr = pd.read_csv(fp)
+            except Exception as e:
+                logger.info('file not found')
+
+            for indicator, values in self.EXPOSURE_DATA_UBR_SOURCES.items():
+                logger.info(f'indicator: {indicator}')
+                col_name = self.EXPOSURE_DATA_UBR_SOURCES[indicator]['col_name']
+ 
+                for adm_level in SETTINGS[self.countryCodeISO3]['levels']:
+                    df_indicator = population_ubr[[f'placeCode_{adm_level}', col_name]]
+                    alert_threshold_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'alert_threshold' + '.json'
+                    with open(alert_threshold_file_path) as fp:
+                        alert_threshold = json.load(fp)
+                    df_alert_threshold = pd.DataFrame(alert_threshold["exposurePlaceCodes"])#.set_index('placeCode').to_dict()
+                    
+                    df_stats = pd.merge(df_alert_threshold, df_indicator, \
+                        how='left', left_on='placeCode', right_on=f'placeCode_{adm_level}')
+                    df_stats['amount'] = df_stats['amount'] * df_stats[col_name]
+
+                    df_stats_levl = df_stats.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
+                    df_stats_levl.reset_index(inplace=True)
+                    df_stats_levl['placeCode'] = df_stats_levl[f'placeCode_{adm_level}']
+                    df_stats_levl = df_stats_levl[['amount','placeCode']].to_dict(orient='records')
+
+                    result = {
+                        'countryCodeISO3': self.countryCodeISO3,
+                        'exposurePlaceCodes': df_stats_levl,
+                        'leadTime': self.leadTimeLabel,
+                        'dynamicIndicator': 'exposed_' + indicator,# + '_affected',
+                        'adminLevel': adm_level
+                    }
+
+                    self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' + str(adm_level) + '_' + str(indicator) + '.json'
+
+                    # self.to_json_api(self.countryCodeISO3, df_stats_levl, \
+                    #     self.leadTimeLabel, indicator, adm_level, self.statsPath)
+                    with open(self.statsPath, 'w') as fp:
+                        json.dump(result, fp)
 
 
     def get_alert_threshold(self, population_affected):

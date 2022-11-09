@@ -442,6 +442,14 @@ class GlofasData:
                                 discharge = 11400
                             elif station['code'] == 'G5100':  # SS dummy flood station 3
                                 discharge = 41400    
+                            elif station['code'] == 'G1724':  # MWI dummy flood station 1
+                                discharge = 6000
+                            elif station['code'] == 'G2001':  # MWI dummy flood station 2
+                                discharge = 7000
+                            elif station['code'] == 'G5670':  # MWI dummy flood station 3
+                                discharge = 4400
+                            elif station['code'] == 'G5694':  # MWI dummy flood station 4
+                                discharge = 3000
                             else:
                                 discharge = 0
                         else:
@@ -507,7 +515,7 @@ class GlofasData:
             fc = float(row['fc'])
             trigger = int(row['fc_trigger'])
             if trigger == 1:
-                if self.countryCodeISO3 == 'ZMB':
+                if (self.countryCodeISO3 == 'ZMB') or (self.countryCodeISO3 == 'MWI'):
                     if fc >= row['threshold20Year']:
                         return_period_flood_extent = 20
                     else:
