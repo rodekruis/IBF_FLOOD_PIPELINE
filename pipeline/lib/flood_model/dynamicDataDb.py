@@ -25,6 +25,8 @@ class DatabaseManager:
         self.triggerFolder = PIPELINE_OUTPUT + "triggers_rp_per_station/"
         self.affectedFolder = PIPELINE_OUTPUT + "calculated_affected/"
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
+        if countryCodeISO3 == 'MWI':
+            self.EXPOSURE_DATA_UBR_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_UBR_SOURCES']
         self.API_SERVICE_URL = SETTINGS[countryCodeISO3]['IBF_API_URL']
         self.ADMIN_PASSWORD = SETTINGS[countryCodeISO3]['PASSWORD']
         self.levels = SETTINGS[countryCodeISO3]['levels']
@@ -127,7 +129,15 @@ class DatabaseManager:
         #             #body['adminLevel'] = self.admin_level
         #             self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
         #         print('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage')
-
+            if self.countryCodeISO3 == 'MWI':
+                for indicator, values in self.EXPOSURE_DATA_UBR_SOURCES.items():
+                    affectedIndicatorPath = self.affectedFolder + \
+                            'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + indicator + '.json'
+                    with open(affectedIndicatorPath) as json_file:
+                        body = json.load(json_file)
+                        body['disasterType'] = self.getDisasterType()
+                        self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
+                        logger.info('Uploaded calculated_affected for indicator: ' + f'{indicator} for admin level: ' + str(adminlevels))
 
     def uploadRasterFile(self):
         disasterType = self.getDisasterType()
