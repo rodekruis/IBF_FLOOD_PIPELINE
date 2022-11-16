@@ -39,7 +39,7 @@ try:
   
     DATALAKE_STORAGE_ACCOUNT_NAME = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-NAME").value
     DATALAKE_STORAGE_ACCOUNT_KEY = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-KEY").value
-    DATALAKE_API_VERSION = '2018-11-09'
+    DATALAKE_API_VERSION = '2021-06-08'
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')

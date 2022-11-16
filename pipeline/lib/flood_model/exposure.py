@@ -84,7 +84,7 @@ class Exposure:
                 df1['adminLevel']=adm_level
                 df1['leadTime']=adm_level
                 df1['dynamicIndicator']=indicator + '_affected'
-                df1.to_csv(population_affected_percentage_file_pathCsv)
+                df1.to_csv(self.statsPathCsv)
                     
                 with open(self.statsPath, 'w') as fp:
                     json.dump(result, fp)
