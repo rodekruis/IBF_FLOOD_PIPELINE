@@ -71,7 +71,8 @@ class Exposure:
  
                 self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
                     self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.json'
-
+                self.statsPathCsv = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.csv'
                 result = {
                     'countryCodeISO3': self.countryCodeISO3,
                     'exposurePlaceCodes': df_stats_levl,
@@ -79,7 +80,12 @@ class Exposure:
                     'dynamicIndicator': indicator + '_affected',
                     'adminLevel': adm_level
                 }
-                
+                df1 = pd.DataFrame(df_stats_levl)
+                df1['adminLevel']=adm_level
+                df1['leadTime']=adm_level
+                df1['dynamicIndicator']=indicator + '_affected'
+                df1.to_csv(population_affected_percentage_file_pathCsv)
+                    
                 with open(self.statsPath, 'w') as fp:
                     json.dump(result, fp)
 
@@ -90,7 +96,8 @@ class Exposure:
      
                     population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
                         self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'population_affected_percentage' + '.json'
-                        
+                    population_affected_percentage_file_pathCsv = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'population_affected_percentage' + '.csv'                        
                     population_affected_percentage_records = {
                         'countryCodeISO3': self.countryCodeISO3,
                         'exposurePlaceCodes': population_affected_percentage, 
@@ -98,6 +105,11 @@ class Exposure:
                         'dynamicIndicator': 'population_affected_percentage',
                         'adminLevel': adm_level
                     }
+                    df = pd.DataFrame(population_affected_percentage)
+                    df['adminLevel']=adm_level
+                    df['leadTime']=adm_level
+                    df['dynamicIndicator']='population_affected_percentage'
+                    df.to_csv(population_affected_percentage_file_pathCsv)
 
                     with open(population_affected_percentage_file_path, 'w') as fp:
                         json.dump(population_affected_percentage_records, fp)
