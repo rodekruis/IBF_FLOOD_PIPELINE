@@ -26,7 +26,9 @@ try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
     az_credential = DefaultAzureCredential()
-    secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
+    #secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
+    secret_client = SecretClient(vault_url='https://ibf-training-keys.vault.azure.net', credential=az_credential)
+    
 
     ADMIN_LOGIN = secret_client.get_secret("ADMIN-LOGIN").value
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
