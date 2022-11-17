@@ -1,5 +1,4 @@
 import os 
-
 from datetime import date, timedelta
 ##################
 ## LOAD SECRETS ##
@@ -25,6 +24,13 @@ except:
 try:
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
+
+    if not os.getenv("AZURE_CLIENT_ID"):
+        from flood_model.secrets import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID
+        os.environ["AZURE_CLIENT_ID"] = AZURE_CLIENT_ID
+        os.environ["AZURE_CLIENT_SECRET"] = AZURE_CLIENT_SECRET
+        os.environ["AZURE_TENANT_ID"] = AZURE_TENANT_ID
+
     az_credential = DefaultAzureCredential()
     #secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
     secret_client = SecretClient(vault_url='https://ibf-training-keys.vault.azure.net', credential=az_credential)
@@ -58,7 +64,7 @@ except ImportError:
 # Countries to include
 
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['SSD'] # 
+COUNTRY_CODES = ['PHL'] #
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
