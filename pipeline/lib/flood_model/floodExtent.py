@@ -24,6 +24,7 @@ class FloodExtent:
         self.outputPathMerge = RASTER_OUTPUT + '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
+        self.Areas_With_GlofasStation=Areas_With_GlofasStation
 
     def calculate(self):
         admin_gdf = self.ADMIN_AREA_GDF
