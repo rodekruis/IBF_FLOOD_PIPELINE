@@ -39,18 +39,30 @@ def main():
     logger.info(str(datetime.datetime.now()))
     ## download data from Datalacke 
     
- 
-    dbm_ = dbm('7-day', 'ETH',3)
-    filename='data.zip'
-    path = 'flood/Gold/datapipeline/'+ filename
-    #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
-    DataFile = dbm_.getDataFromDatalake(path)
-    if DataFile.status_code >= 400:
-        raise ValueError()
-    open('./' + filename, 'wb').write(DataFile.content)
-    path_to_zip_file='./'+filename
-    with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-        zip_ref.extractall('./data')
+    if len(COUNTRY_CODES)==1 and COUNTRY_CODES[0]=='PHL':
+        dbm_ = dbm('7-day', 'PHL',3)
+        filename='data_phl.zip'
+        path = 'flood/Gold/datapipeline/'+ filename
+        #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
+        DataFile = dbm_.getDataFromDatalake(path)
+        if DataFile.status_code >= 400:
+            raise ValueError()
+        open('./' + filename, 'wb').write(DataFile.content)
+        path_to_zip_file='./'+filename
+        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+            zip_ref.extractall('./data')
+    else:
+        dbm_ = dbm('7-day', 'ETH',3)
+        filename='data.zip'
+        path = 'flood/Gold/datapipeline/'+ filename
+        #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
+        DataFile = dbm_.getDataFromDatalake(path)
+        if DataFile.status_code >= 400:
+            raise ValueError()
+        open('./' + filename, 'wb').write(DataFile.content)
+        path_to_zip_file='./'+filename
+        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+            zip_ref.extractall('./data')
     
     
     
