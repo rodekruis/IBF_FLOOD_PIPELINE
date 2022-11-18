@@ -63,8 +63,8 @@ except ImportError:
 
 # Countries to include
 
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
+# COUNTRY_CODES = ['MWI'] #
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
