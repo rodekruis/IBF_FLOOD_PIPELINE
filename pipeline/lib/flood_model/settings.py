@@ -32,8 +32,8 @@ try:
         os.environ["AZURE_TENANT_ID"] = AZURE_TENANT_ID
 
     az_credential = DefaultAzureCredential()
-    #secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
-    secret_client = SecretClient(vault_url='https://ibf-training-keys.vault.azure.net', credential=az_credential)
+    secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
+    # secret_client = SecretClient(vault_url='https://ibf-training-keys.vault.azure.net', credential=az_credential)
     
 
     ADMIN_LOGIN = secret_client.get_secret("ADMIN-LOGIN").value
