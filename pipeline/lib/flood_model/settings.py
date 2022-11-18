@@ -79,7 +79,7 @@ SETTINGS = {
             "placeCodeInitial": 'MWI',
             "glofasReturnPeriod":'rl5',
             "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
-            "notify_email": False,
+            "notify_email": True,
             'lead_times': {
                 "7-day": 7
             },

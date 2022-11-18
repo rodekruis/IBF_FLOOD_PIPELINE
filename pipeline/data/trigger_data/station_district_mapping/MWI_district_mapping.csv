@@ -1,0 +1,371 @@
+placeName,placeCode,parentCode,glofasStation
+TA Mlilima,MW31011,MW310,G5694
+TA Ngowe,MW31010,MW310,no_station
+Area 1,MW21031,MW210,no_station
+Area 10,MW21040,MW210,no_station
+Area 11,MW21041,MW210,no_station
+Area 12,MW21042,MW210,no_station
+Area 13,MW21043,MW210,no_station
+Area 14,MW21044,MW210,no_station
+Area 15,MW21045,MW210,no_station
+Area 16,MW21046,MW210,no_station
+Area 17,MW21047,MW210,no_station
+Area 18,MW21048,MW210,no_station
+Area 19,MW21049,MW210,no_station
+Area 2,MW21032,MW210,no_station
+Area 20,MW21050,MW210,no_station
+Area 21,MW21051,MW210,no_station
+Area 22,MW21052,MW210,no_station
+Area 23,MW21053,MW210,no_station
+Area 24,MW21054,MW210,no_station
+Area 25,MW21055,MW210,no_station
+Area 26,MW21056,MW210,no_station
+Area 27,MW21057,MW210,no_station
+Area 28,MW21058,MW210,no_station
+Area 29,MW21059,MW210,no_station
+Area 3,MW21033,MW210,no_station
+Area 30,MW21060,MW210,no_station
+Area 31,MW21061,MW210,no_station
+Area 32,MW21062,MW210,no_station
+Area 33,MW21063,MW210,no_station
+Area 34,MW21064,MW210,no_station
+Area 35,MW21065,MW210,no_station
+Area 36,MW21066,MW210,no_station
+Area 37,MW21067,MW210,no_station
+Area 38,MW21068,MW210,no_station
+Area 39,MW21069,MW210,no_station
+Area 4,MW21034,MW210,no_station
+Area 40,MW21070,MW210,no_station
+Area 41,MW21071,MW210,no_station
+Area 42,MW21072,MW210,no_station
+Area 43,MW21073,MW210,no_station
+Area 44,MW21074,MW210,no_station
+Area 45,MW21075,MW210,no_station
+Area 46,MW21076,MW210,no_station
+Area 47,MW21077,MW210,no_station
+Area 48,MW21078,MW210,no_station
+Area 49,MW21079,MW210,no_station
+Area 5,MW21035,MW210,no_station
+Area 50,MW21080,MW210,no_station
+Area 51,MW21081,MW210,no_station
+Area 52,MW21082,MW210,no_station
+Area 53,MW21083,MW210,no_station
+Area 54,MW21084,MW210,no_station
+Area 55,MW21085,MW210,no_station
+Area 56,MW21086,MW210,no_station
+Area 57,MW21087,MW210,no_station
+Area 58,MW21088,MW210,no_station
+Area 6,MW21036,MW210,no_station
+Area 7,MW21037,MW210,no_station
+Area 8,MW21038,MW210,no_station
+Area 9,MW21039,MW210,no_station
+Balaka Town,MW31220,MW312,no_station
+Bangwe Ward,MW31546,MW315,no_station
+Blantyre Central Ward,MW31542,MW315,no_station
+Blantyre East Ward,MW31543,MW315,no_station
+Blantyre West Ward,MW31541,MW315,no_station
+Chambo Ward,MW31441,MW314,no_station
+Chasefu Ward,MW10740,MW107,no_station
+Chibanja Ward,MW10735,MW107,no_station
+Chichiri Ward,MW31544,MW315,no_station
+Chigumula Ward,MW31555,MW315,no_station
+Chikamveka North Ward,MW31435,MW314,no_station
+Chikamveka Ward,MW31434,MW314,no_station
+Chikwawa Boma,MW31020,MW310,G5694
+Chilomoni Ward,MW31540,MW315,no_station
+Chiputula Ward,MW10734,MW107,no_station
+Chiradzulu Boma,MW30420,MW304,no_station
+Chirunga East Ward,MW31436,MW314,no_station
+Chirunga Ward,MW31437,MW314,no_station
+Chitipa Boma,MW10120,MW101,no_station
+Dedza Boma,MW20820,MW208,no_station
+Dowa Boma,MW20420,MW204,no_station
+Jombo Ward,MW10738,MW107,no_station
+Kaning'ina Ward,MW10743,MW107,no_station
+Karonga Town,MW10220,MW102,no_station
+Kasungu Boma,MW20120,MW201,no_station
+Kasungu National Park,MW20115,MW201,no_station
+Katawa Ward,MW10741,MW107,no_station
+Katoto Ward,MW10737,MW107,no_station
+Lake Chilwa,MW30399,MW303,no_station
+Lake Chilwa,MW30904,MW309,no_station
+Lake Chiuta,MW30299,MW302,no_station
+Lake Malawi Natl. Park - Mangochi,MW30111,MW301,no_station
+Lake Malawi Natl. Park - Salima,MW20511,MW205,no_station
+Lake Malombe,MW30199,MW301,no_station
+Lengwe National Park,MW31008,MW310,no_station
+Likangala Central Ward,MW31443,MW314,no_station
+Likangala South Ward,MW31444,MW314,no_station
+Likangala Ward,MW31438,MW314,no_station
+Likhubula Ward,MW31539,MW315,no_station
+Likoma Boma,MW10620,MW106,no_station
+Limbe Central Ward,MW31549,MW315,no_station
+Limbe East Ward,MW31548,MW315,no_station
+Limbe West Ward,MW31550,MW315,no_station
+Liwonde National Park,MW30213,MW302,no_station
+Liwonde Town,MW30222,MW302,no_station
+Luchenza Town,MW30721,MW307,no_station
+Lupaso Ward,MW10732,MW107,no_station
+Machinga Boma,MW30220,MW302,no_station
+Majete Game Reserve - Chikwawa,MW31009,MW310,no_station
+Majete Game Reserve - Neno,MW31305,MW313,no_station
+Mangochi Town,MW30120,MW301,no_station
+Mapanga Ward,MW31533,MW315,no_station
+Masasa Ward,MW10742,MW107,no_station
+Masongola Ward,MW31433,MW314,no_station
+Mbedza Ward,MW31431,MW314,no_station
+Mchengautuwa Ward,MW10736,MW107,no_station
+Mchinji Boma,MW20720,MW207,no_station
+Michiru Ward,MW31531,MW315,no_station
+Misesa Ward,MW31554,MW315,no_station
+Monkey Bay Urban,MW30121,MW301,no_station
+Msamba Ward,MW31556,MW315,no_station
+Msongwe Ward,MW10745,MW107,no_station
+Mtiya Ward,MW31432,MW314,no_station
+Mulanje Boma,MW30820,MW308,no_station
+Mulanje Mountain Reserve,MW30807,MW308,no_station
+Muzilawayingwe Ward,MW10739,MW107,no_station
+Mwabvi Game Reserve,MW31110,MW311,no_station
+Mwanza Boma,MW30620,MW306,no_station
+Mzedi Ward,MW31545,MW315,no_station
+Mzimba Boma,MW10520,MW105,no_station
+Namiyango Ward,MW31547,MW315,no_station
+Nancholi Ward,MW31553,MW315,no_station
+Ndirande North Ward,MW31535,MW315,no_station
+Ndirande South Ward,MW31536,MW315,no_station
+Ndirande West Ward,MW31537,MW315,no_station
+Neno Boma,MW31320,MW313,no_station
+New Airport Site Ward,MW10746,MW107,no_station
+Nkhata Bay Boma,MW10320,MW103,no_station
+Nkhorongo Ward,MW10731,MW107,no_station
+Nkhotakota Boma,MW20220,MW202,no_station
+Nkhotakota Game Reserve,MW20207,MW202,no_station
+Nkolokoti Ward,MW31534,MW315,no_station
+Nsanje Boma,MW31120,MW311,no_station
+Ntcheu Boma,MW20920,MW209,no_station
+Ntchisi Boma,MW20320,MW203,no_station
+Nyambadwe Ward,MW31538,MW315,no_station
+Nyika National Park - Chitipa,MW10106,MW101,no_station
+Nyika National Park - Karonga,MW10206,MW102,no_station
+Nyika National Park - Rumphi,MW10410,MW104,no_station
+Phalombe Boma,MW30920,MW309,no_station
+Rumphi Boma,MW10420,MW104,no_station
+Sadzi Ward,MW31442,MW314,no_station
+Salima Town,MW20520,MW205,no_station
+SC Chakhaza,MW20402,MW204,no_station
+SC Chamba,MW30204,MW302,no_station
+SC Champiti,MW20905,MW209,no_station
+SC Chapinduka,MW10406,MW104,no_station
+SC Chauma,MW20805,MW208,no_station
+SC Chikweo,MW30207,MW302,no_station
+SC Chilikumwendo,MW20802,MW208,no_station
+SC Chilooko,MW20305,MW203,no_station
+SC Chilowamatambe,MW20109,MW201,no_station
+SC Chisikwa,MW20104,MW201,no_station
+SC Chitekwele,MW20605,MW206,no_station
+SC Chiwalo,MW30209,MW302,no_station
+SC Chowe,MW30106,MW301,no_station
+SC Dambe,MW20706,MW207,no_station
+SC Fukamalaza,MW10307,MW103,no_station
+SC Goodson Ganya,MW20908,MW209,no_station
+SC Jaravikuba Munthali,MW10504,MW105,no_station
+SC Juma,MW30806,MW308,no_station
+SC Kachulu,MW10405,MW104,no_station
+SC Kafuzila,MW20202,MW202,no_station
+SC Kambalame,MW20506,MW205,no_station
+SC Kambwiri,MW20504,MW205,no_station
+SC Kamenya Gwaza,MW20808,MW208,no_station
+SC Kampingo Sibande,MW10503,MW105,no_station
+SC Kawamba,MW20107,MW201,no_station
+SC Kayembe,MW20403,MW204,no_station
+SC Khosolo Gwaza Jere,MW10508,MW105,no_station
+SC Kwethemule,MW30706,MW307,no_station
+SC Laston Njema,MW30802,MW308,no_station
+SC Lukwa,MW20106,MW201,no_station
+SC M'nyanja,MW20103,MW201,no_station
+SC Makoka,MW31109,MW311,no_station
+SC Makwangwala,MW20904,MW209,no_station
+SC Malanda,MW10304,MW103,no_station
+SC Mavwere,MW20702,MW207,no_station
+SC Mbawela,MW30703,MW307,G5670
+SC Mbenje,MW31106,MW311,G1724
+SC Mbiza,MW30305,MW303,no_station
+SC Mbwana Nyambi,MW30105,MW301,no_station
+SC Mduwa,MW20704,MW207,no_station
+SC Mkondowe,MW10311,MW103,no_station
+SC Mkukula,MW20405,MW204,no_station
+SC Mkumbira,MW10308,MW103,no_station
+SC Mkumbira,MW30303,MW303,no_station
+SC Mlomba,MW30206,MW302,no_station
+SC Mphonde,MW20204,MW202,no_station
+SC Mphuka,MW30705,MW307,no_station
+SC Mponela,MW20407,MW204,no_station
+SC Mposa,MW30205,MW302,no_station
+SC Msosa,MW20510,MW205,no_station
+SC Mtema,MW20609,MW206,no_station
+SC Mwahenga,MW10403,MW104,no_station
+SC Mwakaboko,MW10202,MW102,no_station
+SC Mwalweni,MW10404,MW104,no_station
+SC Mwankhunikira,MW10407,MW104,no_station
+SC Mwansambo,MW20206,MW202,no_station
+SC Mwanza,MW20508,MW205,no_station
+SC Mwirang'ombe,MW10205,MW102,no_station
+SC Namabvi,MW30109,MW301,no_station
+SC Ngokwe,MW30208,MW302,no_station
+SC Njewa,MW20613,MW206,no_station
+SC Njombwa,MW20108,MW201,no_station
+SC Nthondo,MW20303,MW203,no_station
+SC Nyaluwanga,MW10310,MW103,no_station
+SC Simlemba,MW20102,MW201,no_station
+SC Sitola,MW30202,MW302,no_station
+SC Thukuta,MW30702,MW307,no_station
+SC Tsabango,MW20611,MW206,no_station
+SC Zilakoma,MW10305,MW103,no_station
+Soche East Ward,MW31551,MW315,no_station
+Soche West Ward,MW31552,MW315,no_station
+South Lunzu Ward,MW31532,MW315,no_station
+TA Boghoyo,MW10313,MW103,no_station
+TA Bvumbwe,MW30710,MW307,no_station
+TA Chadza,MW20601,MW206,no_station
+TA Chakhumbira,MW20907,MW209,no_station
+TA Changata,MW30704,MW307,no_station
+TA Chapananga,MW31003,MW310,no_station
+TA Chigaru,MW30503,MW305,no_station
+TA Chikho,MW20302,MW203,no_station
+TA Chikowi,MW30304,MW303,no_station
+TA Chikulamayembe,MW10401,MW104,no_station
+TA Chikumbu,MW30803,MW308,no_station
+TA Chimaliro,MW30709,MW307,no_station
+TA Chimombo,MW31102,MW311,no_station
+TA Chimutu,MW20607,MW206,no_station
+TA Chimwala,MW30102,MW301,no_station
+TA Chindi,MW10505,MW105,no_station
+TA Chiseka,MW20603,MW206,no_station
+TA Chitera,MW30405,MW304,no_station
+TA Chitukula,MW20608,MW206,no_station
+TA Chiwalo,MW30903,MW309,no_station
+TA Chiwere,MW20404,MW204,no_station
+TA Chulu,MW20110,MW201,no_station
+TA Dambe,MW31301,MW313,no_station
+TA Dzoole,MW20401,MW204,no_station
+TA Fukamapiri,MW10302,MW103,no_station
+TA Jalasi,MW30104,MW301,no_station
+TA Kabudula,MW20615,MW206,no_station
+TA Kabunduli,MW10301,MW103,no_station
+TA Kachindamoto,MW20807,MW208,no_station
+TA Kadewere,MW30403,MW304,no_station
+TA Kalembo,MW31204,MW312,no_station
+TA Kalolo,MW20602,MW206,no_station
+TA Kaluluma,MW20101,MW201,no_station
+TA Kalumba,MW20612,MW206,no_station
+TA Kalumbu,MW20610,MW206,no_station
+TA Kalumo,MW20304,MW203,no_station
+TA Kameme,MW10105,MW101,no_station
+TA Kanduku,MW30601,MW306,no_station
+TA Kanyenda,MW20201,MW202,no_station
+TA Kaomba,MW20105,MW201,no_station
+TA Kapelula,MW20113,MW201,no_station
+TA Kapeni,MW30501,MW305,no_station
+TA Kaphuka,MW20803,MW208,no_station
+TA Kapichi,MW30707,MW307,no_station
+TA Karonga,MW20502,MW205,no_station
+TA Kasakula,MW20301,MW203,no_station
+TA Kasisi,MW31006,MW310,no_station
+TA Kasumbu,MW20806,MW208,no_station
+TA Katuli,MW30107,MW301,no_station
+TA Katumbi,MW10408,MW104,no_station
+TA Katunga,MW31005,MW310,G5694
+TA Kawinga,MW30203,MW302,no_station
+TA Khombedza,MW20507,MW205,no_station
+TA Khongoni,MW20606,MW206,no_station
+TA Kilupula,MW10201,MW102,no_station
+TA Kuluunda,MW20509,MW205,no_station
+TA Kuntaja,MW30506,MW305,no_station
+TA Kunthembwe,MW30504,MW305,no_station
+TA Kuntumanji,MW30301,MW303,no_station
+TA Kwataine,MW20903,MW209,no_station
+TA Kyungu,MW10203,MW102,no_station
+TA Likoswe,MW30402,MW304,no_station
+TA Liwonde,MW30201,MW302,no_station
+TA Lundu,MW30502,MW305,no_station
+TA Lundu,MW31002,MW310,G2001
+TA M'Mbelwa,MW10501,MW105,no_station
+TA Mabuka,MW30801,MW308,no_station
+TA Mabulabo,MW10507,MW105,no_station
+TA Machinjili,MW30507,MW305,no_station
+TA Maganga,MW20501,MW205,no_station
+TA Makanjila,MW30108,MW301,no_station
+TA Makata,MW30505,MW305,no_station
+TA Makhwira,MW31007,MW310,G2001
+TA Malemia,MW30307,MW303,no_station
+TA Malemia,MW31107,MW311,no_station
+TA Malenga Chanzi,MW20203,MW202,no_station
+TA Malenga Mzoma,MW10303,MW103,no_station
+TA Malili,MW20614,MW206,no_station
+TA Mankhambira,MW10306,MW103,no_station
+TA Masasa,MW20909,MW209,no_station
+TA Maseya,MW31004,MW310,no_station
+TA Mazengera,MW20604,MW206,no_station
+TA Mkanda,MW20705,MW207,no_station
+TA Mkhumba,MW30901,MW309,no_station
+TA Mkumpha,MW10601,MW106,no_station
+TA Mlauli,MW31302,MW313,no_station
+TA Mlolo,MW31104,MW311,G1724
+TA Mlonyeni,MW20701,MW207,no_station
+TA Mlumbe,MW30306,MW303,no_station
+TA Mpama,MW30401,MW304,no_station
+TA Mpando,MW20902,MW209,no_station
+TA Mpherembe,MW10509,MW105,no_station
+TA Mponda,MW30101,MW301,no_station
+TA Msakambewa,MW20406,MW204,no_station
+TA Mtwalo,MW10502,MW105,no_station
+TA Musisya,MW10309,MW103,no_station
+TA Mwabulambya,MW10101,MW101,no_station
+TA Mwadzama,MW20205,MW202,no_station
+TA Mwambo,MW30302,MW303,no_station
+TA Mwamlowe,MW10402,MW104,no_station
+TA Mwase,MW20114,MW201,no_station
+TA Mwenemisuku,MW10102,MW101,no_station
+TA Mwenewenya,MW10103,MW101,no_station
+TA Mzikubola,MW10506,MW105,no_station
+TA Mzukuzuku,MW10510,MW105,no_station
+TA Nankumba,MW30103,MW301,no_station
+TA Nazombe,MW30902,MW309,no_station
+TA Nchema,MW30406,MW304,no_station
+TA Nchilamwela,MW30708,MW307,no_station
+TA Ndamera,MW31101,MW311,no_station
+TA Ndindi,MW20505,MW205,no_station
+TA Ngabu,MW31001,MW310,no_station
+TA Ngabu,MW31108,MW311,no_station
+TA Ngozi,MW31304,MW313,no_station
+TA Njolomole,MW20906,MW209,no_station
+TA Nkalo,MW30404,MW304,no_station
+TA Nkanda,MW30805,MW308,no_station
+TA Nsabwe,MW30701,MW307,G5670
+TA Nsamala,MW31201,MW312,no_station
+TA Nthache,MW30602,MW306,no_station
+TA Nthalire,MW10104,MW101,no_station
+TA Nthiramanja,MW30804,MW308,no_station
+TA Nyachikadza,MW31103,MW311,no_station
+TA Nyambi,MW30210,MW302,no_station
+TA Pemba,MW20503,MW205,no_station
+TA Pemba,MW20801,MW208,no_station
+TA Phambala,MW20901,MW209,no_station
+TA Santhe,MW20111,MW201,no_station
+TA Somba,MW30508,MW305,no_station
+TA Symon,MW31303,MW313,no_station
+TA Tambala,MW20804,MW208,no_station
+TA Tengani,MW31105,MW311,no_station
+TA Thomas,MW30711,MW307,no_station
+TA Timbiri,MW10312,MW103,no_station
+TA Wasambo,MW10204,MW102,no_station
+TA Wimbe,MW20112,MW201,no_station
+TA Zolokere,MW10409,MW104,no_station
+TA Zulu,MW20703,MW207,no_station
+Thyolo Boma,MW30720,MW307,no_station
+Viphya Ward,MW10744,MW107,no_station
+Vwaza Marsh Reserve - Mzimba,MW10511,MW105,no_station
+Vwaza Marsh Reserve - Rumphi,MW10411,MW104,no_station
+Zakazaka Ward,MW31439,MW314,no_station
+Zolozolo Ward,MW10733,MW107,no_station
+Zomba Central Ward,MW31440,MW314,no_station
