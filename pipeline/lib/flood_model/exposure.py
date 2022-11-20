@@ -26,6 +26,18 @@ class Exposure:
         self.countryCodeISO3 = countryCodeISO3
         self.disasterExtentRaster = RASTER_OUTPUT + \
             '0/flood_extents/flood_extent_' + leadTimeLabel + '_' + countryCodeISO3 + '.tif'
+            
+        self.floodExt = RASTER_OUTPUT + \
+            '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
+            
+        #self.image_name= PIPELINE_OUTPUT + 'Map_of_affeced_areas_'+ leadTimeLabel + '_' + countryCodeISO3 + '.png'
+        
+        self.image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png' 
+             
+        self.popAffeced = RASTER_OUTPUT + "0/" +\
+            SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']['population']['source'] + \
+                '_' + self.leadTimeLabel + ".tif"
+                
         self.selectionValue = 0.9
         self.outputPath = PIPELINE_OUTPUT + "out.tif"
         self.district_mapping = district_mapping
@@ -35,6 +47,7 @@ class Exposure:
 
         #self.ADMIN_AREA_GDF_TMP_PATH = os.path.join(PIPELINE_OUTPUT,"admin-areas_TMP.geojson")  #s.geojson', driver='GeoJSON')
         self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
+        self.selectedPcode=selectedPcode
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         if self.countryCodeISO3 == 'MWI':
             self.EXPOSURE_DATA_UBR_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_UBR_SOURCES']
@@ -50,7 +63,7 @@ class Exposure:
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
             logger.info(f'indicator: {indicator}')
             self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
-            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
+            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + '_' + self.leadTimeLabel + ".tif"
             
             stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'])
             df_stats=pd.DataFrame(stats) 
@@ -341,3 +354,69 @@ class Exposure:
                         "transform": out_transform})
 
         return outImage, outMeta
+    
+    
+    def makeMaps(self):
+        import numpy as np
+        import rasterio
+        import matplotlib.pyplot as plt
+        import matplotlib as mpl
+        import geopandas as gpd
+        import earthpy.plot as ep 
+        import contextily as cx
+
+        # Set figure size and title size of plots
+        mpl.rcParams['figure.figsize'] = (24, 24)
+        mpl.rcParams['axes.titlesize'] = 20       
+        shfile=self.ADMIN_AREA_GDF #gpd.read_file('./data/other/input/cod/SS_adm3.geojson')
+        
+        
+        selectedPcode_=self.selectedPcode
+        
+        BOR=shfile.query('placeCode==@selectedPcode_')
+        
+        shapes = BOR["geometry"] 
+
+        with rasterio.open(self.floodExt, masked=True) as src:
+            out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True)
+            out_meta = src.meta
+            
+        with rasterio.open(self.popAffeced, masked=True) as src:
+            out_image2, out_transform2 = rasterio.mask.mask(src, shapes, crop=True)
+            out_meta = src.meta
+            
+        # Plot uncropped array
+        out_image2[out_image2 <0 ] = 0               
+        data_plotting_extent=(BOR.total_bounds[0],BOR.total_bounds[2],BOR.total_bounds[1],BOR.total_bounds[3])
+        f, ax = plt.subplots()
+
+        cmapPop = mpl.colors.ListedColormap(['#FF000000','#f7f7f7','#cccccc','#969696'])
+        cmapFlood = mpl.colors.ListedColormap(['#FF000000','#ffffb2','#fecc5c','#f03b20'])
+        
+        ep._plot_image(out_image[0],
+                    cmap=cmapFlood,
+                    vmin=0,
+                    vmax=np.max(out_image),
+                    ax=ax,
+                    cbar=False,
+                    alpha=0.75,
+                    #title="",
+                    extent=data_plotting_extent)  # Use plotting extent from DatasetReader object
+        '''
+        ep._plot_image(out_image2[0],
+                    cmap=cmapPop,
+                    vmin=0,
+                    vmax=np.max(out_image2),
+                    ax=ax,
+                    cbar=False,
+                    alpha=0.75,
+                    #title="",
+                    extent=data_plotting_extent)  # Use plotting extent from DatasetReader object
+        '''
+        BOR.boundary.plot(ax=ax, edgecolor='k')        
+        cx.add_basemap(ax,crs=BOR.crs,zoom=12,alpha=0.15)    
+        image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'         
+        f.savefig(image_name, dpi=400)
+
+
+     
