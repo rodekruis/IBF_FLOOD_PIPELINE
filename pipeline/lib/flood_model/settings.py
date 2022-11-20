@@ -65,8 +65,6 @@ except ImportError:
 
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
 COUNTRY_CODES = ['PHL'] #
-#for south sudan 
-selectedPcode='SS030303'
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,

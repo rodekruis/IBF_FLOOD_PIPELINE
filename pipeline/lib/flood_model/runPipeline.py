@@ -88,9 +88,6 @@ def main():
                 logger.info('--------Finished flood extent')
                 fc.exposure.callAllExposure()
                 logger.info('--------Finished exposure')
-                if COUNTRY_CODE =='SSD':
-                    fc.exposure.makeMaps()
-                    logger.info('--------Finished make maps')
                 fc.db.upload()
                 logger.info('--------Finished upload')
                 fc.db.sendNotification()
