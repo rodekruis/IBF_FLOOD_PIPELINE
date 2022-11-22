@@ -10,15 +10,15 @@ try:
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]  
     GLOFAS_USER = os.environ["GLOFAS_USER"]
     GLOFAS_PW = os.environ["GLOFAS_PW"]
-    IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+    IBF_PASSWORD = os.environ["IBF_PASSWORD"]
+    IBF_URL = "https://ibf-demo.510.global/api/"
     DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
-    DATALAKE_STORAGE_ACCOUNT_KEY_ = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
-    print('Environment variables found.')
-    DATALAKE_STORAGE_ACCOUNT_KEY=f'{DATALAKE_STORAGE_ACCOUNT_KEY_}=='
-    
-
+    DATALAKE_STORAGE_ACCOUNT_KEY = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
+    DATALAKE_API_VERSION = '2021-06-08'
+    print('Secrets loaded from environment variables.')
 except:
      print('No environment variables found.')
+  
 # 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
 try:
@@ -46,7 +46,7 @@ try:
     DATALAKE_STORAGE_ACCOUNT_NAME = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-NAME").value
     DATALAKE_STORAGE_ACCOUNT_KEY = secret_client.get_secret("DATALAKE-STORAGE-ACCOUNT-KEY").value
     DATALAKE_API_VERSION = '2021-06-08'
-
+    print('Secrets loaded from Azure Key vault.')
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
  
@@ -63,8 +63,7 @@ except ImportError:
 
 # Countries to include
 
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['PHL']
 SETTINGS = {
     "MWI": {
             "IBF_API_URL": IBF_URL,
