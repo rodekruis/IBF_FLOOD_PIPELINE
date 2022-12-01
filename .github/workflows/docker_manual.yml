@@ -1,4 +1,4 @@
-name: update Docker image
+name: update PHL Docker image
 
 on:
   workflow_dispatch:
