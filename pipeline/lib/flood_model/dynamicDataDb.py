@@ -37,6 +37,8 @@ class DatabaseManager:
         self.uploadTriggerPerStation()
         self.uploadCalculatedAffected()
         self.uploadRasterFile()
+        if self.countryCodeISO3=='SSD':
+            self.uploadImage()
     
     def sendNotification(self):
         leadTimes = SETTINGS[self.countryCodeISO3]['lead_times']
@@ -146,6 +148,87 @@ class DatabaseManager:
         self.apiPostRequest('admin-area-dynamic-data/raster/' + disasterType, files=files)
         logger.info(f'Uploaded raster-file: {rasterFile}')
 
+    def uploadImage(self,eventName='no-name'):
+        disasterType = self.getDisasterType()
+       
+        
+        imageFile = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'     
+        
+        files = {
+            'image': (imageFile, open(imageFile, 'rb'), "image/png"), 
+            }
+        
+        data = {"submit": "Upload Image" }
+        
+        path_=f'event/event-map-image/{self.countryCodeISO3}/{disasterType}/{eventName}'          
+        
+
+    def uploadImage(self,eventName='no-name'):
+        disasterType = self.getDisasterType()
+       
+        
+        imageFile = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'     
+        
+        files = {
+            'image': (imageFile, open(imageFile, 'rb'), "image/png"), 
+            }
+        
+        data = {"submit": "Upload Image" }
+        
+        path_=f'event/event-map-image/{self.countryCodeISO3}/{disasterType}/{eventName}'          
+        
+
+    def uploadImage(self,eventName='no-name'):
+        disasterType = self.getDisasterType()
+       
+        
+        imageFile = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'     
+        
+        files = {
+            'image': (imageFile, open(imageFile, 'rb'), "image/png"), 
+            }
+        
+        data = {"submit": "Upload Image" }
+        
+        path_=f'event/event-map-image/{self.countryCodeISO3}/{disasterType}/{eventName}'          
+        
+
+
+        self.apiPostRequestImage(path_,
+                                 files=files,
+                                 data=data
+                                 )
+        logger.info(f'Uploaded image-file: {imageFile}')
+
+
+ 
+ 
+
+
+
+        self.apiPostRequestImage(path_,
+                                 files=files,
+                                 data=data
+                                 )
+        logger.info(f'Uploaded image-file: {imageFile}')
+
+
+ 
+ 
+
+
+
+        self.apiPostRequestImage(path_,
+                                 files=files,
+                                 data=data
+                                 )
+        logger.info(f'Uploaded image-file: {imageFile}')
+
+
+ 
+ 
+
+
 
     def uploadTriggerPerStation(self):
         df = pd.read_json(self.triggerFolder +
@@ -239,6 +322,30 @@ class DatabaseManager:
             #logger.info(r.text)
             logger.error("PIPELINE ERROR")
             raise ValueError()
+    def apiPostRequestImage(self, path,files=None,data=None):
+        TOKEN = self.apiAuthenticate()
+
+        headers={'Authorization': 'Bearer ' + TOKEN}
+
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+      
+
+        r = session.post(
+            self.API_SERVICE_URL + path,  
+            files=files,
+            data=data,
+            headers=headers
+        )
+         
+        if r.status_code >= 400:
+            #logger.info(r.text)
+            logger.error("PIPELINE ERROR")
+            raise ValueError()
+        
 
     def apiAuthenticate(self):
         API_LOGIN_URL=self.API_SERVICE_URL+'user/login'
