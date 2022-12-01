@@ -76,7 +76,7 @@ SETTINGS = {
             "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
             "notify_email": True,
             'lead_times': {
-                "7-day": 7
+                "6-day": 6
             },
             'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
             'admin_level': 3,
