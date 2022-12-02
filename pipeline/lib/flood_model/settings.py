@@ -63,8 +63,8 @@ except ImportError:
 
 # Countries to include
 
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
+# COUNTRY_CODES = ['PHL'] #
 selectedPcode='SS030303'
 SETTINGS = {
     "MWI": {
@@ -75,9 +75,9 @@ SETTINGS = {
             "placeCodeInitial": 'MWI',
             "glofasReturnPeriod":'rl5',
             "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
-            "notify_email": False,
+            "notify_email": True,
             'lead_times': {
-                "7-day": 7
+                "6-day": 6
             },
             'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
             'admin_level': 3,
