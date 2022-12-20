@@ -31,10 +31,15 @@ class Exposure:
         self.outputPath = PIPELINE_OUTPUT + "out.tif"
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
+        self.logoFile=logoPath 
         self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
         self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_{self.admin_level}_population.json") 
         self.floodExt = RASTER_OUTPUT + \
             '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
+        # change this to adopt to other countries 
+        return_period_='25'
+        self.floodExt_raster = RASTER_INPUT +'flood_extent/'+ self.countryCodeISO3 + '_flood_' +return_period_+'year.tif'
+            
             
         #self.image_name= PIPELINE_OUTPUT + 'Map_of_affeced_areas_'+ leadTimeLabel + '_' + countryCodeISO3 + '.png'
         
@@ -363,10 +368,13 @@ class Exposure:
         import geopandas as gpd
         import earthpy.plot as ep 
         import contextily as cx
+        import imageio
+        
+        subtitle='  General information about the map Goes here'
 
         # Set figure size and title size of plots
-        mpl.rcParams['figure.figsize'] = (24, 24)
-        mpl.rcParams['axes.titlesize'] = 20       
+        mpl.rcParams['figure.figsize'] = (12, 12)
+        mpl.rcParams['axes.titlesize'] = 14       
         shfile=self.ADMIN_AREA_GDF #gpd.read_file('./data/other/input/cod/SS_adm3.geojson')
         
         
@@ -376,46 +384,83 @@ class Exposure:
         
         shapes = BOR["geometry"] 
 
+        bor_cnter=shapes.centroid.buffer(0.25)
+        bor_cnter2=shapes.centroid.buffer(0.25)
+            
         with rasterio.open(self.floodExt, masked=True) as src:
-            out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True)
+            out_image, out_transform = rasterio.mask.mask(src, bor_cnter, crop=True)
             out_meta = src.meta
             
-        with rasterio.open(self.popAffeced, masked=True) as src:
-            out_image2, out_transform2 = rasterio.mask.mask(src, shapes, crop=True)
+        with rasterio.open( self.floodExt_raster, masked=True) as src:
+            out_image_l, out_transform2 = rasterio.mask.mask(src, bor_cnter2, crop=True)
             out_meta = src.meta
+
+        out_image_l[out_image_l <0 ] = 0      
+         
             
         # Plot uncropped array
-        out_image2[out_image2 <0 ] = 0               
-        data_plotting_extent=(BOR.total_bounds[0],BOR.total_bounds[2],BOR.total_bounds[1],BOR.total_bounds[3])
-        f, ax = plt.subplots()
-
-        cmapPop = mpl.colors.ListedColormap(['#FF000000','#f7f7f7','#cccccc','#969696'])
-        cmapFlood = mpl.colors.ListedColormap(['#FF000000','#ffffb2','#fecc5c','#f03b20'])
+                 
+        data_plotting_extent=(bor_cnter.total_bounds[0],bor_cnter.total_bounds[2],bor_cnter.total_bounds[1],bor_cnter.total_bounds[3])
+        data_plotting_extentl=(bor_cnter2.total_bounds[0],bor_cnter2.total_bounds[2],bor_cnter2.total_bounds[1],bor_cnter2.total_bounds[3])
         
+   
+        cmapFlood = mpl.colors.ListedColormap(['#FF000000','#ffffb2','#fecc5c','#f03b20'])
+        cmapFlood2 = mpl.colors.ListedColormap(['#FF000000','#deebf7','#9ecae1','#3182bd'])
+        #'#e8dcf4','#e0868a' color copied from IBF portal
+
+        #f, ax = plt.subplots()
+        fig = plt.figure(figsize=(12, 12), dpi=96)
+        #rect : This parameter is the dimensions [left, bottom, width, height] of the new axes.
+        axes1 = fig.add_axes([0.05, 0.1, 0.95, 0.7]) 
+        axes2 = fig.add_axes([0.55, 0.8, 0.375, 0.2]) 
+        #axes3 = fig.add_axes([0.15, 0.85, 0.5, 0.125])
+        #axes4 = fig.add_axes([0.15, 0.95, 0.3, 0.06]) 
+        
+        ep._plot_image(out_image_l[0],
+                    cmap=cmapFlood,
+                    vmin=0,
+                    vmax=np.max(out_image),
+                    ax=axes1,
+                    cbar=False,
+                    alpha=0.75,
+                    #title="",
+                    extent=data_plotting_extentl)  # Use plotting extent from DatasetReader object
+
         ep._plot_image(out_image[0],
                     cmap=cmapFlood,
                     vmin=0,
                     vmax=np.max(out_image),
-                    ax=ax,
+                    ax=axes1,
                     cbar=False,
                     alpha=0.75,
                     #title="",
-                    extent=data_plotting_extent)  # Use plotting extent from DatasetReader object
-        '''
-        ep._plot_image(out_image2[0],
-                    cmap=cmapPop,
-                    vmin=0,
-                    vmax=np.max(out_image2),
-                    ax=ax,
-                    cbar=False,
-                    alpha=0.75,
-                    #title="",
-                    extent=data_plotting_extent)  # Use plotting extent from DatasetReader object
-        '''
-        BOR.boundary.plot(ax=ax, edgecolor='k')        
-        cx.add_basemap(ax,crs=BOR.crs,zoom=12,alpha=0.15)    
-        image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'         
-        f.savefig(image_name, dpi=400)
+                    extent=data_plotting_extent) 
+
+        BOR.boundary.plot(ax=axes1, edgecolor='#8856a7',linewidth=4)        
+        cx.add_basemap(ax=axes1,crs=bor_cnter.crs,zoom=12,alpha=0.5,attribution='', attribution_size=6) 
+        axes1.set_axis_off()
+        plt.grid()
+
+
+        bor_cnter3=shapes.centroid.buffer(0.5)
+        bor_cnter3.plot(ax=axes2, alpha=0.25, color='red', edgecolor='red') 
+
+        shfile.plot(ax=axes2, alpha=0.2, color='white', edgecolor='#969696') 
+        cx.add_basemap(axes2, crs=shfile.crs.to_string(), zoom=7,alpha=0.5,attribution='',attribution_size=6)
+        axes2.set_axis_off()
+
+        #axis  
+        #im2 = imageio.imread(self.logoFile) 
+        #axes4.imshow(im2)        
+        #axes4.set_axis_off()
+        
+        #axes3.text(.05, 0.30, subtitle, fontsize = 22)
+        #axes3.set_axis_off()
+        plt.grid(); 
+
+        image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png' 
+        #plt.savefig(image_name, dpi=96)     
+        fig.savefig(image_name, dpi=100)
 
 
      
