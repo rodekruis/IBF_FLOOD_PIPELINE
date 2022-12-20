@@ -64,7 +64,7 @@ except ImportError:
 # Countries to include
 
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['SSD'] #
 selectedPcode='SS030303'
 SETTINGS = {
     "MWI": {
@@ -282,6 +282,7 @@ PIPELINE_OUTPUT = PIPELINE_DATA + 'output/'
 TRIGGER_DATA_FOLDER='data/trigger_data/triggers_rp_per_station/'
 TRIGGER_DATA_FOLDER_TR='data/trigger_data/glofas_trigger_levels/'
 STATION_DISTRICT_MAPPING_FOLDER='data/trigger_data/station_district_mapping/'
+logoPath = 'logo/SSD.png'
 
 #########################
 ## INPUT DATA SETTINGS ##
