@@ -4,7 +4,7 @@ on:
     - cron:  '0 8 * * *'
 jobs:
   run-flood-model:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       running-directory: ./pipeline
     if: ${{ github.repository_owner != 'rodekruis' }}
