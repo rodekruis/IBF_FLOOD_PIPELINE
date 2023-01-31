@@ -11,6 +11,7 @@ try:
     GLOFAS_USER = os.environ["GLOFAS_USER"]
     GLOFAS_PW = os.environ["GLOFAS_PW"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+    IBF_URL=os.environ["IBF_URL"]
     DATALAKE_STORAGE_ACCOUNT_NAME = os.environ["DATALAKE_STORAGE_ACCOUNT_NAME"]
     DATALAKE_STORAGE_ACCOUNT_KEY_ = os.environ["DATALAKE_STORAGE_ACCOUNT_KEY"]
     print('Environment variables found.')
