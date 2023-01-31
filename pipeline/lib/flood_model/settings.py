@@ -65,7 +65,7 @@ except ImportError:
 # Countries to include
 
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['SSD'] #
+COUNTRY_CODES = ['ZMB'] #
 selectedPcode='SS030303'
 SETTINGS = {
     "MWI": {
