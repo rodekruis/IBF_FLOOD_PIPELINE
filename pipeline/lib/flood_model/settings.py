@@ -64,8 +64,8 @@ except ImportError:
 
 # Countries to include
 
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-COUNTRY_CODES = ['ZMB'] #
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] 
+#COUNTRY_CODES = ['ZMB'] #
 selectedPcode='SS030303'
 SETTINGS = {
     "MWI": {
@@ -81,6 +81,7 @@ SETTINGS = {
                 "7-day": 7
             },
             'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+            'eapAlertClass':{"no": 0.6,"max": 0.601},
             'admin_level': 3,
             'levels':[3,2,1],
             'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -115,6 +116,7 @@ SETTINGS = {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.6,"min": 0.7,"med": 0.8,"max": 0.801},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -139,6 +141,7 @@ SETTINGS = {
             "5-day": 5
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.6,"max": 0.601},
         'admin_level': 4,
         'levels':[4,3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -163,6 +166,7 @@ SETTINGS = {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.85,"max": 0.851},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -187,6 +191,7 @@ SETTINGS = {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.75,"max": 0.751},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -211,6 +216,7 @@ SETTINGS = {
             "3-day": 3
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.7,"max": 0.701},
         'admin_level': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/',
@@ -235,6 +241,7 @@ SETTINGS = {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.6,"max": 0.601},
         'admin_level': 3,
         'levels':[3],
         'GLOFAS_FTP':'aux.ecmwf.int/for_JBA/',

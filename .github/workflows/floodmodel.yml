@@ -6,7 +6,7 @@ on:
   #  - cron: "0 8 1 * *"
   workflow_dispatch:
       branches:
-          - PHL
+          - master
 env:
    ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
    GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
