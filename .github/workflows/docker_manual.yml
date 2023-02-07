@@ -1,15 +1,15 @@
-name: update PHL Docker image
+name: update Docker image
 
 on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ibf-phl-flood-model
+  IMAGE_NAME: ibf-flood-model
 
 jobs:
   build:
     name: Build container image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2       

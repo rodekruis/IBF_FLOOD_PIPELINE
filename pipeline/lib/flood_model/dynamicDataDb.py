@@ -236,8 +236,9 @@ class DatabaseManager:
         dfStation = pd.DataFrame(index=df.index)
         dfStation['stationCode'] = df['stationCode']
         dfStation['forecastLevel'] = df['fc'].astype(np.float64,errors='ignore')
-        dfStation['forecastProbability'] = df['fc_prob'].astype(np.float64,errors='ignore')
-        dfStation['forecastTrigger'] = df['fc_trigger'].astype(np.int32,errors='ignore')
+        #dfStation['forecastProbability'] = df['fc_prob'].astype(np.float64,errors='ignore')
+        #dfStation['forecastTrigger'] = df['fc_trigger'].astype(np.int32,errors='ignore')
+        dfStation['eapAlertClass'] = df['eapAlertClass']
         dfStation['forecastReturnPeriod'] = df['fc_rp'].astype(np.int32,errors='ignore')
         dfStation['triggerLevel'] = df['triggerLevel'].astype(np.int32,errors='ignore')
         stationForecasts = json.loads(dfStation.to_json(orient='records'))

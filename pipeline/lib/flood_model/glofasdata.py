@@ -47,6 +47,7 @@ class GlofasData:
         self.glofasReturnPeriod=SETTINGS[countryCodeISO3]['glofasReturnPeriod']
         self.GLOFAS_FTP=SETTINGS[countryCodeISO3]['GLOFAS_FTP']
         self.TRIGGER_LEVELS=SETTINGS[countryCodeISO3]['TRIGGER_LEVELS']
+        self.eapAlertClass=SETTINGS[countryCodeISO3]['eapAlertClass']
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.inputPathGrid = PIPELINE_DATA+'input/glofasgrid/'
         
@@ -163,6 +164,22 @@ class GlofasData:
         tar.extractall(self.inputPath)
         tar.close()
         
+    def checkTriggerProb(self,num):
+        if self.countryCodeISO3 in ['ZMB']:
+            if num <= self.eapAlertClass['no']:
+                return "no"
+            elif  num <= self.eapAlertClass['min']:
+                return "min"
+            elif  num <= self.eapAlertClass['med']:
+                return "med"
+            elif  num <= self.eapAlertClass['max']:
+                return "max"
+        else:
+            if num > self.eapAlertClass['max']:
+                return "max"
+            else:
+                return "no"
+            
     def extractGlofasDataGrid(self):
         
         bf_gpd=self.admin_area_gdf 
@@ -259,6 +276,7 @@ class GlofasData:
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob 
                     station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
+                    station['eapAlertClass'] = self.checkTriggerProb(prob)
 
                     if station['fc_trigger'] == 1:
                         trigger_per_day[str(step)+'-day'] = True
@@ -273,6 +291,7 @@ class GlofasData:
             station['fc'] = 0
             station['fc_prob'] = 0
             station['fc_trigger'] = 0
+            station['eapAlertClass'] = 'no'
             stations.append(station)
 
         with open(self.extractedGlofasPath, 'w') as fp:
@@ -283,7 +302,16 @@ class GlofasData:
             json.dump([trigger_per_day], fp)
             logger.info('Extracted Glofas data - Trigger per day File saved')       
  
-                        
+ 
+    def check_intervals(self,num):
+        if abs(num - 5) <= 0.5:
+            return "Close to interval 1 (5 ± 0.5)"
+        elif abs(num - 10) <= 0.5:
+            return "Close to interval 2 (10 ± 0.5)"
+        elif abs(num - 15) <= 0.5:
+            return "Close to interval 3 (15 ± 0.5)"
+        else:
+            return "Not close to any interval"                     
 
 
 
@@ -349,6 +377,9 @@ class GlofasData:
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob 
                     station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
+                    station['eapAlertClass'] = self.checkTriggerProb(prob) # 1 if prob > self.eapAlertClass['min'] else 0
+                    
+                    
                     #station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
                     if station['fc_trigger'] == 1:
                         trigger_per_day[str(step)+'-day'] = True
@@ -368,6 +399,7 @@ class GlofasData:
             station['fc'] = 0
             station['fc_prob'] = 0
             station['fc_trigger'] = 0
+            station['eapAlertClass'] = 'no'
             stations.append(station)
 
         with open(self.extractedGlofasPath, 'w') as fp:
@@ -398,10 +430,12 @@ class GlofasData:
             '6-day': False,
             '7-day': False,
         }
+        
 
         for index, row in df_thresholds.iterrows():
             station = {}
             station['code'] = row['stationCode']
+            station['eapAlertClass'] = 'no'
 
             if station['code'] in df_district_mapping['glofasStation'] and station['code'] != 'no_station':
                 logger.info(station['code'])
@@ -468,6 +502,7 @@ class GlofasData:
 
                     if station['fc_trigger'] == 1:
                         trigger_per_day[str(step)+'-day'] = True
+                        station['eapAlertClass'] = 'max'
 
                     if step == self.leadTimeValue:
                         stations.append(station)
@@ -482,6 +517,7 @@ class GlofasData:
             station['fc'] = 0
             station['fc_prob'] = 0
             station['fc_trigger'] = 0
+            station['eapAlertClass'] = 'no'
             stations.append(station)
 
         with open(self.extractedGlofasPath, 'w') as fp:
