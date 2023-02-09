@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       running-directory: ./pipeline
-            
+
     #if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
@@ -54,11 +54,11 @@ jobs:
           sudo add-apt-repository ppa:ubuntugis/ppa
           sudo apt-get update
           sudo apt-get install -y postgresql postgresql-contrib  
-           sudo apt-get install -y postgresql postgresql-contrib  
+          sudo apt-get install -y postgresql postgresql-contrib  
           sudo apt-get install -y postgresql postgresql-contrib  
           sudo apt-get install -y libproj-dev libgeos++-dev
           sudo apt-get install -y gdal-bin 
-           sudo apt-get install -y gdal-bin 
+          sudo apt-get install -y gdal-bin 
           sudo apt-get install -y gdal-bin 
           sudo apt-get install -y libgdal-dev
           sudo apt-get install libgnutls28-dev
@@ -91,8 +91,8 @@ jobs:
         GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
         GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
         GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}
-        ZMB_URL: ${{ secrets.ZMB_URL }}
-        ZMB_PASSWORD: ${{ secrets.ZMB_PASSWORD }}
+        IBF_URL: ${{ secrets.IBF_URL }}
+        IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
       run: |
         run-flood-model
       working-directory: ${{ env.running-directory }}
