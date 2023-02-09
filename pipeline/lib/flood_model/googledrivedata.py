@@ -31,7 +31,10 @@ def save_response_content(response, destination):
 
 def downloaddatalack(countryCode): 
     countryCode=countryCode.lower()
-    url=f'https://510ibfsystem.blob.core.windows.net/ibfdatapipelines/flood/data_{countryCode}.zip'
+    if countryCode:
+        url=f'https://510ibfsystem.blob.core.windows.net/ibfdatapipelines/flood/data_{countryCode}.zip'
+    else:
+        url='https://510ibfsystem.blob.core.windows.net/ibfdatapipelines/flood/data.zip'
 
     response = requests.get(url)
     if response.status_code == 200:
