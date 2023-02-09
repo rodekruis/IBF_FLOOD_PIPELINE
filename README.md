@@ -17,7 +17,7 @@ Getting its secrets from a local secrets.py file.
 Obviously, this method can be used also non-locally, e.g. by running it as cronjob on a Virtual Machine.
 
 - Install Docker
-
+ 
 - Clone the 'ZMB-release' branch: `git clone -b ZMB-release https://github.com/<github-account>/IBF_FLOOD_PIPELINE.git`
 - Change `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and fill in the necessary secrets. Particularly fill in for 
   - ZMB_URL: `https://<ibf-system-url>/api/` (so with a slash at the end!)
