@@ -6,14 +6,14 @@ on:
   #  - cron: "0 8 1 * *"
   workflow_dispatch:
       branches:
-          - ZMB-release
+          - master
 jobs:
   run-flood-model:
     runs-on: ubuntu-20.04
     env:
       running-directory: ./pipeline
-
-    if: ${{ github.repository_owner != 'rodekruis' }}
+            
+    #if: ${{ github.repository_owner != 'rodekruis' }}
     steps:  
     - uses: actions/checkout@v2
       with:
