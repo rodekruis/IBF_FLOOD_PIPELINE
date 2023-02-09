@@ -64,6 +64,11 @@ def main():
             path_to_zip_file='./'+filename
             with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
                 zip_ref.extractall('./data')
+        elif COUNTRY_CODES[0]=='ZMB':    
+            gdd.download_file_from_google_drive(file_id = GOOGLE_DRIVE_DATA_URL ,
+                                                dest_path='./data/data_flood.zip',
+                                                overwrite=True,unzip=True)
+ 
     else:
         dbm_ = dbm('7-day', 'ETH',3)
         filename='data.zip'
