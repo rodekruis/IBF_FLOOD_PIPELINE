@@ -22,19 +22,42 @@ class Exposure:
 
     def __init__(self, leadTimeLabel, countryCodeISO3, admin_area_gdf, population_total, admin_level, district_mapping,pcodes):
         self.leadTimeLabel = leadTimeLabel
+        self.admin_level = admin_level
         self.countryCodeISO3 = countryCodeISO3
+        self.selectedPcode=selectedPcode
         self.disasterExtentRaster = RASTER_OUTPUT + \
             '0/flood_extents/flood_extent_' + leadTimeLabel + '_' + countryCodeISO3 + '.tif'
         self.selectionValue = 0.9
         self.outputPath = PIPELINE_OUTPUT + "out.tif"
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
-        self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.geojson"  #s.geojson', driver='GeoJSON')
-        #self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
+        self.logoFile=logoPath 
+        self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
+        self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_{self.admin_level}_population.json") 
+        self.floodExt = RASTER_OUTPUT + \
+            '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
+        # change this to adopt to other countries 
+        return_period_='25'
+        self.floodExt_raster = RASTER_INPUT +'flood_extent/'+ self.countryCodeISO3 + '_flood_' +return_period_+'year.tif'
+            
+            
+        #self.image_name= PIPELINE_OUTPUT + 'Map_of_affeced_areas_'+ leadTimeLabel + '_' + countryCodeISO3 + '.png'
+        
+        self.image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png' 
+             
+        self.popAffeced = RASTER_OUTPUT + "0/" +\
+            SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']['population']['source'] + \
+                '_' + self.leadTimeLabel + ".tif"
+                
+
+        #self.ADMIN_AREA_GDF_TMP_PATH = os.path.join(PIPELINE_OUTPUT,"admin-areas_TMP.geojson")  #s.geojson', driver='GeoJSON')
+        self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
-        self.admin_level = admin_level
+        if self.countryCodeISO3 == 'MWI':
+            self.EXPOSURE_DATA_UBR_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_UBR_SOURCES']
+        
         self.levels = SETTINGS[countryCodeISO3]['levels']
-        self.pcode_df=pcodes
+        self.pcode_df=pcodes 
         self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
         if "population" in self.EXPOSURE_DATA_SOURCES:
             self.population_total = population_total
@@ -44,7 +67,8 @@ class Exposure:
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
             logger.info(f'indicator: {indicator}')
             self.inputRaster = RASTER_INPUT + values['source'] + ".tif"
-            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
+            #self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + self.leadTimeLabel
+            self.outputRaster = RASTER_OUTPUT + "0/" + values['source'] + '_' + self.leadTimeLabel + ".tif"
             
             stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'])
             df_stats=pd.DataFrame(stats) 
@@ -52,7 +76,8 @@ class Exposure:
  
   
             #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
-            for adm_level in SETTINGS[self.countryCodeISO3]['levels']:  
+            for adm_level in SETTINGS[self.countryCodeISO3]['levels']:
+                logger.info(f'processing indicator: {indicator} for admin level{adm_level}')         
                 if adm_level==self.admin_level:
                     df_stats_levl=stats
                 else:
@@ -64,7 +89,8 @@ class Exposure:
  
                 self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
                     self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.json'
-
+                self.statsPathCsv = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                    self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.csv'
                 result = {
                     'countryCodeISO3': self.countryCodeISO3,
                     'exposurePlaceCodes': df_stats_levl,
@@ -72,7 +98,12 @@ class Exposure:
                     'dynamicIndicator': indicator + '_affected',
                     'adminLevel': adm_level
                 }
-                
+                df1 = pd.DataFrame(df_stats_levl)
+                df1['adminLevel']=adm_level
+                df1['leadTime']=adm_level
+                df1['dynamicIndicator']=indicator + '_affected'
+                df1.to_csv(self.statsPathCsv)
+                    
                 with open(self.statsPath, 'w') as fp:
                     json.dump(result, fp)
 
@@ -83,7 +114,8 @@ class Exposure:
      
                     population_affected_percentage_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
                         self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'population_affected_percentage' + '.json'
-                        
+                    population_affected_percentage_file_pathCsv = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'population_affected_percentage' + '.csv'                        
                     population_affected_percentage_records = {
                         'countryCodeISO3': self.countryCodeISO3,
                         'exposurePlaceCodes': population_affected_percentage, 
@@ -91,6 +123,11 @@ class Exposure:
                         'dynamicIndicator': 'population_affected_percentage',
                         'adminLevel': adm_level
                     }
+                    df = pd.DataFrame(population_affected_percentage)
+                    df['adminLevel']=adm_level
+                    df['leadTime']=adm_level
+                    df['dynamicIndicator']='population_affected_percentage'
+                    df.to_csv(population_affected_percentage_file_pathCsv)
 
                     with open(population_affected_percentage_file_path, 'w') as fp:
                         json.dump(population_affected_percentage_records, fp)
@@ -111,6 +148,52 @@ class Exposure:
 
                 with open(alert_threshold_file_path, 'w') as fp:
                     json.dump(alert_threshold_records, fp)
+        
+        if self.countryCodeISO3 == 'MWI':
+            try:
+                self.UBR_ADM_PATH = os.path.join(self.PIPELINE_INPUT_COD, \
+                    f"{self.countryCodeISO3}_population_ubr.csv") 
+                with open(self.UBR_ADM_PATH) as fp:
+                    population_ubr = pd.read_csv(fp)
+            except Exception as e:
+                logger.info('file not found')
+
+            for indicator, values in self.EXPOSURE_DATA_UBR_SOURCES.items():
+                logger.info(f'indicator: {indicator}')
+                col_name = self.EXPOSURE_DATA_UBR_SOURCES[indicator]['col_name']
+ 
+                for adm_level in SETTINGS[self.countryCodeISO3]['levels']:
+                    df_indicator = population_ubr[[f'placeCode_{adm_level}', col_name]]
+                    alert_threshold_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adm_level) + '_' + 'alert_threshold' + '.json'
+                    with open(alert_threshold_file_path) as fp:
+                        alert_threshold = json.load(fp)
+                    df_alert_threshold = pd.DataFrame(alert_threshold["exposurePlaceCodes"])#.set_index('placeCode').to_dict()
+                    
+                    df_stats = pd.merge(df_alert_threshold, df_indicator, \
+                        how='left', left_on='placeCode', right_on=f'placeCode_{adm_level}')
+                    df_stats['amount'] = df_stats['amount'] * df_stats[col_name]
+
+                    df_stats_levl = df_stats.groupby(f'placeCode_{adm_level}').agg({'amount': 'sum'})
+                    df_stats_levl.reset_index(inplace=True)
+                    df_stats_levl['placeCode'] = df_stats_levl[f'placeCode_{adm_level}']
+                    df_stats_levl = df_stats_levl[['amount','placeCode']].to_dict(orient='records')
+
+                    result = {
+                        'countryCodeISO3': self.countryCodeISO3,
+                        'exposurePlaceCodes': df_stats_levl,
+                        'leadTime': self.leadTimeLabel,
+                        'dynamicIndicator': 'exposed_' + indicator,# + '_affected',
+                        'adminLevel': adm_level
+                    }
+
+                    self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
+                        self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' + str(adm_level) + '_' + str(indicator) + '.json'
+
+                    # self.to_json_api(self.countryCodeISO3, df_stats_levl, \
+                    #     self.leadTimeLabel, indicator, adm_level, self.statsPath)
+                    with open(self.statsPath, 'w') as fp:
+                        json.dump(result, fp)
 
 
     def get_alert_threshold(self, population_affected):
@@ -128,11 +211,15 @@ class Exposure:
     def get_population_affected_percentage(self, population_affected,adm_level):
         ##get population for admin level
         try:
-            df_stats = self.db.apiGetRequest(
-                'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
-                countryCodeISO3='')
+            #df_stats = self.db.apiGetRequest('admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),countryCodeISO3='')
+            self.POPULATION_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{self.countryCodeISO3}_{adm_level}_population.json") 
+            with open(self.POPULATION_PATH) as fp:
+                df_stats=json.load(fp)
         except Exception as e:
+            logger.info('file not found')
+            '''
             logger.info(f'connection error while getting population data, waiting 60 seconds then trying again (1/2)')
+            
             time.sleep(60)
             try:
                 df_stats = self.db.apiGetRequest(
@@ -144,6 +231,7 @@ class Exposure:
                 df_stats = self.db.apiGetRequest(
                     'admin-area-data/{}/{}/{}'.format(self.countryCodeISO3, adm_level, 'populationTotal'),
                     countryCodeISO3='')
+            '''        
         population_total = next((x for x in df_stats if x['placeCode'] == population_affected['placeCode']), None)
         population_affected_percentage = 0.0
         if population_total and population_total['value'] > 0:
@@ -164,8 +252,8 @@ class Exposure:
             except ValueError:
                 logger.info('Rasters do not overlap')
         #self.ADMIN_AREA_GDF_ADM_LEL_=self.ADMIN_AREA_GDF_ADM_LEL.query(f'adminLevel == {adm_level}')
-        #self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
-        self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH,driver='GeoJSON')
+        self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH)
+        #self.ADMIN_AREA_GDF.to_file(self.ADMIN_AREA_GDF_TMP_PATH,driver='GeoJSON')
         stats = self.calcStatsPerAdmin(indicator, disasterExtentShapes, rasterValue)
         return stats
 
@@ -243,6 +331,7 @@ class Exposure:
         with rasterio.open(tiffLocaction) as dataset:
             # Read the dataset's valid data mask as a ndarray.
             image = dataset.read(1).astype(np.float32)
+            image[image >= 0] = 1
             mask = dataset.dataset_mask()
             theShapes = shapes(image, mask=mask, transform=dataset.transform)
 
@@ -270,3 +359,108 @@ class Exposure:
                         "transform": out_transform})
 
         return outImage, outMeta
+
+    def makeMaps(self):
+        import numpy as np
+        import rasterio
+        import matplotlib.pyplot as plt
+        import matplotlib as mpl
+        import geopandas as gpd
+        import earthpy.plot as ep 
+        import contextily as cx
+        import imageio
+        
+        subtitle='  General information about the map Goes here'
+
+        # Set figure size and title size of plots
+        mpl.rcParams['figure.figsize'] = (12, 12)
+        mpl.rcParams['axes.titlesize'] = 14       
+        shfile=self.ADMIN_AREA_GDF #gpd.read_file('./data/other/input/cod/SS_adm3.geojson')
+        
+        
+        selectedPcode_=self.selectedPcode
+        
+        BOR=shfile.query('placeCode==@selectedPcode_')
+        
+        shapes = BOR["geometry"] 
+
+        bor_cnter=shapes.centroid.buffer(0.25)
+        bor_cnter2=shapes.centroid.buffer(0.25)
+            
+        with rasterio.open(self.floodExt, masked=True) as src:
+            out_image, out_transform = rasterio.mask.mask(src, bor_cnter, crop=True)
+            out_meta = src.meta
+            
+        with rasterio.open( self.floodExt_raster, masked=True) as src:
+            out_image_l, out_transform2 = rasterio.mask.mask(src, bor_cnter2, crop=True)
+            out_meta = src.meta
+
+        out_image_l[out_image_l <0 ] = 0      
+         
+            
+        # Plot uncropped array
+                 
+        data_plotting_extent=(bor_cnter.total_bounds[0],bor_cnter.total_bounds[2],bor_cnter.total_bounds[1],bor_cnter.total_bounds[3])
+        data_plotting_extentl=(bor_cnter2.total_bounds[0],bor_cnter2.total_bounds[2],bor_cnter2.total_bounds[1],bor_cnter2.total_bounds[3])
+        
+   
+        cmapFlood = mpl.colors.ListedColormap(['#FF000000','#ffffb2','#fecc5c','#f03b20'])
+        cmapFlood2 = mpl.colors.ListedColormap(['#FF000000','#deebf7','#9ecae1','#3182bd'])
+        #'#e8dcf4','#e0868a' color copied from IBF portal
+
+        #f, ax = plt.subplots()
+        fig = plt.figure(figsize=(12, 12), dpi=96)
+        #rect : This parameter is the dimensions [left, bottom, width, height] of the new axes.
+        axes1 = fig.add_axes([0.05, 0.1, 0.95, 0.7]) 
+        axes2 = fig.add_axes([0.55, 0.8, 0.375, 0.2]) 
+        #axes3 = fig.add_axes([0.15, 0.85, 0.5, 0.125])
+        #axes4 = fig.add_axes([0.15, 0.95, 0.3, 0.06]) 
+        
+        ep._plot_image(out_image_l[0],
+                    cmap=cmapFlood,
+                    vmin=0,
+                    vmax=np.max(out_image),
+                    ax=axes1,
+                    cbar=False,
+                    alpha=0.75,
+                    #title="",
+                    extent=data_plotting_extentl)  # Use plotting extent from DatasetReader object
+
+        ep._plot_image(out_image[0],
+                    cmap=cmapFlood,
+                    vmin=0,
+                    vmax=np.max(out_image),
+                    ax=axes1,
+                    cbar=False,
+                    alpha=0.75,
+                    #title="",
+                    extent=data_plotting_extent) 
+
+        BOR.boundary.plot(ax=axes1, edgecolor='#8856a7',linewidth=4)        
+        cx.add_basemap(ax=axes1,crs=bor_cnter.crs,zoom=12,alpha=0.5,attribution='', attribution_size=6) 
+        axes1.set_axis_off()
+        plt.grid()
+
+
+        bor_cnter3=shapes.centroid.buffer(0.5)
+        bor_cnter3.plot(ax=axes2, alpha=0.25, color='red', edgecolor='red') 
+
+        shfile.plot(ax=axes2, alpha=0.2, color='white', edgecolor='#969696') 
+        cx.add_basemap(axes2, crs=shfile.crs.to_string(), zoom=7,alpha=0.5,attribution='',attribution_size=6)
+        axes2.set_axis_off()
+
+        #axis  
+        #im2 = imageio.imread(self.logoFile) 
+        #axes4.imshow(im2)        
+        #axes4.set_axis_off()
+        
+        #axes3.text(.05, 0.30, subtitle, fontsize = 22)
+        #axes3.set_axis_off()
+        plt.grid(); 
+
+        image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png' 
+        #plt.savefig(image_name, dpi=96)     
+        fig.savefig(image_name, dpi=100)
+
+
+     

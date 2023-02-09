@@ -10,7 +10,8 @@
 
 
 # Local data files
-pipeline/data/*
+pipeline/data
+
  
 !pipeline/data/README.md
 !pipeline/data/trigger_data
@@ -29,7 +30,7 @@ logs
 *.log
 npm-debug.log*
 .npm
-
+*.zip
 # Secrets
 secrets
 pipeline/lib/flood_model/secrets.py

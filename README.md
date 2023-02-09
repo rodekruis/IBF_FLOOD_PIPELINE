@@ -17,10 +17,12 @@ Getting its secrets from a local secrets.py file.
 Obviously, this method can be used also non-locally, e.g. by running it as cronjob on a Virtual Machine.
 
 - Install Docker
+
 - Clone the 'ZMB-release' branch: `git clone -b ZMB-release https://github.com/<github-account>/IBF_FLOOD_PIPELINE.git`
 - Change `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and fill in the necessary secrets. Particularly fill in for 
   - ZMB_URL: `https://<ibf-system-url>/api/` (so with a slash at the end!)
   - ZMB_PASSWORD: the IBF-System admin users' password, set in the `.env` file on the environment where IBF-System is running
+
   - ADMIN_LOGIN: retrieve from someone who knows
   - GLOFAS_USER: retrieve from someone who knows
   - GLOFAS_PW: retrieve from someone who knows
@@ -35,7 +37,9 @@ Obviously, this method can be used also non-locally, e.g. by running it as cronj
 Getting its secrets from Github Secrets.
 
 - Fork this repository to your own Github-account.
+
 - IMPORTANT: Make 'ZMB-release' the default branch in `https://github.com/<your-github-account>/IBF_FLOOD_PIPELINE/settings/branches`
+
 - Add Github secrets in Settings > Secrets of the forked repository: `https://github.com/<your-github-account>/IBF_FLOOD_PIPELINE/settings/secrets/actions`
   - Add the same 6 secrets as mentioned in the local scenario above.
 - The Github action is already scheduled to run daily at a specific time. So wait until that time has passed to test that the pipeline has run correctly.
@@ -52,6 +56,10 @@ Getting its secrets from Azure Key Vault.
 
 ## Versions
 You can find the versions in the [tags](https://github.com/rodekruis/IBF_FLOOD_PIPELINE/tags) of the commits. See below table to find which version of the pipeline corresponds to which version of IBF-Portal.
-| Flood Pipeline version  | IBF-Portal version |
-| --- | --- |
-| 0.0.1  | 0.103.1  |
+| Flood Pipeline version  | IBF-Portal version | Changes |
+| --- | --- | --- |
+| v0.0.1 | 0.103.1 | initial number |
+| v0.1.0 | 0.129.0 | alert_threshold upload to API | 
+| v0.2.0 | 0.129.0 | rearranged and set up for github actions |
+| v0.3.1 | 0.158.3 | add ethiopia multi admin |
+

@@ -19,6 +19,7 @@ coverage
 # External code
 node_modules
 
+ 
 
 # Logs / Cache / temporary files
 logs
@@ -27,8 +28,11 @@ npm-debug.log*
 .npm
 
 # Secrets
- 
+secrets_
 # Byte-compiled / optimized / DLL files
 __pycache__/
+
 *.py[cod]
 *$py.class
+
+#pipeline/data

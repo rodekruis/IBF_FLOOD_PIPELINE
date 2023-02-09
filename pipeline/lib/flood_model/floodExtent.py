@@ -24,9 +24,13 @@ class FloodExtent:
         self.outputPathMerge = RASTER_OUTPUT + '0/flood_extents/flood_extent_'+ leadTimeLabel + '_' + countryCodeISO3 + '.tif'
         self.district_mapping = district_mapping
         self.ADMIN_AREA_GDF = admin_area_gdf
+        self.Areas_With_GlofasStation=Areas_With_GlofasStation
 
     def calculate(self):
         admin_gdf = self.ADMIN_AREA_GDF
+        #admin_gdf.crs = "EPSG:4326"
+        #if self.countryCodeISO3=='KEN':
+        #    admin_gdf=admin_gdf.to_crs(4210)
 
         df_glofas = self.loadGlofasData()
 
@@ -50,24 +54,44 @@ class FloodExtent:
             
             dist_coords = self.getCoordinatesFromGDF(gdf_dist)
             
+            ### for PHL to save time process only districts with GLOFAS stations 
+            
+            #if pcode in Areas_With_GlofasStation:
             
             #If trigger, find the right flood extent and clip it for the area and save it
-            trigger = rows['fc_trigger']
-            if trigger == 1:
-                return_period = rows['fc_rp_flood_extent'] 
-                input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
+            if self.countryCodeISO3 =='PHL':
+                if pcode in self.Areas_With_GlofasStation:
+                    logger.info(f'procssing {pcode}')                
+                    #If trigger, find the right flood extent and clip it for the area and save it
+                    trigger = rows['fc_trigger']
+                    if trigger == 1:
+                        return_period = rows['fc_rp_flood_extent'] 
+                        input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
+                    else:
+                        input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
+                    out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)                   
+
+                    with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
+                        dest.write(out_image)                       
             else:
-                input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
+                trigger = rows['fc_trigger']
+                if trigger == 1:
+                    return_period = rows['fc_rp_flood_extent'] 
+                    input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
+                else:
+                    input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
 
-            out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
+                out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
+                
 
-            with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
-                dest.write(out_image)
-
+                with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
+                    dest.write(out_image)
+                logger.info(f"flood extent file written for {pcode}")
 
         #Merge all clipped flood extents back together and Save
         mosaic, out_meta = self.mergeRasters()
-
+        
+        out_meta.update({"compress": "lzw"}) #"dtype": 'int16',
         
         with rasterio.open(self.outputPathMerge, "w", **out_meta) as dest:
             dest.write(mosaic)
@@ -106,7 +130,9 @@ class FloodExtent:
         outMeta.update({"driver": "GTiff",
                     "height": outImage.shape[1],
                     "width": outImage.shape[2],
-                    "transform": out_transform})
+                    "transform": out_transform,
+                    #"dtype": 'int16',
+                    "compress": "lzw"}) #
 
         return outImage, outMeta
 
