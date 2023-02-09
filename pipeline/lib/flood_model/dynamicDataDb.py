@@ -408,3 +408,4 @@ class DatabaseManager:
                '.dfs.core.windows.net/'+file_system_name)
         r = requests.get(url, headers=headers)
         return r
+    

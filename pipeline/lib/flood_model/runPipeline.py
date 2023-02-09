@@ -13,11 +13,10 @@ import resource
 import os
 import logging
 import zipfile
-from google_drive_downloader import GoogleDriveDownloader as gdd
-
+from flood_model.googledrivedata import downloaddatalack 
 
             
-            
+        
 # Set up logger
 logging.root.handlers = []
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG, filename='ex.log')
@@ -40,35 +39,12 @@ def main():
     ## download data from Datalacke 
     
     if len(COUNTRY_CODES)==1:
-        if COUNTRY_CODES[0]=='PHL':    
-            dbm_ = dbm('7-day', 'PHL',3)
-            filename='data_phl.zip'
-            path = 'flood/Gold/datapipeline/'+ filename
-            #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
-            DataFile = dbm_.getDataFromDatalake(path)
-            if DataFile.status_code >= 400:
-                raise ValueError()
-            open('./' + filename, 'wb').write(DataFile.content)
-            path_to_zip_file='./'+filename
-            with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-                zip_ref.extractall('./data')
-        elif COUNTRY_CODES[0]=='SSD':    
-            dbm_ = dbm('7-day', 'SSD',3)
-            filename='data_ssd.zip'
-            path = 'flood/Gold/datapipeline/'+ filename
-            #admin_area_json1['geometry'] = admin_area_json1.pop('geom')
-            DataFile = dbm_.getDataFromDatalake(path)
-            if DataFile.status_code >= 400:
-                raise ValueError()
-            open('./' + filename, 'wb').write(DataFile.content)
-            path_to_zip_file='./'+filename
-            with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-                zip_ref.extractall('./data')
-        elif COUNTRY_CODES[0]=='ZMB':    
-            gdd.download_file_from_google_drive(file_id = GOOGLE_DRIVE_DATA_URL ,
-                                                dest_path='./data/data_flood.zip',
-                                                overwrite=True,unzip=True)
- 
+        countryCode=COUNTRY_CODES[0].lower()
+        downloaddatalack(countryCode)
+        filename=f'data_{countryCode}.zip'
+        path_to_zip_file='./'+filename 
+        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+            zip_ref.extractall('./data') 
     else:
         dbm_ = dbm('7-day', 'ETH',3)
         filename='data.zip'
@@ -82,9 +58,6 @@ def main():
         with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
             zip_ref.extractall('./data')
     
-    
-    
-
     #gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')
  
