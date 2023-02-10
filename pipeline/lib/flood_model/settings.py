@@ -12,9 +12,9 @@ try:
     GLOFAS_PW = os.environ["GLOFAS_PW"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
     IBF_URL=os.environ["IBF_URL"] 
-    GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
-    ZMB_URL=os.environ['ZMB_URL']
-    ZMB_PASSWORD=os.environ['ZMB_PASSWORD']
+    #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
+    #ZMB_URL=os.environ['ZMB_URL']
+    #ZMB_PASSWORD=os.environ['ZMB_PASSWORD']
     
 
 except:
@@ -60,11 +60,46 @@ except ImportError:
 
 # Countries to include
 
-COUNTRY_CODES = ['ZMB']
-
 selectedPcode='SS030303'
-
+COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] 
+#COUNTRY_CODES = ['ZMB'] #
+ 
 SETTINGS = {
+    "MWI": {
+            "IBF_API_URL": IBF_URL,
+            "PASSWORD": IBF_PASSWORD,
+            "mock": False,
+            "if_mock_trigger": False,
+            "placeCodeInitial": 'MWI',
+            "glofasReturnPeriod":'rl5',
+            "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+            "notify_email": False,
+            'lead_times': {
+                "7-day": 7
+            },
+            'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+            'eapAlertClass':{"no": 0.6,"max": 0.601},
+            'admin_level': 3,
+            'levels':[3,2,1],
+            'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+            'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',  
+            'EXPOSURE_DATA_SOURCES': {
+                "population": {
+                    "source": "population/population_mwi",
+                    "rasterValue": 1
+               }
+            },
+            'EXPOSURE_DATA_UBR_SOURCES': {
+                "pop_u18": {
+                    "source": "mwi_3_population_ubr",
+                    "col_name": "ubr_pop_u18"
+                },
+                "pop_65": {
+                    "source": "mwi_3_population_ubr",
+                    "col_name": "ubr_pop_65"
+                }
+            }
+    },
     "ZMB": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
@@ -89,7 +124,131 @@ SETTINGS = {
                 "rasterValue": 1
             }
         }
-
+    },
+    "UGA": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "placeCodeInitial": 'UGA',
+        "if_mock_trigger": False,
+        "notify_email": True,
+        "glofasReturnPeriod":'rl5',
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        'lead_times': {
+            "5-day": 5
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.6,"max": 0.601},
+        'admin_level': 4,
+        'levels':[4,3,2,1],
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_uga_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "KEN": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "placeCodeInitial": 'KEN',
+        "if_mock_trigger": False,
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        "notify_email": True,
+        "glofasReturnPeriod":'rl5',
+        'lead_times': {
+            "7-day": 7
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.85,"max": 0.851},
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_ken_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "ETH": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "placeCodeInitial": 'ETH',
+        "mock": False,
+        "if_mock_trigger": False,
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        "notify_email": True,
+        "glofasReturnPeriod":'rl10',
+        'lead_times': {
+            "7-day": 7
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.75,"max": 0.751},
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/worldpop_eth",
+                "rasterValue": 1
+            }
+        }
+    },
+    "PHL": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": False,
+        "placeCodeInitial": 'PHL',
+        "if_mock_trigger": False,
+        "notify_email": True,
+        "placecodeLen":9, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        "glofasReturnPeriod":'rl5',
+        'lead_times': {
+            "3-day": 3
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.7,"max": 0.701},
+        'admin_level': 3,
+        'levels':[3,2,1],
+        'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/',
+        'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/hrsl_phl_pop_resized_100",
+                "rasterValue": 1
+            }
+        }
+    },
+    "SSD": {
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
+        "mock": True,
+        "placeCodeInitial": 'SS',
+        "if_mock_trigger": True,
+        "notify_email": True,
+        "glofasReturnPeriod":'rl5',
+        "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
+        'lead_times': {
+            "7-day": 7
+        },
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
+        'eapAlertClass':{"no": 0.6,"max": 0.601},
+        'admin_level': 3,
+        'levels':[3],
+        'GLOFAS_FTP':'aux.ecmwf.int/for_JBA/',
+        'GLOFAS_FILENAME':'glofas_areagrid_for_JBA_in_Global', 
+        'EXPOSURE_DATA_SOURCES': {
+            "population": {
+                "source": "population/ssd_ppp_2020_adjusted",
+                "rasterValue": 1
+            }
+        }
     }
 }
 
@@ -137,9 +296,8 @@ logoPath = 'logo/SSD.png'
 GLOFAS_GRID_FILENAME='glofas_areagrid_for_JBA_in_Global'
 
 # Glofas input
-
-GLOFAS_FTP = 'aux.ecmwf.int/ZambiaRedcross_glofas_point/'
-GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
+#GLOFAS_FTP = 'data-portal.ecmwf.int/ZambiaRedcross_glofas_point/'
+#GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
 
 
 #####################
@@ -148,6 +306,7 @@ GLOFAS_FILENAME = 'glofas_pointdata_ZambiaRedcross'
 
 TRIGGER_LEVEL = 'triggerLevel'
 LEAD_TIME = 'leadTime'
+
 
 ### For PHL to reduce the task when running in logic-app run pipeline only for the flood prone areas 
 
