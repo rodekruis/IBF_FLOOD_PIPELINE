@@ -62,44 +62,9 @@ except ImportError:
 
 COUNTRY_CODES = ['ZMB']
 
-
 selectedPcode='SS030303'
+
 SETTINGS = {
-    "MWI": {
-            "IBF_API_URL": IBF_URL,
-            "PASSWORD": IBF_PASSWORD,
-            "mock": False,
-            "if_mock_trigger": False,
-            "placeCodeInitial": 'MWI',
-            "glofasReturnPeriod":'rl5',
-            "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
-            "notify_email": False,
-            'lead_times': {
-                "7-day": 7
-            },
-            'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
-            'eapAlertClass':{"no": 0.6,"max": 0.601},
-            'admin_level': 3,
-            'levels':[3,2,1],
-            'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
-            'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',  
-            'EXPOSURE_DATA_SOURCES': {
-                "population": {
-                    "source": "population/population_mwi",
-                    "rasterValue": 1
-               }
-            },
-            'EXPOSURE_DATA_UBR_SOURCES': {
-                "pop_u18": {
-                    "source": "mwi_3_population_ubr",
-                    "col_name": "ubr_pop_u18"
-                },
-                "pop_65": {
-                    "source": "mwi_3_population_ubr",
-                    "col_name": "ubr_pop_65"
-                }
-            }
-    },
     "ZMB": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,

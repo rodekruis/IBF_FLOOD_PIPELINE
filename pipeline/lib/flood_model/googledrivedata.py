@@ -30,17 +30,26 @@ def save_response_content(response, destination):
                 f.write(chunk)
 
 def downloaddatalack(countryCode): 
-    countryCode=countryCode.lower()
     if countryCode:
+        countryCode=countryCode.lower()
         url=f'https://510ibfsystem.blob.core.windows.net/ibfdatapipelines/flood/data_{countryCode}.zip'
+        response = requests.get(url)
+        if response.status_code == 200:
+            # If the request is successful, the response content can be saved to a file
+            with open(f'data_{countryCode}.zip', "wb") as f:
+                f.write(response.content)
+        else:
+            # If the request fails, print an error message
+            print(f"Failed to download data from {url} with status code {response.status_code}")
+        
     else:
         url='https://510ibfsystem.blob.core.windows.net/ibfdatapipelines/flood/data.zip'
 
-    response = requests.get(url)
-    if response.status_code == 200:
-        # If the request is successful, the response content can be saved to a file
-        with open(f'data_{countryCode}.zip', "wb") as f:
-            f.write(response.content)
-    else:
-        # If the request fails, print an error message
-        print(f"Failed to download data from {url} with status code {response.status_code}")
+        response = requests.get(url)
+        if response.status_code == 200:
+            # If the request is successful, the response content can be saved to a file
+            with open(f'data.zip', "wb") as f:
+                f.write(response.content)
+        else:
+            # If the request fails, print an error message
+            print(f"Failed to download data from {url} with status code {response.status_code}")
