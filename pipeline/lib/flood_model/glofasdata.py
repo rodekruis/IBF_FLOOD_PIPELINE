@@ -48,6 +48,7 @@ class GlofasData:
         self.GLOFAS_FTP=SETTINGS[countryCodeISO3]['GLOFAS_FTP']
         self.TRIGGER_LEVELS=SETTINGS[countryCodeISO3]['TRIGGER_LEVELS']
         self.eapAlertClass=SETTINGS[countryCodeISO3]['eapAlertClass']
+        self.selectedPcode = SETTINGS[countryCodeISO3]['selectedPcode']
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.inputPathGrid = PIPELINE_DATA+'input/glofasgrid/'
         
@@ -75,18 +76,21 @@ class GlofasData:
         self.placeCodeInitial= SETTINGS[countryCodeISO3]['placeCodeInitial'] 
 
     def process(self):
-        if SETTINGS[self.countryCodeISO3]['mock'] == False:
-            self.removeOldGlofasData()
-            self.download()        
-            #self.start_download_loop()
         if SETTINGS[self.countryCodeISO3]['mock'] == True:
             self.extractMockData()
-        elif self.countryCodeISO3=='SSD':
-            self.extractGlofasDataGrid()
+            self.findTrigger()
         else:
-            self.getGlofasData()
-            self.extractGlofasData()
-        self.findTrigger()
+            self.removeOldGlofasData()
+            self.download()
+            if self.countryCodeISO3=='SSD':
+                self.extractGlofasDataGridToCsv()
+                self.extractGlofasDataGrid()
+                self.findTrigger()
+            else:
+                self.getGlofasData()
+                self.extractGlofasData()
+                self.findTrigger()
+
 
     def removeOldGlofasData(self):
         for filepath in [self.inputPath,self.inputPathGrid]:
@@ -172,16 +176,16 @@ class GlofasData:
                 return "min"
             elif  num <= self.eapAlertClass['med']:
                 return "med"
-            elif  num <= self.eapAlertClass['max']:
+            elif  num >= self.eapAlertClass['max']:
                 return "max"
         else:
-            if num > self.eapAlertClass['max']:
+            if num >= self.eapAlertClass['max']:
                 return "max"
             else:
                 return "no"
             
-    def extractGlofasDataGrid(self):
-        
+    def extractGlofasDataGridToCsv(self):
+            
         bf_gpd=self.admin_area_gdf 
         
         bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
@@ -191,29 +195,12 @@ class GlofasData:
         # Load input data
         filename = self.GLOFAS_GRID_FILENAME + '_' + self.current_date + '00.nc'
         Filename = os.path.join(self.inputPathGrid, filename) 
-        nc_file = xr.open_dataset(Filename)    
-        
-
-        
-        
-        trigger_per_day = {
-            '1-day': False,
-            '2-day': False,
-            '3-day': False,
-            '4-day': False,
-            '5-day': False,
-            '6-day': False,
-            '7-day': False,
-        }       
-
-                  
+        nc_file = xr.open_dataset(Filename)  
         var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
         df_leadtime_ens=[]
-        
 
         for i in range(0,7):
             leadTimelabel=str(i+1)+'_day'  
-
             for ens in range(0,51):
                 nc_p =var_data.sel(time=var_data.time.values[i],ensemble=var_data.ensemble.values[ens]).drop(['time','ensemble']).rio.write_crs("epsg:4326", inplace=True)
 
@@ -237,25 +224,38 @@ class GlofasData:
         glofasDffinal = pd.concat(df_leadtime_ens) 
         
         glofasDffinal.to_csv(self.glofasAdmnPerDay) 
-         
-        
-         
+
         logger.info('Extracted Glofas data from grid- discharge per day File saved') 
             
         nc_file.close()
         
+        
+          
+    def extractGlofasDataGrid(self):
+        trigger_per_day = {
+            '1-day': False,
+            '2-day': False,
+            '3-day': False,
+            '4-day': False,
+            '5-day': False,
+            '6-day': False,
+            '7-day': False,
+        }       
+        
+        glofasDffinal= pd.read_csv(self.glofasAdmnPerDay) 
+        selectedPcodeVal=self.selectedPcode
+        #glofasDffinal= glofasDffinal.query('pcode in @selectedPcode')
+        
+        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
         df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
         df_thresholds = df_thresholds.set_index("stationCode", drop=False)
-        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
         df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
         
-        
-        stations=[]
-        for index, row in df_district_mapping.iterrows():
+        stations=[]               
+        for exractAdminCode in selectedPcodeVal:
             station = {}
-            station['code'] = row['glofasStation']
-            exractAdminCode=row['placeCode']            
-            if station['code'] in df_thresholds['stationCode'] and station['code'] in df_district_mapping['glofasStation']:
+            station['code'] = df_district_mapping.query('placeCode == @exractAdminCode')['glofasStation'].values[0]            
+            if station['code'] in df_thresholds['stationCode']:#and station['code'] in df_district_mapping['glofasStation']:
                 logger.info(station['code'])
                 threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
             
@@ -266,13 +266,16 @@ class GlofasData:
                     dis_sum = 0
                     leadTimelabel=str(step)+'_day'   
                     
-                    for discharge in list(glofasDffinal.query("pcode==@exractAdminCode").query("leadTime==@leadTimelabel")['dis'].values):    
+                    for ensemble in range(1, ensemble_options+1):
+                        discharge = glofasDffinal.query('pcode in @exractAdminCode').query('ensemble ==@ensemble').query('leadTime ==@leadTimelabel')['dis'].values[0]
+    
                         if discharge >= threshold:
                             count = count + 1
-                        dis_sum = dis_sum + discharge
-                        
-                    prob = count/ensemble_options
+                        dis_sum = dis_sum + discharge                  
+
+                    prob = int(count/ensemble_options)
                     dis_avg = dis_sum/ensemble_options
+                    
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob 
                     station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
@@ -296,25 +299,12 @@ class GlofasData:
 
         with open(self.extractedGlofasPath, 'w') as fp:
             json.dump(stations, fp)
-            logger.info('Extracted Glofas data - File saved')
+            logger.info('Extracted Glofas data - File saved_')
 
         with open(self.triggerPerDay, 'w') as fp:
             json.dump([trigger_per_day], fp)
-            logger.info('Extracted Glofas data - Trigger per day File saved')       
- 
- 
-    def check_intervals(self,num):
-        if abs(num - 5) <= 0.5:
-            return "Close to interval 1 (5 ± 0.5)"
-        elif abs(num - 10) <= 0.5:
-            return "Close to interval 2 (10 ± 0.5)"
-        elif abs(num - 15) <= 0.5:
-            return "Close to interval 3 (15 ± 0.5)"
-        else:
-            return "Not close to any interval"                     
-
-
-
+            logger.info('Extracted Glofas data - Trigger per day File saved_')       
+  
     def extractGlofasData(self):
         logger.info('\nExtracting Glofas (FTP) Data\n')
 
@@ -325,7 +315,6 @@ class GlofasData:
         df_thresholds = df_thresholds.set_index("stationCode", drop=False)
         df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
         df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
-
         stations = []
         trigger_per_day = {
             '1-day': False,
@@ -338,7 +327,7 @@ class GlofasData:
         }
         for i in range(0, len(files)):
             Filename = os.path.join(self.inputPath, files[i])
-            
+           
             # Skip old stations > need to be removed from FTP
             if 'G5230_Na_ZambiaRedcross' in Filename or 'G5196_Uganda_Gauge' in Filename:
                 continue
@@ -372,7 +361,7 @@ class GlofasData:
                             count = count + 1
                         dis_sum = dis_sum + discharge
 
-                    prob = count/ensemble_options
+                    prob = int(count/ensemble_options)
                     dis_avg = dis_sum/ensemble_options
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob 
@@ -493,7 +482,7 @@ class GlofasData:
                             count = count + 1
                         dis_sum = dis_sum + discharge
 
-                    prob = count/ensemble_options
+                    prob = int(count/ensemble_options)
                     dis_avg = dis_sum/ensemble_options
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob

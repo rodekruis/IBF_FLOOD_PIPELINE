@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 def main():
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
-    ## download data from Datalacke 
+    ## download data from Datalack  
     
     if len(COUNTRY_CODES)==1:
         countryCode=COUNTRY_CODES[0].lower()

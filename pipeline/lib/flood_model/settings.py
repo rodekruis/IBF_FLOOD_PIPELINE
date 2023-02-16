@@ -12,9 +12,6 @@ try:
     GLOFAS_PW = os.environ["GLOFAS_PW"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
     IBF_URL=os.environ["IBF_URL"] 
-    #GOOGLE_DRIVE_DATA_URL = os.environ['GOOGLE_DRIVE_DATA_URL']
-    #ZMB_URL=os.environ['ZMB_URL']
-    #ZMB_PASSWORD=os.environ['ZMB_PASSWORD']
     
 
 except:
@@ -32,7 +29,6 @@ try:
         os.environ["AZURE_TENANT_ID"] = AZURE_TENANT_ID
 
     az_credential = DefaultAzureCredential()
-    #secret_client = SecretClient(vault_url='https://ibf-flood-keys.vault.azure.net', credential=az_credential)
     secret_client = SecretClient(vault_url='https://ibf-training-keys.vault.azure.net', credential=az_credential)
     
 
@@ -40,8 +36,8 @@ try:
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
     GLOFAS_PW = secret_client.get_secret("GLOFAS-PW").value
     GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
-    ZMB_URL=secret_client.get_secret("ZMB-URL").value
-    ZMB_PASSWORD=secret_client.get_secret("ZMB-PASSWORD").value
+    IBF_URL=secret_client.get_secret("IBF-URL").value
+    IBF_PASSWORD=secret_client.get_secret("IBF-PASSWORD").value
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
@@ -60,9 +56,10 @@ except ImportError:
 
 # Countries to include
 
-selectedPcode='SS030303'
-COUNTRY_CODES = ['ETH','ZMB','KEN','UGA'] 
-#COUNTRY_CODES = ['ZMB'] #
+ 
+#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
+#COUNTRY_CODES = ['PHL'] #
+COUNTRY_CODES = ['SSD'] #
  
 SETTINGS = {
     "MWI": {
@@ -72,6 +69,7 @@ SETTINGS = {
             "if_mock_trigger": False,
             "placeCodeInitial": 'MWI',
             "glofasReturnPeriod":'rl5',
+            "selectedPcode":[],
             "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
             "notify_email": False,
             'lead_times': {
@@ -107,6 +105,7 @@ SETTINGS = {
         "if_mock_trigger": False,
         "placeCodeInitial": 'ZMB',
         "glofasReturnPeriod":'rl10',
+        "selectedPcode":[],
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         'lead_times': {
@@ -133,6 +132,7 @@ SETTINGS = {
         "if_mock_trigger": False,
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
+        "selectedPcode":[],
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
             "5-day": 5
@@ -159,6 +159,7 @@ SETTINGS = {
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
+        "selectedPcode":[],
         'lead_times': {
             "7-day": 7
         },
@@ -184,6 +185,7 @@ SETTINGS = {
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         "glofasReturnPeriod":'rl10',
+        "selectedPcode":[],
         'lead_times': {
             "7-day": 7
         },
@@ -209,6 +211,7 @@ SETTINGS = {
         "notify_email": True,
         "placecodeLen":9, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "glofasReturnPeriod":'rl5',
+        "selectedPcode":[],
         'lead_times': {
             "3-day": 3
         },
@@ -228,11 +231,12 @@ SETTINGS = {
     "SSD": {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
-        "mock": True,
+        "mock": False,
         "placeCodeInitial": 'SS',
-        "if_mock_trigger": True,
+        "if_mock_trigger": False,
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
+        "selectedPcode":['SS030303'],
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
             "7-day": 7
