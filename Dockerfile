@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN mkdir --parents /home/ibf
 ENV HOME /home/ibf
@@ -6,8 +6,6 @@ WORKDIR $HOME
 
 RUN apt-get update && apt-get install -y \
     software-properties-common \
-    nano \
-    vim \
     python3-pip \
     git \
     wget \

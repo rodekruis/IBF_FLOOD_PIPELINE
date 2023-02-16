@@ -36,3 +36,5 @@ __pycache__/
 *$py.class
 
 #pipeline/data
+pipeline/data/other
+pipeline/data/raster
