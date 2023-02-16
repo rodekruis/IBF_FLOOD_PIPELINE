@@ -3,9 +3,12 @@ FROM ubuntu:20.04
 RUN mkdir --parents /home/ibf
 ENV HOME /home/ibf
 WORKDIR $HOME
+ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update &&\
+	DEBIAN_FRONTEND=noninteractive apt-get install -y \
     software-properties-common \
+	nano \
     python3-pip \
     git \
     wget \
@@ -14,18 +17,20 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get purge --auto-remove \
     && apt-get clean
-
-RUN add-apt-repository ppa:ubuntugis/ppa \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y \
+#ppa:ubuntugis/ppa
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
+	&& apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     python-numpy \
     gdal-bin \
     libgdal-dev \
     postgresql-client \
-    libgnutls28-dev \
-    libgnutls28-dev \
-    libspatialindex-dev \
-    libeccodes0 \
+				libproj-dev \
+	libgeos-dev \
+		libspatialindex-dev \
+	libudunits2-dev \
+	libssl-dev \
+	libeccodes0 \
 	libcairo2-dev\
 	libgirepository1.0-dev\
     gfortran \
@@ -37,7 +42,7 @@ RUN apt-get update\
     && apt-get install -y curl
 
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get -f -y install curl apt-transport-https lsb-release gnupg python3-pip python-pip && \
+    apt-get -f -y install curl apt-transport-https lsb-release gnupg python3-pip && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg && \
     CLI_REPO=$(lsb_release -cs) && \
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${CLI_REPO} main" \
