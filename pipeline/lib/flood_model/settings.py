@@ -59,7 +59,8 @@ except ImportError:
  
 #COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
 #COUNTRY_CODES = ['PHL'] #
-COUNTRY_CODES = ['SSD'] #
+#COUNTRY_CODES = ['SSD'] #
+COUNTRY_CODES = ['PHL'] #
  
 SETTINGS = {
     "MWI": {

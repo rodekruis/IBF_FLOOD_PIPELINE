@@ -1,48 +1,29 @@
-FROM ubuntu:20.04
+FROM python:3.7-buster
 
 RUN mkdir --parents /home/ibf
 ENV HOME /home/ibf
 WORKDIR $HOME
-ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update &&\
-	DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    software-properties-common \
-	nano \
-    python3-pip \
-    git \
-    wget \
-    libxml2-utils \
-    gir1.2-secret-1\
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge --auto-remove \
-    && apt-get clean
-#ppa:ubuntugis/ppa
-RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
-	&& apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-    python-numpy \
-    gdal-bin \
-    libgdal-dev \
-    postgresql-client \
-				libproj-dev \
-	libgeos-dev \
-		libspatialindex-dev \
-	libudunits2-dev \
-	libssl-dev \
-	libeccodes0 \
-	libcairo2-dev\
-	libgirepository1.0-dev\
-    gfortran \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge --auto-remove \
-    && apt-get clean
+RUN apt-get update && \
+	apt-get install -y python3-pip && \
+	ln -sfn /usr/bin/python3.6 /usr/bin/python && \
+	ln -sfn /usr/bin/pip3 /usr/bin/pip
+
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+
+RUN deps='build-essential gdal-bin python-gdal libgdal-dev kmod wget apache2' && \
+	apt-get update && \
+	apt-get install -y $deps
+
+RUN pip install --upgrade pip && \
+	pip install GDAL==$(gdal-config --version)
 
 RUN apt-get update\
     && apt-get install -y curl
 
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get -f -y install curl apt-transport-https lsb-release gnupg python3-pip && \
+    apt-get -f -y install curl apt-transport-https lsb-release gnupg python3-pip python-pip && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg && \
     CLI_REPO=$(lsb_release -cs) && \
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${CLI_REPO} main" \

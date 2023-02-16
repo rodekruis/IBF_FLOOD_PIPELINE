@@ -24,7 +24,7 @@ class Exposure:
         self.leadTimeLabel = leadTimeLabel
         self.admin_level = admin_level
         self.countryCodeISO3 = countryCodeISO3
-        self.selectedPcode=selectedPcode
+        self.selectedPcode = SETTINGS[countryCodeISO3]['selectedPcode']
         self.disasterExtentRaster = RASTER_OUTPUT + \
             '0/flood_extents/flood_extent_' + leadTimeLabel + '_' + countryCodeISO3 + '.tif'
         self.selectionValue = 0.9
