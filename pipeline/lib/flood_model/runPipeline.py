@@ -37,6 +37,7 @@ def main():
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
     ## download data from Datalack  
+
     
     if len(COUNTRY_CODES)==1:
         countryCode=COUNTRY_CODES[0].lower()

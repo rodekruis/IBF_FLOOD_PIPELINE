@@ -6,8 +6,8 @@ services:
     image: ibf-floods-pipeline
     ports:
       - "587:587"
-    #env_file:
-    #  - secrets
+    env_file:
+      - secrets.env
     volumes: 
       - ./pipeline:/home/ibf
     command: run-flood-model

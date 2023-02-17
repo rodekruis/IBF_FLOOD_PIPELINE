@@ -1,10 +1,31 @@
 import os 
 from datetime import date, timedelta
+#from dotenv import load_dotenv
+from pathlib import Path
+import ast
+
+
 ##################
 ## LOAD SECRETS ##
 ##################
  
-# 1. Try to load secrets from env-variables (i.e. when using Github Actions)
+# 1. Try to load secrets from a local env-variables 
+ 
+try:
+    ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
+    GLOFAS_USER =os.getenv("GLOFAS_USER")
+    GLOFAS_PW =os.getenv("GLOFAS_PW")
+    IBF_PASSWORD=os.getenv("IBF_PASSWORD")
+    IBF_URL =os.getenv("IBF_URL")
+    COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
+    
+
+except:
+     print('No environment variables found localy.')
+ 
+
+
+# 2. Try to load secrets from env-variables (i.e. when using Github Actions)
  
 try:
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]  
@@ -12,11 +33,14 @@ try:
     GLOFAS_PW = os.environ["GLOFAS_PW"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
     IBF_URL=os.environ["IBF_URL"] 
-    
+    COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
+   
+   
 
 except:
      print('No environment variables found.')
-# 2. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
+# 3. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
+
 
 try:
     from azure.identity import DefaultAzureCredential
@@ -38,29 +62,20 @@ try:
     GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
     IBF_URL=secret_client.get_secret("IBF-URL").value
     IBF_PASSWORD=secret_client.get_secret("IBF-PASSWORD").value
+    COUNTRY_CODES=secret_client.get_secret("COUNTRY-CODES").value
 
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
 
-
-# 3. If 1. and 2. both fail, then assume secrets are loaded via secrets.py file (when running locally). If neither of the 3 options apply, this script will fail.
-try:
-    from flood_model.secrets import *
-except ImportError:
-    print('No secrets file found.')
-
-
+ 
+# If neither of the 3 options apply, this script will fail.
+ 
 ######################
 ## COUNTRY SETTINGS ##
 ######################
-
-# Countries to include
-
  
-#COUNTRY_CODES = ['ETH','ZMB','KEN','UGA','MWI'] 
-#COUNTRY_CODES = ['PHL'] #
-#COUNTRY_CODES = ['SSD'] #
-COUNTRY_CODES = ['PHL'] #
+ 
+
  
 SETTINGS = {
     "MWI": {

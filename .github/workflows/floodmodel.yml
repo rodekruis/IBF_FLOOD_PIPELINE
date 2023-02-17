@@ -93,6 +93,7 @@ jobs:
         GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}
         IBF_URL: ${{ secrets.IBF_URL }}
         IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
+        COUNTRY_CODES: ${{ secrets.COUNTRY_CODES }}   
       run: |
         run-flood-model
       working-directory: ${{ env.running-directory }}
