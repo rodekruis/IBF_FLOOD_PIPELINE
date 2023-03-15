@@ -81,7 +81,7 @@ class FloodExtent:
                     input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
                 else:
                     input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
-                logger.info(f'return period  {return_period}')
+             
 
                 out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
                 
