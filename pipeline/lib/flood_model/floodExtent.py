@@ -33,6 +33,7 @@ class FloodExtent:
         #    admin_gdf=admin_gdf.to_crs(4210)
 
         df_glofas = self.loadGlofasData()
+       
 
         #Create new subfolder for current date
         if not os.path.exists(self.outputPathAreas):
@@ -61,7 +62,7 @@ class FloodExtent:
             #If trigger, find the right flood extent and clip it for the area and save it
             if self.countryCodeISO3 =='PHL':
                 if pcode in self.Areas_With_GlofasStation:
-                    logger.info(f'procssing {pcode}')                
+                    #logger.info(f'procssing {pcode}')                
                     #If trigger, find the right flood extent and clip it for the area and save it
                     trigger = rows['fc_trigger']
                     if trigger == 1:
@@ -80,13 +81,14 @@ class FloodExtent:
                     input_raster = self.inputPath + self.countryCodeISO3 + '_flood_' +str(int(return_period))+'year.tif'
                 else:
                     input_raster = self.inputPath + self.countryCodeISO3 + '_flood_empty.tif'
+                logger.info(f'return period  {return_period}')
 
                 out_image, out_meta = self.clipTiffWithShapes(input_raster, dist_coords)
                 
 
                 with rasterio.open(self.outputPathAreas+ 'pcode_' + str(pcode) + ".tif", "w", **out_meta) as dest:
                     dest.write(out_image)
-                logger.info(f"flood extent file written for {pcode}")
+                #logger.info(f"flood extent file written for {pcode}")
 
         #Merge all clipped flood extents back together and Save
         mosaic, out_meta = self.mergeRasters()

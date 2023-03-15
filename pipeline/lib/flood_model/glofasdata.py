@@ -172,9 +172,9 @@ class GlofasData:
         if self.countryCodeISO3 in ['ZMB']:
             if num <= self.eapAlertClass['no']:
                 return "no"
-            elif  num <= self.eapAlertClass['min']:
+            elif  num < self.eapAlertClass['min']:
                 return "min"
-            elif  num <= self.eapAlertClass['med']:
+            elif  num < self.eapAlertClass['med']:
                 return "med"
             elif  num >= self.eapAlertClass['max']:
                 return "max"
@@ -329,8 +329,18 @@ class GlofasData:
             Filename = os.path.join(self.inputPath, files[i])
            
             # Skip old stations > need to be removed from FTP
-            if 'G5230_Na_ZambiaRedcross' in Filename or 'G5196_Uganda_Gauge' in Filename:
+            oldStations=['G5230_Na_ZambiaRedcross',
+                         'glofas_discharge_G1724_X33',
+                         'G5196_Uganda_Gauge',
+                         'glofas_discharge_G2001_X34',
+                         'glofas_discharge_G5670_X36',
+                         'glofas_discharge_G5694_X37']
+            
+            if any(pattern in Filename for pattern in oldStations):
                 continue
+                
+            #if 'G5230_Na_ZambiaRedcross' in Filename or 'G5196_Uganda_Gauge' in Filename:
+            #    continue
 
             station = {}
             station['code'] = files[i].split('_')[2]

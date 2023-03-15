@@ -67,8 +67,13 @@ try:
 except Exception as e:
     print('No access to Azure Key vault, skipping.')
 
- 
-# If neither of the 3 options apply, this script will fail.
+
+# 3. If 1,2 and 3. fail, then assume secrets are loaded via secrets.py file (when running locally).
+try:
+    from flood_model.secrets import *
+except ImportError:
+    print("No secrets file found.")
+# If neither of the 4 options apply, this script will fail.
  
 ######################
 ## COUNTRY SETTINGS ##
