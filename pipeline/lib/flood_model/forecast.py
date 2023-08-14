@@ -57,14 +57,24 @@ class Forecast:
             df_list[adm_level]=df_            
         
         df=df_list[self.admin_level]        
-        ################# Create a dataframe with pcodes for each admin level         
-        for adm_level in self.levels:
-            j=adm_level-1
-            if j >0 and len(self.levels)>1:
-                df=pd.merge(df.copy(),df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
+        ################# Create a dataframe with pcodes for each admin level   
+        
+        df=df_list[list(df_list.keys())[0]]
+
+        for adm_level in list(df_list.keys())[1:]:
+            df2=df_list[adm_level].drop('adminLevel', axis=1)
+            df=pd.merge(df,df2,  how='left',left_on=f'placeCodeParent_{adm_level+1}' , right_on =f'placeCode_{adm_level}')
+
+        self.pcode_df=df[[f"placeCode_{i}" for i in list(df_list.keys())]]
+
+   
+        #for adm_level in self.levels:
+        #    j=adm_level-1
+        #    if j >0 and len(self.levels)>1:
+        #        df=pd.merge(df.copy(),df_list[j],  how='left',left_on=f'placeCodeParent_{j+1}' , right_on =f'placeCode_{j}')
      
-        df=df[[f"placeCode_{i}" for i in self.levels]]      
-        self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]           
+        #df=df[[f"placeCode_{i}" for i in self.levels]]      
+        #self.pcode_df=df[[f"placeCode_{i}" for i in self.levels]]           
        
         df_admin=df_admin.query(f'adminLevel == {self.admin_level}')
         
@@ -106,7 +116,10 @@ class Forecast:
 
         #read glofas trigger levels from file
         glofas_stations = self.db.apiGetRequest('glofas-stations',countryCodeISO3=countryCodeISO3)
+        
         df=pd.read_csv(self.TriggersFolder + f'{countryCodeISO3}_glofas_stations.csv', index_col=False)
+        
+      
         
         df_glofas_stations= pd.DataFrame(glofas_stations)        
         df_glofas_stations = df_glofas_stations.filter(['id', 'stationCode','geom'])
@@ -118,6 +131,11 @@ class Forecast:
         self.glofasData = GlofasData(leadTimeLabel, leadTimeValue, countryCodeISO3, self.glofas_stations, self.district_mapping,self.admin_area_gdf)
         self.floodExtent = FloodExtent(leadTimeLabel, leadTimeValue, countryCodeISO3, self.district_mapping, self.admin_area_gdf)
         self.exposure = Exposure(leadTimeLabel, countryCodeISO3, self.admin_area_gdf, self.population_total, self.admin_level, self.district_mapping,self.pcode_df)
+
+        stationNAmesfile=PIPELINE_INPUT +'glofasStaions.json'
+        with open(stationNAmesfile, 'w') as fp:
+            json.dump(dic_glofas_stations, fp)
+ 
         
     def pcode1(self,x):
         len_x=len(x)-2

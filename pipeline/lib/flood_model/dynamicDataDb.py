@@ -119,7 +119,7 @@ class DatabaseManager:
                     
 
 
-            if self.countryCodeISO3 == 'MWI':
+            if self.countryCodeISO3 == 'MWII':
                 for indicator, values in self.EXPOSURE_DATA_UBR_SOURCES.items():
                     affectedIndicatorPath = self.affectedFolder + \
                             'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + indicator + '.json'
@@ -161,6 +161,36 @@ class DatabaseManager:
     def uploadTriggerPerStation(self):
         df = pd.read_json(self.triggerFolder +
                           'triggers_rp_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + ".json", orient='records')
+        
+        filename= self.triggerFolder +'triggers_rp_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + ".json"
+
+        with open(filename) as json_file:
+            triggers = json.load(json_file) 
+
+        stationForecasts = []
+        for key in triggers:
+
+            if key['eapAlertClass']:
+                alertclass=key['eapAlertClass']
+            else:
+                alertclass='no'
+
+            stationForecasts.append({
+                "stationCode": key['stationCode'],
+                "forecastLevel": int(key['fc']),
+                "eapAlertClass": alertclass, #key['eapAlertClass'],
+                "forecastReturnPeriod": key['fc_rp'],
+                "triggerLevel": int(key['triggerLevel'])
+
+            })
+            
+        body = {
+            "countryCodeISO3": self.countryCodeISO3,
+            "leadTime": self.leadTimeLabel,
+            "date": self.uploadTime,
+            "stationForecasts": stationForecasts
+        }
+
         dfStation = pd.DataFrame(index=df.index)
         dfStation['stationCode'] = df['stationCode']
         dfStation['forecastLevel'] = df['fc'].astype(np.float64,errors='ignore')
@@ -170,14 +200,15 @@ class DatabaseManager:
         dfStation['forecastReturnPeriod'] = df['fc_rp'].astype(np.int32,errors='ignore')
         dfStation['triggerLevel'] = df['triggerLevel'].astype(np.int32,errors='ignore')
         stationForecasts = json.loads(dfStation.to_json(orient='records'))
-        body = {
+
+        body2 = {
             'countryCodeISO3': self.countryCodeISO3,
             'leadTime': self.leadTimeLabel,
             'date': self.uploadTime,
             'stationForecasts': stationForecasts
         }
         #body['disasterType'] = self.getDisasterType()
-        
+        print(body)
         self.apiPostRequest('glofas-stations/triggers', body=body)
         logger.info('Uploaded triggers per station')
 

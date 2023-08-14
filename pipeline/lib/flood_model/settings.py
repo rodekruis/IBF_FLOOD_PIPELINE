@@ -10,14 +10,28 @@ import ast
 ##################
  
 # 1. Try to load secrets from a local env-variables 
+
  
 try:
+    COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
+
     ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
     GLOFAS_USER =os.getenv("GLOFAS_USER")
     GLOFAS_PW =os.getenv("GLOFAS_PW")
+    GLOFAS_FTP =os.getenv("GLOFAS_FTP")
     IBF_PASSWORD=os.getenv("IBF_PASSWORD")
     IBF_URL =os.getenv("IBF_URL")
-    COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
+
+    DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM")
+    DATALAKE_STORAGE_ACCOUNT_NAME =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME")
+
+    DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT =os.getenv("DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT")
+    DATALAKE_STORAGE_ENDPOINT =os.getenv("DATALAKE_STORAGE_ENDPOINT")
+
+    DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM")
+    DATALAKE_STORAGE_ACCOUNT_KEY=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY")
+
+    
     
 
 except:
@@ -28,12 +42,16 @@ except:
 # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
  
 try:
-    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]  
+    #COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
     GLOFAS_USER = os.environ["GLOFAS_USER"]
     GLOFAS_PW = os.environ["GLOFAS_PW"]
+    #GLOFAS_FTP = os.environ["GLOFAS_FTP"]
+
+    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
     IBF_URL=os.environ["IBF_URL"] 
-    COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
+
+
    
    
 
@@ -41,6 +59,7 @@ except:
      print('No environment variables found.')
 # 3. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
+'''
 
 try:
     from azure.identity import DefaultAzureCredential
@@ -59,6 +78,8 @@ try:
     ADMIN_LOGIN = secret_client.get_secret("ADMIN-LOGIN").value
     GLOFAS_USER = secret_client.get_secret("GLOFAS-USER").value
     GLOFAS_PW = secret_client.get_secret("GLOFAS-PW").value
+    GLOFAS_FTP = secret_client.get_secret("GLOFAS-FTP").value
+
     GOOGLE_DRIVE_DATA_URL = secret_client.get_secret("GOOGLE-DRIVE-DATA-URL").value
     IBF_URL=secret_client.get_secret("IBF-URL").value
     IBF_PASSWORD=secret_client.get_secret("IBF-PASSWORD").value
@@ -74,11 +95,12 @@ try:
 except ImportError:
     print("No secrets file found.")
 # If neither of the 4 options apply, this script will fail.
- 
+'''
 ######################
 ## COUNTRY SETTINGS ##
 ######################
  
+#COUNTRY_CODES = ["SSD"]
  
 SETTINGS = {
     "MWI": {
@@ -90,7 +112,7 @@ SETTINGS = {
             "glofasReturnPeriod":'rl5',
             "selectedPcode":[],
             "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
-            "notify_email": False,
+            "notify_email": True,
             'lead_times': {
                 "6-day": 6
             },
@@ -98,7 +120,8 @@ SETTINGS = {
             'eapAlertClass':{"no": 0.6,"max": 0.601},
             'admin_level': 3,
             'levels':[3,2,1],
-            'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+            'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
+            #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
             'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',  
             'EXPOSURE_DATA_SOURCES': {
                 "population": {
@@ -134,7 +157,8 @@ SETTINGS = {
         'eapAlertClass':{"no": 0.6,"min": 0.7,"med": 0.8,"max": 0.801},
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
+        #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -160,7 +184,8 @@ SETTINGS = {
         'eapAlertClass':{"no": 0.6,"max": 0.601},
         'admin_level': 4,
         'levels':[4,3,2,1],
-        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
+        #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -173,8 +198,8 @@ SETTINGS = {
         "IBF_API_URL": IBF_URL,
         "PASSWORD": IBF_PASSWORD,
         "mock": False,
-        "placeCodeInitial": 'KEN',
-        "if_mock_trigger": False,
+        "placeCodeInitial": 'KEN', 
+        "if_mock_trigger": True,
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
@@ -186,7 +211,8 @@ SETTINGS = {
         'eapAlertClass':{"no": 0.85,"max": 0.851},
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -212,7 +238,8 @@ SETTINGS = {
         'eapAlertClass':{"no": 0.75,"max": 0.751},
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
+        'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/', 
+        #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/', 
         'GLOFAS_FILENAME':'glofas_pointdata_ZambiaRedcross',   
         'EXPOSURE_DATA_SOURCES': {
             "population": {
@@ -238,7 +265,8 @@ SETTINGS = {
         'eapAlertClass':{"no": 0.7,"max": 0.701},
         'admin_level': 3,
         'levels':[3,2,1],
-        'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/',
+        #'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/', #for_RedcrossPhilippines
+        'GLOFAS_FTP':'aux.ecmwf.int/for_RedcrossPhilippines/', #
         'GLOFAS_FILENAME':'glofas_pointdata_RedcrossPhilippines', 
         'EXPOSURE_DATA_SOURCES': {
             "population": {

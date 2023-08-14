@@ -1,0 +1,35 @@
+# Refer ./setup/baseConfig.yaml for full set of config parameters
+
+allow-other: true
+
+logging:
+  type: syslog
+  level: log_debug
+
+components:
+  - libfuse
+  - file_cache
+  - attr_cache
+  - azstorage
+
+libfuse:
+  attribute-expiration-sec: 120
+  entry-expiration-sec: 120
+  negative-entry-expiration-sec: 240
+ 
+file_cache:
+  path: /mnt/resource/blobfusetmp
+  timeout-sec: 120
+ 
+attr_cache:
+  timeout-sec: 7200
+
+azstorage:
+  type: block
+  account-name: 510ibfsystem
+  container: glofasforecast
+  endpoint: https://510ibfsystem.blob.core.windows.net
+  mode: key
+  account-key: KOXu9IS2rXomLhPrU9AVzGo2AnFRkXYE6QPyh2Zvjv4Bmttq7RZax71ABeQjYNNXXQZINpd8MyaWol80WowvXA== 
+  
+
