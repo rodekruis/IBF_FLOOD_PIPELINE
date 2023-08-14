@@ -4,6 +4,8 @@ from datetime import date, timedelta
 from pathlib import Path
 import ast
 
+from flood_model.secrets import *
+
 
 ##################
 ## LOAD SECRETS ##
@@ -14,25 +16,9 @@ import ast
  
 try:
     COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
-
     ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
-    GLOFAS_USER =os.getenv("GLOFAS_USER")
-    GLOFAS_PW =os.getenv("GLOFAS_PW")
-    GLOFAS_FTP =os.getenv("GLOFAS_FTP")
     IBF_PASSWORD=os.getenv("IBF_PASSWORD")
-    IBF_URL =os.getenv("IBF_URL")
-
-    DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM")
-    DATALAKE_STORAGE_ACCOUNT_NAME =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME")
-
-    DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT =os.getenv("DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT")
-    DATALAKE_STORAGE_ENDPOINT =os.getenv("DATALAKE_STORAGE_ENDPOINT")
-
-    DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM")
-    DATALAKE_STORAGE_ACCOUNT_KEY=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY")
-
-    
-    
+    IBF_URL =os.getenv("IBF_URL")    
 
 except:
      print('No environment variables found localy.')
@@ -42,17 +28,10 @@ except:
 # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
  
 try:
-    #COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
-    GLOFAS_USER = os.environ["GLOFAS_USER"]
-    GLOFAS_PW = os.environ["GLOFAS_PW"]
-    #GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-
+    COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
-    IBF_URL=os.environ["IBF_URL"] 
-
-
-   
+    IBF_URL=os.environ["IBF_URL"]   
    
 
 except:
@@ -89,15 +68,10 @@ except Exception as e:
     print('No access to Azure Key vault, skipping.')
 
 
-# 3. If 1,2 and 3. fail, then assume secrets are loaded via secrets.py file (when running locally).
-try:
-    from flood_model.secrets import *
-except ImportError:
-    print("No secrets file found.")
-# If neither of the 4 options apply, this script will fail.
+# If neither of the 2 options apply, this script will fail.
 '''
 ######################
-## COUNTRY SETTINGS ##
+## COUNTRY SETTINGS (this is now definde as an enviromental variable)##
 ######################
  
 #COUNTRY_CODES = ["SSD"]
