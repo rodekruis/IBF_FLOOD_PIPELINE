@@ -148,10 +148,11 @@ class GlofasData:
   
         bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
         bbox_bfs=list(bf_gpd.total_bounds)
+        logger.info(f'start downloading glofas data for ensamble')
 
         for ens in range (0,51):
             ensamble="{:02d}".format(ens)
-            logger.info(f'start downloading data for ensamble {ens}')
+            #logger.info(f'start downloading data for ensamble {ens}')
 
 
             url = f'ftp://{GLOFAS_USER}:{GLOFAS_PW}@{GLOFAS_FTP}/fc_netcdf/{self.current_date}/dis_{ensamble}_{self.current_date}00.nc'             
@@ -178,7 +179,7 @@ class GlofasData:
                         #print(f"Downloaded {bytes_downloaded} bytes")
             if out_file:
                 out_file.close()
-            logger.info(f'finished downloading data for ensamble {ens}')
+            #logger.info(f'finished downloading data for ensamble {ens}')
             nc_file = xr.open_dataset(Filename)  
             var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
             df_leadtime_ens=[]

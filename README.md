@@ -1,54 +1,49 @@
-# IBF-pipeline Floods
+# IBF Flood Forecast Pipeline
 
-This pipeline is creating and uploading forecast data to the [IBF-system](https://github.com/rodekruis/IBF-system). This means that to set this pipeline up meaningfully, you must also set up an instance of the IBF-system.
+This pipeline generates and uploads forecast data to the [IBF-system](https://github.com/rodekruis/IBF-system). To deploy this pipeline effectively, it's essential to also have an instance of the IBF-system.
 
-The pipeline consists of a series of Python scripts, which - if activated - are supposed to run daily, to:
-- extract relevant forecast input data
-- transform them to create flood extents
-- calculate affected population
-- and uploads the results to an instance of IBF-system's API.
+The pipeline employs several Python scripts designed to execute daily when triggered. Their tasks are to:
+- Extract the necessary forecast input data.
+- Process this data to derive flood extents.
+- Evaluate the affected population.
+- Upload the computed results to the IBF-system via its API.
 
-## Methods for running this pipeline
+## How to Execute the Pipeline
 
-This pipeline is preconfigured to run in 3 different ways:
+The pipeline can be initiated in three distinct manners:
 
-### 1. Locally
-Getting its secrets from a local secrets.env file. 
-Obviously, this method can be used also non-locally, e.g. by running it as cronjob on a Virtual Machine.
+### 1. **Local Execution**
+Here, the pipeline fetches its secrets from a local `secrets.env` file. Though termed "local," this method is adaptable for non-local uses, like setting it as a cron job on a Virtual Machine.
 
-- Install Docker
+**Steps:**
+- Install Docker.
+- Clone the repository: `git clone https://github.com/<github-account>/IBF_FLOOD_PIPELINE.git`.
+- Rename `secrets.env.template` to `secrets.env` and populate the secrets fields. Notably:
+  - `IBF_URL`: `https://<ibf-system-url>/api/` (ensure it ends with a slash!)
+  - `IBF_PASSWORD`: Use the IBF-System admin user password from the `.env` file where IBF-System is deployed.
+  - Others: Obtain details like `ADMIN_LOGIN` and `COUNTRY_CODES` (e.g., ZMB for Zambia) from a knowledgeable source.
+- Rename `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and populate required fields (e.g., `GLOFAS_USER`, `GLOFAS_PW`, and `GLOFAS_FTP`).
+- Navigate to the repository's root folder.
+- Build and start the Docker image: `docker-compose up --build`.
+- Optionally, to clean up Docker containers: `docker-compose down`.
+- Verify the data on the IBF-system dashboard.
 
-- Clone the repo : `git clone https://github.com/<github-account>/IBF_FLOOD_PIPELINE.git`
-- Change `secrets.env.template` to `secrets.env` and fill in the necessary secrets. Particularly fill in for 
-  - IBF_URL: `https://<ibf-system-url>/api/` (so with a slash at the end!)
-  - IBF_PASSWORD: the IBF-System admin users' password, set in the `.env` file on the environment where IBF-System is running
-  - ADMIN_LOGIN: retrieve from someone who knows
-  - COUNTRY_CODES: fil in the iso countrycode eg. ZMB for Zambia 
-- Change `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and fill in the necessary secrets. Particularly fill in for 
- - GLOFAS_USER/GLOFAS_PW/GLOFAS_FTP: retrieve from someone who knows
+### 2. **GitHub Actions**
+For this method, the pipeline derives its secrets from GitHub Secrets.
 
-- Go to the root folder of the repository
-- Build and run Docker image: `docker-compose up --build`
-- (Optional) When you are finished, to remove any docker container(s) run: `docker-compose down`
-- Check the IBF-system's dashboard to see if data is upload as expected
+**Steps:**
+- Fork this repository to your GitHub account.
+- Define GitHub secrets under: `https://github.com/<your-github-account>/IBF_FLOOD_PIPELINE/settings/secrets/actions`.
+  - Incorporate the four secrets highlighted in the local setup.
+- The GitHub Action is pre-set to initiate daily. Check its status post-scheduled run time.
+  - Adjust the scheduled time in [floodmodel.yml](.github/workflows/floodmodel.yml) if needed. For instance, `cron:  '0 8 * * *'` translates to 8:00 AM UTC daily.
+- Verify the data on the IBF-system dashboard.
 
-### 2. Github Actions
-Getting its secrets from Github Secrets.
+### 3. **Azure Logic App**
+This method fetches its secrets from Azure Key Vault.
 
-- Fork this repository to your own Github-account.
-- Add Github secrets in Settings > Secrets of the forked repository: `https://github.com/<your-github-account>/IBF_FLOOD_PIPELINE/settings/secrets/actions`
-  - Add the same 4 secrets as mentioned in the local scenario above.
-  - ADD same 4 secrets in `pipeline/lib/flood_model/secrets.py` file 
-- The Github action is already scheduled to run daily at a specific time. So wait until that time has passed to test that the pipeline has run correctly.
-  - This time can be seen and changed if needed in the 'on: schedule:' part of [floodmodel.yml](.github/workflows/floodmodel.yml), where e.g. `cron:  '0 8 * * *'` means 8:00 AM UTC every day.
-- Check the IBF-system's dashboard to see if data is upload as expected
+**Note:** The Azure Logic App requires an independent setup, inspired by this repository. The logic to pull secrets from the Azure Key Vault is integrated into the existing code.
 
-
-### 3. Azure logic app
-Getting its secrets from Azure Key Vault.
-
-- The Azure logic app needs to be set up separately, based on this repository.
-- The logic to get the secrets from the Azure Key Vault is already included in the code. 
 
 
 ## Versions
