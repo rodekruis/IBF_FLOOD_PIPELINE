@@ -22,11 +22,11 @@ Obviously, this method can be used also non-locally, e.g. by running it as cronj
 - Change `secrets.env.template` to `secrets.env` and fill in the necessary secrets. Particularly fill in for 
   - IBF_URL: `https://<ibf-system-url>/api/` (so with a slash at the end!)
   - IBF_PASSWORD: the IBF-System admin users' password, set in the `.env` file on the environment where IBF-System is running
-
   - ADMIN_LOGIN: retrieve from someone who knows
-  - GLOFAS_USER: retrieve from someone who knows
-  - GLOFAS_PW: retrieve from someone who knows
   - COUNTRY_CODES: fil in the iso countrycode eg. ZMB for Zambia 
+- Change `pipeline/lib/flood_model/secrets.py.template` to `pipeline/lib/flood_model/secrets.py` and fill in the necessary secrets. Particularly fill in for 
+ - GLOFAS_USER/GLOFAS_PW/GLOFAS_FTP: retrieve from someone who knows
+
 - Go to the root folder of the repository
 - Build and run Docker image: `docker-compose up --build`
 - (Optional) When you are finished, to remove any docker container(s) run: `docker-compose down`
@@ -37,7 +37,8 @@ Getting its secrets from Github Secrets.
 
 - Fork this repository to your own Github-account.
 - Add Github secrets in Settings > Secrets of the forked repository: `https://github.com/<your-github-account>/IBF_FLOOD_PIPELINE/settings/secrets/actions`
-  - Add the same 6 secrets as mentioned in the local scenario above.
+  - Add the same 4 secrets as mentioned in the local scenario above.
+  - ADD same 4 secrets in `pipeline/lib/flood_model/secrets.py` file 
 - The Github action is already scheduled to run daily at a specific time. So wait until that time has passed to test that the pipeline has run correctly.
   - This time can be seen and changed if needed in the 'on: schedule:' part of [floodmodel.yml](.github/workflows/floodmodel.yml), where e.g. `cron:  '0 8 * * *'` means 8:00 AM UTC every day.
 - Check the IBF-system's dashboard to see if data is upload as expected
