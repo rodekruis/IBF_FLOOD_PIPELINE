@@ -46,14 +46,17 @@ try:
     GLOFAS_USER = os.environ["GLOFAS_USER"]
     GLOFAS_PW = os.environ["GLOFAS_PW"]
     #GLOFAS_FTP = os.environ["GLOFAS_FTP"]
-
+    
+    IBF_URL=os.environ["IBF_URL"] 
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
-    IBF_URL=os.environ["IBF_URL"] 
+    
+    ZMB_URL=os.environ["ZMB_URL"] 
+    ZMB_PASSWORD=os.environ["ZMB_PASSWORD"]
+    
 
 
-   
-   
+ 
 
 except:
      print('No environment variables found.')
@@ -104,8 +107,8 @@ COUNTRY_CODES = ["ZMB"]
  
 SETTINGS = {
     "ZMB": {
-        "IBF_API_URL": IBF_URL,
-        "PASSWORD": IBF_PASSWORD,
+        "IBF_API_URL": ZMB_URL,
+        "PASSWORD": ZMB_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
         "placeCodeInitial": 'ZMB',
