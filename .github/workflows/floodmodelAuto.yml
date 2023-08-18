@@ -1,0 +1,99 @@
+name: run-flood-model
+
+on:
+  schedule:
+    - cron: "0 8 1 * *"
+jobs:
+  run-flood-model:
+    runs-on: ubuntu-20.04
+    env:
+      running-directory: ./pipeline
+
+    #if: ${{ github.repository_owner != 'rodekruis' }}
+    steps:  
+    - uses: actions/checkout@v2
+      #with:
+      #  ref: ${{ github.event.repository.default_branch }}
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+        
+    - name: Install system dependencies1
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            software-properties-common \
+            build-essential \
+            nano \
+            vim \
+            python3-pip \
+            git \
+            wget \
+            libxml2-utils\
+            libproj-dev \
+            libgeos-dev \
+            libspatialindex-dev \
+            libudunits2-dev \
+            libspatialindex-dev \
+            libssl-dev \
+            libgdal-dev \
+            libxml2-utils\
+            gfortran \
+            kmod \
+            gfortran \
+            apache2
+        
+    - name: Install system dependencies2
+      run: |
+          sudo add-apt-repository ppa:ubuntugis/ppa
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-contrib  
+          sudo apt-get install -y postgresql postgresql-contrib  
+          sudo apt-get install -y postgresql postgresql-contrib  
+          sudo apt-get install -y libproj-dev libgeos++-dev
+          sudo apt-get install -y gdal-bin 
+          sudo apt-get install -y gdal-bin 
+          sudo apt-get install -y gdal-bin 
+          sudo apt-get install -y libgdal-dev
+          sudo apt-get install libgnutls28-dev
+        
+    - name: Install system dependencies
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgirepository1.0-dev\
+            gcc\
+            pkg-config\
+            python3-dev\
+            gir1.2-gtk-3.0
+
+    - name: Install more Python dependencies
+      run: |  
+          python -m pip install -r requirements.txt
+      
+    - name: Install script
+      run: |
+          python -m pip install .
+      working-directory: ${{ env.running-directory }}
+    
+    - name: Run script
+      env:
+        ADMIN_LOGIN: ${{ secrets.ADMIN_LOGIN }}
+        PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+        GLOFAS_PW: ${{ secrets.GLOFAS_PW }}
+        GLOFAS_USER: ${{ secrets.GLOFAS_USER }}
+        GOOGLE_DRIVE_DATA_URL: ${{ secrets.GOOGLE_DRIVE_DATA_URL }}
+        IBF_URL: ${{ secrets.IBF_URL }}
+        IBF_PASSWORD: ${{ secrets.IBF_PASSWORD }}
+        COUNTRY_CODES: ${{ secrets.COUNTRY_CODES }}   
+      run: |
+        run-flood-model
+      working-directory: ${{ env.running-directory }}
+
+    - name: Prevent repository inactivity
+      uses: gautamkrishnar/keepalive-workflow@master
+
