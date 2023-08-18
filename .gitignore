@@ -6,7 +6,7 @@
 
 
 # Configuration, secrets, etc:
-.env
+*.env
 
 
 # Local data files
@@ -33,6 +33,7 @@ npm-debug.log*
 *.zip
 # Secrets
 secrets
+secrets.env
 pipeline/lib/flood_model/secrets.py
 
 
