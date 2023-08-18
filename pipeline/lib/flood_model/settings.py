@@ -44,13 +44,13 @@ except:
  
 try:
     #COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
-    GLOFAS_USER = os.environ["GLOFAS_USER"]
-    GLOFAS_PW = os.environ["GLOFAS_PW"]
-    GLOFAS_FTP = os.environ["GLOFAS_FTP"]
+    GLOFAS_USER = os.environ.get("GLOFAS_USER")
+    GLOFAS_PW = os.environ.get("GLOFAS_PW")
+    GLOFAS_FTP = os.environ.get("GLOFAS_FTP")
     
-    IBF_URL=os.environ["IBF_URL"] 
-    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
-    IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+    IBF_URL=os.environ.get("IBF_URL")
+    ADMIN_LOGIN = os.environ.get("ADMIN_LOGIN")
+    IBF_PASSWORD=os.environ.get("IBF_PASSWORD")
     
     #ZMB_URL=os.environ["ZMB_URL"] 
     #ZMB_PASSWORD=os.environ["ZMB_PASSWORD"]
@@ -106,6 +106,7 @@ except ImportError:
  
 COUNTRY_CODES = ["ZMB"]
  
+
 SETTINGS = {
     "ZMB": {
         "IBF_API_URL": IBF_URL,
