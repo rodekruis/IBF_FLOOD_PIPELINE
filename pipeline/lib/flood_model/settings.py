@@ -3,7 +3,7 @@ from datetime import date, timedelta
 #from dotenv import load_dotenv
 from pathlib import Path
 import ast
-
+from flood_model.secrets import *
 
 ##################
 ## LOAD SECRETS ##
@@ -16,21 +16,22 @@ try:
     COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
 
     ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
-    GLOFAS_USER =os.getenv("GLOFAS_USER")
-    GLOFAS_PW =os.getenv("GLOFAS_PW")
-    GLOFAS_FTP =os.getenv("GLOFAS_FTP")
+
     IBF_PASSWORD=os.getenv("IBF_PASSWORD")
     IBF_URL =os.getenv("IBF_URL")
+ 
+    #GLOFAS_USER =os.getenv("GLOFAS_USER")
+    #GLOFAS_PW =os.getenv("GLOFAS_PW")
+    #GLOFAS_FTP =os.getenv("GLOFAS_FTP")
+    #DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM")
+    #DATALAKE_STORAGE_ACCOUNT_NAME =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME")
 
-    DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME_IBFSYSTEM")
-    DATALAKE_STORAGE_ACCOUNT_NAME =os.getenv("DATALAKE_STORAGE_ACCOUNT_NAME")
+    #DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT =os.getenv("DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT")
+    #DATALAKE_STORAGE_ENDPOINT =os.getenv("DATALAKE_STORAGE_ENDPOINT")
 
-    DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT =os.getenv("DATALAKE_STORAGE_IBFSYSTEM_ENDPOINT")
-    DATALAKE_STORAGE_ENDPOINT =os.getenv("DATALAKE_STORAGE_ENDPOINT")
-
-    DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM")
-    DATALAKE_STORAGE_ACCOUNT_KEY=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY")
-
+    #DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY_IBFSYSTEM")
+    #DATALAKE_STORAGE_ACCOUNT_KEY=os.getenv("DATALAKE_STORAGE_ACCOUNT_KEY")
+ 
     
     
 
@@ -45,14 +46,14 @@ try:
     #COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
     GLOFAS_USER = os.environ["GLOFAS_USER"]
     GLOFAS_PW = os.environ["GLOFAS_PW"]
-    #GLOFAS_FTP = os.environ["GLOFAS_FTP"]
+    GLOFAS_FTP = os.environ["GLOFAS_FTP"]
     
     IBF_URL=os.environ["IBF_URL"] 
     ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
     IBF_PASSWORD=os.environ["IBF_PASSWORD"]
     
-    ZMB_URL=os.environ["ZMB_URL"] 
-    ZMB_PASSWORD=os.environ["ZMB_PASSWORD"]
+    #ZMB_URL=os.environ["ZMB_URL"] 
+    #ZMB_PASSWORD=os.environ["ZMB_PASSWORD"]
     
 
 
@@ -107,8 +108,8 @@ COUNTRY_CODES = ["ZMB"]
  
 SETTINGS = {
     "ZMB": {
-        "IBF_API_URL": ZMB_URL,
-        "PASSWORD": ZMB_PASSWORD,
+        "IBF_API_URL": IBF_URL,
+        "PASSWORD": IBF_PASSWORD,
         "mock": False,
         "if_mock_trigger": False,
         "placeCodeInitial": 'ZMB',
@@ -195,3 +196,4 @@ LEAD_TIME = 'leadTime'
 ### For PHL to reduce the task when running in logic-app run pipeline only for the flood prone areas 
 
 
+Areas_With_GlofasStation=[]

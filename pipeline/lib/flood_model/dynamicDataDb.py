@@ -178,11 +178,18 @@ class DatabaseManager:
             stationForecasts.append({
                 "stationCode": key['stationCode'],
                 "forecastLevel": int(key['fc']),
-                "eapAlertClass": alertclass, #key['eapAlertClass'],
+                "forecastProbability": int(key['fc_prob']),
+                "forecastTrigger": int(key['fc_trigger']),
+                #"eapAlertClass": alertclass, #key['eapAlertClass'],
                 "forecastReturnPeriod": key['fc_rp'],
                 "triggerLevel": int(key['triggerLevel'])
 
             })
+
+
+
+
+       
             
         body = {
             "countryCodeISO3": self.countryCodeISO3,
