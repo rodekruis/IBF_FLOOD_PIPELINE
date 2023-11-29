@@ -74,7 +74,7 @@ except Exception as e:
 ## COUNTRY SETTINGS (this is now definde as an enviromental variable)##
 ######################
  
-#COUNTRY_CODES = ["SSD"]
+#COUNTRY_CODES = ["KEN","SSD","UGA","ETH","KEN","ZMB"]
  
 SETTINGS = {
     "MWI": {
@@ -93,6 +93,7 @@ SETTINGS = {
             'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
             'eapAlertClass':{"no": 0.6,"max": 0.601},
             'admin_level': 3,
+            'admin_level_glofas_extr': 3,
             'levels':[3,2,1],
             'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
             #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -121,7 +122,7 @@ SETTINGS = {
         "if_mock_trigger": False,
         "placeCodeInitial": 'ZMB',
         "glofasReturnPeriod":'rl10',
-        "selectedPcode":[],
+        "selectedPcode":["ZM040205810","ZM090313001","ZM020603011","ZM040306116","ZM080310511","ZM050107302","ZM080410618","ZM090913106","ZM010501001","ZM100514502","ZM100514614","ZM070309004","ZM050207007","ZM070809202","ZM100314011","ZM100615016","ZM060208301","ZM020803202","ZM010501004","ZM030605211"],
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         'lead_times': {
@@ -130,6 +131,7 @@ SETTINGS = {
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.6,"min": 0.7,"med": 0.8,"max": 0.801},
         'admin_level': 3,
+        'admin_level_glofas_extr': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
         #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -149,7 +151,8 @@ SETTINGS = {
         "if_mock_trigger": False,
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
-        "selectedPcode":[],
+        #"selectedPcode":["UG20570101","UG20270110","UG41110113","UG20360110","UG41240112","UG20350201","UG41140116","UG10180304"] ,    
+        "selectedPcode": ["UG20570102","UG10180304","UG41240115","UG41280109","UG20460106","UG20360112","UG20350212","UG41140114"] ,
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
             "5-day": 5
@@ -157,6 +160,7 @@ SETTINGS = {
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.6,"max": 0.601},
         'admin_level': 4,
+        'admin_level_glofas_extr': 4,
         'levels':[4,3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
         #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
@@ -177,13 +181,14 @@ SETTINGS = {
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
-        "selectedPcode":[],
+        "selectedPcode":["KE0392221108","KE0402301149","KE0402301150","KE0402301151","KE0402311153","KE0402311154","KE0402311155","KE0371990995","KE0030150072","KE0030150074","KE0030160075","KE0030160076","KE0030170080","KE0030170083","KE0030170084","KE0050220109","KE0060260126","KE0040180088","KE0040180089","KE0040180091","KE0040190092","KE0040190093","KE0040190094","KE0040200096"],
         'lead_times': {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.85,"max": 0.851},
         'admin_level': 3,
+        'admin_level_glofas_extr': 3,
         'levels':[3,2,1],
         #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/',
         'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/',
@@ -204,13 +209,14 @@ SETTINGS = {
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         "notify_email": True,
         "glofasReturnPeriod":'rl10',
-        "selectedPcode":[],
+        "selectedPcode":['ET020101','ET020103','ET020104','ET020105','ET020106','ET020301','ET020302','ET020303','ET020304','ET020402','ET020502','ET020503','ET030202','ET030203','ET030204','ET030209','ET030308','ET030422','ET030701','ET030702','ET030703','ET030704','ET040405','ET040408','ET040509','ET040701','ET040703','ET040803','ET040811','ET041007','ET041207','ET041208','ET041212','ET042101','ET042102','ET042103','ET042105','ET050101','ET050103','ET050601','ET050603','ET050604','ET050605','ET050606','ET050607','ET050805','ET050901','ET050902','ET050904','ET070111','ET070112','ET070501','ET070701','ET070704','ET070705','ET070706','ET070707','ET071011','ET071601','ET072401','ET120101','ET120102','ET120103','ET120104','ET120203','ET120204','ET120206','ET120407','ET130101'],
         'lead_times': {
             "7-day": 7
         },
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.75,"max": 0.751},
         'admin_level': 3,
+        'admin_level_glofas_extr': 3,
         'levels':[3,2,1],
         'GLOFAS_FTP':'aux.ecmwf.int/for_ZambiaRedcross/', 
         #'GLOFAS_FTP':'aux.ecmwf.int/ZambiaRedcross_glofas_point/', 
@@ -238,6 +244,7 @@ SETTINGS = {
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.7,"max": 0.701},
         'admin_level': 3,
+        'admin_level_glofas_extr': 3,
         'levels':[3,2,1],
         #'GLOFAS_FTP':'aux.ecmwf.int/RedcrossPhilippines_glofas_point/', #for_RedcrossPhilippines
         'GLOFAS_FTP':'aux.ecmwf.int/for_RedcrossPhilippines/', #
@@ -265,6 +272,7 @@ SETTINGS = {
         'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
         'eapAlertClass':{"no": 0.6,"max": 0.601},
         'admin_level': 3,
+        'admin_level_glofas_extr': 3,
         'levels':[3],
         'GLOFAS_FTP':'aux.ecmwf.int/for_JBA/',
         'GLOFAS_FILENAME':'glofas_areagrid_for_JBA_in_Global', 
@@ -285,9 +293,12 @@ SETTINGS = {
 
 # Change this date only in case of specific testing purposes
 
+noOfGlofasEnsambles =51 # 
+
 CURRENT_DATE = date.today()
 
 #CURRENT_DATE=date.today() - timedelta(1) # to use yesterday's date
+
 # if data folder should be downloaded from google drive 
 GOOGLE_DRIVE_DATA_URL = 'https://drive.google.com/file/d/14MbG4uFPGJCduM5aLkvgSGqA8io6Gh9C/view?usp=sharing'
 

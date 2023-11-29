@@ -49,6 +49,7 @@ class Forecast:
         df_admin2=df_admin1.filter(['adminLevel','placeCode','placeCodeParent'])
         
         df_admin=pd.DataFrame(df_admin1)
+
         df_list={}       
         max_iteration=self.admin_level+1
         for adm_level in self.levels:
@@ -57,6 +58,7 @@ class Forecast:
             df_list[adm_level]=df_            
         
         df=df_list[self.admin_level]        
+
         ################# Create a dataframe with pcodes for each admin level   
         
         df=df_list[list(df_list.keys())[0]]
@@ -96,12 +98,13 @@ class Forecast:
 
         
         #self.admin_area_gdf2 = df_admin1
-        df_admin1=df_admin1.query(f'adminLevel == {self.admin_level}')
-
+        
+        self.admin_area_gdf=df_admin1.query(f'adminLevel == {self.admin_level}')
             
         df_admin=df_admin.filter(['placeCode','placeCodeParent','name'])#,'geometry'])
 
-        self.admin_area_gdf = df_admin1#geopandas.GeoDataFrame.from_features(admin_area_json)
+     
+
         district_mapping_df = pd.read_csv(self.DistrictMappingFolder + f'{countryCodeISO3}_district_mapping.csv', index_col=False,dtype={'placeCode': str, 'ADM2_PCODE': str,'ADM3_PCODE': str}) 
         district_mapping_df=district_mapping_df.filter(['placeCode','glofasStation'])
         district_mapping_df = pd.merge(district_mapping_df,df_admin,  how='left',left_on='placeCode', right_on = 'placeCode')
@@ -118,9 +121,7 @@ class Forecast:
         glofas_stations = self.db.apiGetRequest('glofas-stations',countryCodeISO3=countryCodeISO3)
         
         df=pd.read_csv(self.TriggersFolder + f'{countryCodeISO3}_glofas_stations.csv', index_col=False)
-        
-      
-        
+                      
         df_glofas_stations= pd.DataFrame(glofas_stations)        
         df_glofas_stations = df_glofas_stations.filter(['id', 'stationCode','geom'])
         
@@ -147,9 +148,7 @@ class Forecast:
  
         else:
             pcoded='ZM'+x[0:3]
- 
-            
-            
+                     
         return x[:-len_x]
     def pcode2(self,x):
         len_x=len(x)-4

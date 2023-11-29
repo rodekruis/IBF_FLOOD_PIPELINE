@@ -41,18 +41,21 @@ def main():
     
     if len(COUNTRY_CODES)==1:
         countryCode=COUNTRY_CODES[0].lower()
-        downloaddatalack(countryCode)
         filename=f'data_{countryCode}.zip'
-        path_to_zip_file='./'+filename 
-        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-            zip_ref.extractall('./data') 
+        if not os.path.exists(filename):
+            downloaddatalack(countryCode)
+            
+            path_to_zip_file='./'+filename 
+            with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+                zip_ref.extractall('./data') 
     else:
         countryCode=None
-        downloaddatalack(countryCode)
         filename='data.zip'
-        path_to_zip_file='./'+filename 
-        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-            zip_ref.extractall('./data') 
+        if not os.path.exists(filename):
+            downloaddatalack(countryCode)        
+            path_to_zip_file='./'+filename 
+            with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
+                zip_ref.extractall('./data') 
     
     #gdd.download_file_from_google_drive(file_id=GOOGLE_DRIVE_DATA_URL,dest_path='./data/data_flood.zip',overwrite=True,unzip=True)
     logger.info('finished data download')

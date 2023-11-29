@@ -50,6 +50,9 @@ class GlofasData:
         self.TRIGGER_LEVELS=SETTINGS[countryCodeISO3]['TRIGGER_LEVELS']
         self.eapAlertClass=SETTINGS[countryCodeISO3]['eapAlertClass']
         self.selectedPcode = SETTINGS[countryCodeISO3]['selectedPcode']
+        self.admin_level = SETTINGS[countryCodeISO3]['admin_level']
+        self.admin_level_glofas_extr = SETTINGS[countryCodeISO3]['admin_level_glofas_extr']
+
         self.inputPath = PIPELINE_DATA+'input/glofas/'
         self.inputPathGrid = PIPELINE_DATA+'input/glofasgrid/'
         
@@ -76,22 +79,30 @@ class GlofasData:
         self.placecodeLen= SETTINGS[countryCodeISO3]['placecodeLen'] 
         self.placeCodeInitial= SETTINGS[countryCodeISO3]['placeCodeInitial'] 
 
+
+        self.nofEns= noOfGlofasEnsambles # 51 # this should be 51
+        self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
+        self.ADMIN_AREA_GDF_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_admin_areas.geojson")
+        gdf_admin=gpd.read_file(self.ADMIN_AREA_GDF_PATH)
+        self.gdf_admin=gdf_admin.query(f'adminLevel == {self.admin_level}')
+        self.gdf_extr_admin=gdf_admin.query(f'adminLevel == {self.admin_level_glofas_extr}')
+
+
     def process(self):
         if SETTINGS[self.countryCodeISO3]['mock'] == True:
             self.extractMockData()
             self.findTrigger()
         else:
-            self.removeOldGlofasData()
+            #self.removeOldGlofasData()
             self.download()
-            if self.countryCodeISO3=='SSD':
-                #self.extractGlofasDataGridToCsv()
+            if self.countryCodeISO3 in ['SSD','ETH','UGA','KEN',"ZMB"]:#=='SSD':
+                self.zonalStatGlofasDataGridToCsv()
                 self.extractGlofasDataGrid()
                 self.findTrigger()
             else:
                 self.getGlofasData()
                 self.extractGlofasData()
                 self.findTrigger()
-
 
     def removeOldGlofasData(self):
         for filepath in [self.inputPath,self.inputPathGrid]:
@@ -143,79 +154,40 @@ class GlofasData:
         extract data for admin area
         generate csv files for each admin area
         """
-        # Open a connection to the URL
-        bf_gpd=self.admin_area_gdf
-  
-        bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
-        bbox_bfs=list(bf_gpd.total_bounds)
-        logger.info(f'start downloading glofas data for ensamble')
+        from ftplib import FTP
+        from rasterstats import zonal_stats
+        import rasterio               
+        logger.info(f'start downloading glofas data for ensamble')  
+        # The following extent will download data for the extent of Zambia, Uganda,Kenya,Ethiopia and South Sudan 
+        min_lon = 21  #21 Minimum longitude 
+        max_lon = 48  # Maximum longitude
+        min_lat = -18   # -18 Minimum latitude
+        max_lat = 16  # Maximum latitude      
 
-        for ens in range (0,51):
+        for ens in range (0, self.nofEns):
             ensamble="{:02d}".format(ens)
-            #logger.info(f'start downloading data for ensamble {ens}')
-
-
-            url = f'ftp://{GLOFAS_USER}:{GLOFAS_PW}@{GLOFAS_FTP}/fc_netcdf/{self.current_date}/dis_{ensamble}_{self.current_date}00.nc'             
-            chunk_size=8192
-
+            logger.info(f'start downloading data for ensamble {ens}')
             Filename = self.inputPathGrid + 'glofas.nc'
+            Filename2 = self.inputPathGrid + f'glofas_{ens}.nc'  
+            filename_to_download = f'dis_{ensamble}_{self.current_date}00.nc' 
+            ftp = FTP(GLOFAS_FTP)
+            ftp.login(user=GLOFAS_USER, passwd=GLOFAS_PW)
+            ftp.cwd(f"/fc_netcdf/{self.current_date}/")
 
-            with urllib.request.urlopen(url) as response:
-                # Open the local file for writing the downloaded content       
-                with open(Filename, 'wb') as out_file:
-                    # Initialize a counter for the downloaded bytes
-                    bytes_downloaded = 0
-
-                    while True:
-                        # Read a chunk from the response
-                        chunk = response.read(chunk_size)
-                        # If the chunk is empty, we have downloaded the entire file
-                        if not chunk:
-                            break
-                        # Write the chunk to the local file
-                        out_file.write(chunk)
-                        # Update the counter
-                        bytes_downloaded += len(chunk)
-                        #print(f"Downloaded {bytes_downloaded} bytes")
-            if out_file:
-                out_file.close()
-            #logger.info(f'finished downloading data for ensamble {ens}')
-            nc_file = xr.open_dataset(Filename)  
-            var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
-            df_leadtime_ens=[]
-
-            for i in range(0,7):
-                leadTimelabel=str(i+1)+'_day'  
-                nc_p =var_data.sel(time=var_data.time.values[i]).drop(['time']).rio.write_crs("epsg:4326", inplace=True)
-
-                out_grid = make_geocube(
-                    vector_data=bf_gpd,
-                    measurements=['pcode'],
-                    like=nc_p)
-                
-                out_grid=out_grid.rename({'x': 'lon','y': 'lat'})
-                for gof_var in ['dis']:
-                    glofas_rtp=nc_p[gof_var]       
-                    out_grid[gof_var] = (glofas_rtp.dims, glofas_rtp.values)     
-
-                zonal_stats_df = (out_grid.groupby(out_grid['pcode']).max().to_dataframe().reset_index())
-                zonal_stats_df['pcode']=zonal_stats_df['pcode'].apply(lambda x:self.placeCodeInitial + str(int(x)).zfill(self.placecodeLen))
-                zonal_stats_df['ensemble']=ens
-                zonal_stats_df[f'dis_{ensamble}']= zonal_stats_df['dis']
-                
-                zonal_stats_df['leadTime']=leadTimelabel
-                df_leadtime_ens.append(zonal_stats_df.filter(['pcode','ensemble','leadTime','dis','rl2','rl5','rl20']))
-
-            glofasDffinal = pd.concat(df_leadtime_ens) 
-
-            FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
-            logger.info(f'saved csv files for ensamble {ens}')
-
-            glofasDffinal.to_csv(FilenameCsv) 
-            #glofasDffinal.to_csv(f'/mnt/containermnt/glofas_{ens}.csv')  
-            nc_file.close()
-        logger.info(f'finished downloading data per chunk')
-
+            if not os.path.exists(Filename2):
+                with open(Filename, "wb") as file:
+                    ftp.retrbinary("RETR " + filename_to_download, file.write)
+            
+                nc_file = xr.open_dataset(Filename) 
+                #var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2])) 
+                var_data = nc_file.sel( lon=slice(min_lon, max_lon), 
+                                           lat=slice(max_lat, min_lat)  
+                                             )
+                var_data.to_netcdf(Filename2)   
+                nc_file.close()
+            ftp.quit()
+            logger.info(f'finished downloading data for ensamble {ens}')   
+        logger.info('finished downloading data ')        
 
     def start_download_loop(self):
       downloadDone = False
@@ -225,9 +197,8 @@ class GlofasData:
       end = start + timeToTryDownload
       while downloadDone == False and time.time() < end:
           try:
-              if self.countryCodeISO3=='SSD':
-                  #self.makeFtpRequestNcFiles()
-                  logger.info('Dounloading data for south sudan')
+              if self.countryCodeISO3 in ['SSD','ETH','UGA','KEN',"ZMB"]:
+                  logger.info(f'Dounloading data for {self.countryCodeISO3}')
                   self.downloadFtpChunks()
               else:
                    self.makeFtpRequest()
@@ -242,7 +213,47 @@ class GlofasData:
                           str(timeToTryDownload/3600) + ' hours, no new dataset was found')
           raise ValueError('GLofas download failed for ' +
                           str(timeToTryDownload/3600) + ' hours, no new dataset was found')
-                          
+
+    def zonalStatGlofasDataGridToCsv(self):
+        ''' 
+        zonal statistics for Grided glofas data
+        '''
+        from rasterstats import zonal_stats
+        import rasterio
+
+        #bf_gpd= self.gdf_admin #self.gdf_extr_admin #self.admin_area_gdf
+        selectedPcodeVal=self.selectedPcode
+        bf_gpd= self.gdf_extr_admin.query('placeCode in @selectedPcodeVal')
+        
+        
+        for ens in range (0, self.nofEns):
+            ensamble="{:02d}".format(ens)       
+            Filename = self.inputPathGrid + f'glofas_{ens}.nc'       
+            df_leadtime_ens=[]
+            for i in range(0,7):
+                leadTimelabel=str(i+1)+'_day'  
+                with rasterio.open(Filename) as src:             
+                    raster_array = src.read(i+1)  #
+                    transform = src.transform
+
+                # Perform zonal statistics
+                stats = zonal_stats(bf_gpd, raster_array, affine=transform, stats= "max", all_touched=True)  
+                df_dis=bf_gpd.filter(['placeCode','placeCodeParent','name']) 
+                dis = pd.DataFrame(stats)
+                df_dis['dis']=dis['max'].values
+                df_dis['ensemble']=ens
+                df_dis[f'dis_{ensamble}']= df_dis['dis']                
+                df_dis['pcode']=df_dis['placeCode']
+                df_dis['leadTime']=leadTimelabel
+                df_leadtime_ens.append(df_dis.filter(['pcode','placeCode','placeCodeParent','ensemble','leadTime','dis','rl2','rl5','rl20'])) 
+            glofasDffinal = pd.concat(df_leadtime_ens) 
+
+            FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
+            logger.info(f'saved csv files for ensamble {ens}')
+
+            glofasDffinal.to_csv(FilenameCsv) 
+        logger.info(f'saved csv files for all ensambles')
+
     def getGlofasData(self):
         filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
         path = 'glofas/' + filename
@@ -271,54 +282,7 @@ class GlofasData:
             else:
                 return "no"
             
-    def extractGlofasDataGridToCsv(self):
-            
-        bf_gpd=self.admin_area_gdf 
-        
-        bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
-        
-        bbox_bfs=list(bf_gpd.total_bounds)
-        
-        # Load input data
-        filename = self.GLOFAS_GRID_FILENAME + '_' + self.current_date + '00.nc'
-        #filename ='/mnt/containermnt/glofas.nc'
-        Filename = os.path.join(self.inputPathGrid, filename) 
-        nc_file = xr.open_dataset(Filename)  
-        var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
-        df_leadtime_ens=[]
-
-        for i in range(0,7):
-            leadTimelabel=str(i+1)+'_day'  
-            for ens in range(0,51):
-                nc_p =var_data.sel(time=var_data.time.values[i],ensemble=var_data.ensemble.values[ens]).drop(['time','ensemble']).rio.write_crs("epsg:4326", inplace=True)
-
-                out_grid = make_geocube(
-                    vector_data=bf_gpd,
-                    measurements=['pcode'],
-                    like=nc_p)
-                
-                out_grid=out_grid.rename({'x': 'lon','y': 'lat'})
-                for gof_var in ['dis','rl2','rl5','rl20']:
-                    glofas_rtp=nc_p[gof_var]       
-                    out_grid[gof_var] = (glofas_rtp.dims, glofas_rtp.values)     
-
-                zonal_stats_df = (out_grid.groupby(out_grid['pcode']).max().to_dataframe().reset_index())
-                zonal_stats_df['pcode']=zonal_stats_df['pcode'].apply(lambda x:self.placeCodeInitial + str(int(x)).zfill(self.placecodeLen))
-                zonal_stats_df['ensemble']=ens+1
-                
-                zonal_stats_df['leadTime']=leadTimelabel
-                df_leadtime_ens.append(zonal_stats_df.filter(['pcode','ensemble','leadTime','dis','rl2','rl5','rl20']))
- 
-        glofasDffinal = pd.concat(df_leadtime_ens) 
-        
-        glofasDffinal.to_csv(self.glofasAdmnPerDay) 
-
-        logger.info('Extracted Glofas data from grid- discharge per day File saved') 
-            
-        nc_file.close()
-        
-        
-          
+      
     def extractGlofasDataGrid(self):
         trigger_per_day = {
             '1-day': False,
@@ -328,10 +292,11 @@ class GlofasData:
             '5-day': False,
             '6-day': False,
             '7-day': False,
-        }       
+            }    
+           
         #glofasDffinal.to_csv(f'glofas_{ensamble}.csv') 
 
-        csv_files = [f'{self.inputPathGrid}glofas_{f}.csv' for f in range (0,51) ]
+        csv_files = [f'{self.inputPathGrid}glofas_{f}.csv' for f in range (0,self.nofEns) ]
 
         # Create an empty list to hold dataframes
         dfs = []
@@ -340,6 +305,7 @@ class GlofasData:
         for csv_file in csv_files:
             df = pd.read_csv(csv_file)
             dfs.append(df)
+
         # Concatenate all dataframes in the list into a single dataframe
         glofasDffinal = pd.concat(dfs, ignore_index=True)
 
@@ -349,26 +315,30 @@ class GlofasData:
         
         df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
         df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
+ 
         df_thresholds = df_thresholds.set_index("stationCode", drop=False)
         df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
         
         stations=[]               
         for exractAdminCode in selectedPcodeVal:
             station = {}
+            #logger.info(exractAdminCode)
             station['code'] = df_district_mapping.query('placeCode == @exractAdminCode')['glofasStation'].values[0]            
             if station['code'] in df_thresholds['stationCode']:#and station['code'] in df_district_mapping['glofasStation']:
-                logger.info(station['code'])
+                #logger.info(station['code'])
+                
                 threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
             
                 for step in range(1, 8):
                     # Loop through 51 ensembles, get forecast and compare to threshold
-                    ensemble_options = 51
+                    ensemble_options = self.nofEns
                     count = 0
                     dis_sum = 0
                     leadTimelabel=str(step)+'_day'   
                     
                     for ensemble in range(0, ensemble_options):
                         discharge = glofasDffinal.query('pcode in @exractAdminCode').query('ensemble ==@ensemble').query('leadTime ==@leadTimelabel')['dis'].values[0]
+                        #logger.info(discharge)
     
                         if discharge >= threshold:
                             count = count + 1
@@ -408,6 +378,7 @@ class GlofasData:
   
     
     def extractGlofasData(self):
+        
         logger.info('\nExtracting Glofas (FTP) Data\n')
 
         files = [f for f in listdir(self.inputPath) if isfile(
@@ -418,6 +389,7 @@ class GlofasData:
         df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
         df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
         stations = []
+
         trigger_per_day = {
             '1-day': False,
             '2-day': False,
@@ -770,7 +742,9 @@ class GlofasData:
         # Load extracted Glofas discharge levels per station
         with open(self.extractedGlofasPath) as json_data:
             d = json.load(json_data)
-        df_discharge = pd.DataFrame(d)
+        df_dischargeT = pd.DataFrame(d)
+        df_discharge = df_dischargeT.loc[df_dischargeT.groupby('code')['fc'].idxmax()]
+
         df_discharge.index = df_discharge['code']
         df_discharge.sort_index(inplace=True)
 
@@ -810,6 +784,134 @@ class GlofasData:
             df.at[index, 'fc_rp'] = return_period
 
         out = df.to_json(orient='records')
+
         with open(self.triggersPerStationPath, 'w') as fp:
             fp.write(out)
             logger.info('Processed Glofas data - File saved')
+
+    def extractGlofasDataGridToCsv_old(self):
+            
+        bf_gpd=self.admin_area_gdf 
+        
+        bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
+        
+        bbox_bfs=list(bf_gpd.total_bounds)
+        
+        # Load input data
+        filename = self.GLOFAS_GRID_FILENAME + '_' + self.current_date + '00.nc'
+        #filename ='/mnt/containermnt/glofas.nc'
+        Filename = os.path.join(self.inputPathGrid, filename) 
+        nc_file = xr.open_dataset(Filename)  
+        var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
+        df_leadtime_ens=[]
+
+        for i in range(0,7):
+            leadTimelabel=str(i+1)+'_day'  
+            for ens in range(0,51):
+                nc_p =var_data.sel(time=var_data.time.values[i],ensemble=var_data.ensemble.values[ens]).drop(['time','ensemble']).rio.write_crs("epsg:4326", inplace=True)
+
+                out_grid = make_geocube(
+                    vector_data=bf_gpd,
+                    measurements=['pcode'],
+                    like=nc_p)
+                
+                out_grid=out_grid.rename({'x': 'lon','y': 'lat'})
+                for gof_var in ['dis','rl2','rl5','rl20']:
+                    glofas_rtp=nc_p[gof_var]       
+                    out_grid[gof_var] = (glofas_rtp.dims, glofas_rtp.values)     
+
+                zonal_stats_df = (out_grid.groupby(out_grid['pcode']).max().to_dataframe().reset_index())
+                zonal_stats_df['pcode']=zonal_stats_df['pcode'].apply(lambda x:self.placeCodeInitial + str(int(x)).zfill(self.placecodeLen))
+                zonal_stats_df['ensemble']=ens+1
+                
+                zonal_stats_df['leadTime']=leadTimelabel
+                df_leadtime_ens.append(zonal_stats_df.filter(['pcode','ensemble','leadTime','dis','rl2','rl5','rl20']))
+ 
+        glofasDffinal = pd.concat(df_leadtime_ens) 
+        
+        glofasDffinal.to_csv(self.glofasAdmnPerDay) 
+
+        logger.info('Extracted Glofas data from grid- discharge per day File saved') 
+            
+        nc_file.close()
+        
+
+    def downloadFtpChunks_old(self):
+        """
+        Download a glofas data from a URL in chunks and save it to a local file.
+        extract data for admin area
+        generate csv files for each admin area
+        """
+        # Open a connection to the URL
+        bf_gpd=self.admin_area_gdf
+  
+        bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
+        bbox_bfs=list(bf_gpd.total_bounds)
+        logger.info(f'start downloading glofas data for ensamble')
+
+        for ens in range (0,51):
+            ensamble="{:02d}".format(ens)
+            #logger.info(f'start downloading data for ensamble {ens}')
+
+
+            url = f'ftp://{GLOFAS_USER}:{GLOFAS_PW}@{GLOFAS_FTP}/fc_netcdf/{self.current_date}/dis_{ensamble}_{self.current_date}00.nc'             
+            chunk_size=8192
+
+            Filename = self.inputPathGrid + 'glofas.nc'
+
+            with urllib.request.urlopen(url) as response:
+                # Open the local file for writing the downloaded content       
+                with open(Filename, 'wb') as out_file:
+                    # Initialize a counter for the downloaded bytes
+                    bytes_downloaded = 0
+
+                    while True:
+                        # Read a chunk from the response
+                        chunk = response.read(chunk_size)
+                        # If the chunk is empty, we have downloaded the entire file
+                        if not chunk:
+                            break
+                        # Write the chunk to the local file
+                        out_file.write(chunk)
+                        # Update the counter
+                        bytes_downloaded += len(chunk)
+                        #print(f"Downloaded {bytes_downloaded} bytes")
+            if out_file:
+                out_file.close()
+            #logger.info(f'finished downloading data for ensamble {ens}')
+            nc_file = xr.open_dataset(Filename)  
+            var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
+            df_leadtime_ens=[]
+
+            for i in range(0,7):
+                leadTimelabel=str(i+1)+'_day'  
+                nc_p =var_data.sel(time=var_data.time.values[i]).drop(['time']).rio.write_crs("epsg:4326", inplace=True)
+
+                out_grid = make_geocube(
+                    vector_data=bf_gpd,
+                    measurements=['pcode'],
+                    like=nc_p)
+                
+                out_grid=out_grid.rename({'x': 'lon','y': 'lat'})
+                for gof_var in ['dis']:
+                    glofas_rtp=nc_p[gof_var]       
+                    out_grid[gof_var] = (glofas_rtp.dims, glofas_rtp.values)     
+
+                zonal_stats_df = (out_grid.groupby(out_grid['pcode']).max().to_dataframe().reset_index())
+                zonal_stats_df['pcode']=zonal_stats_df['pcode'].apply(lambda x:self.placeCodeInitial + str(int(x)).zfill(self.placecodeLen))
+                zonal_stats_df['ensemble']=ens
+                zonal_stats_df[f'dis_{ensamble}']= zonal_stats_df['dis']
+                
+                zonal_stats_df['leadTime']=leadTimelabel
+                df_leadtime_ens.append(zonal_stats_df.filter(['pcode','ensemble','leadTime','dis','rl2','rl5','rl20']))
+
+            glofasDffinal = pd.concat(df_leadtime_ens) 
+
+            FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
+            logger.info(f'saved csv files for ensamble {ens}')
+
+            glofasDffinal.to_csv(FilenameCsv) 
+            #glofasDffinal.to_csv(f'/mnt/containermnt/glofas_{ens}.csv')  
+            nc_file.close()
+        logger.info(f'finished downloading data per chunk')
+ 
