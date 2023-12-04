@@ -21,6 +21,7 @@ import urllib.error
 import tarfile
 import time
 from ftplib import FTP
+import ftplib
 #import cdsapi
 from flood_model.dynamicDataDb import DatabaseManager
 from flood_model.settings import *
@@ -29,6 +30,8 @@ try:
 except ImportError:
     print('No secrets file found.')
 import os
+from rasterstats import zonal_stats
+import rasterio   
 import logging
 logger = logging.getLogger(__name__)
 
@@ -142,11 +145,35 @@ class GlofasData:
             #urllib.request.urlretrieve(ftp_path + filename,'/mnt/containermnt/glofas.nc')
             
             
-    def makeFtpRequestNcFiles(self):
-            filename = self.GLOFAS_GRID_FILENAME + '_' + self.current_date + '00.nc'
-            ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + self.GLOFAS_FTP         
-            urllib.request.urlretrieve(ftp_path + filename,self.inputPathGrid + filename)
-            #urllib.request.urlretrieve(ftp_path + filename,'/mnt/containermnt/glofas.nc')
+    def makeFtpRequestNcFiles(self,filename_to_download):      
+            GLOFAS_FTP_GRID=f'aux.ecmwf.int/fc_netcdf/{self.current_date}/'
+            filename_local = self.inputPathGrid + 'glofas.nc'
+  
+            #filename = self.GLOFAS_GRID_FILENAME + '_' + self.current_date + '00.nc'
+            ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + GLOFAS_FTP_GRID    
+            max_retries=5
+            retries = 0
+            while retries < max_retries:
+                try:
+                    # Your FTP connection code here
+                    #ftp = ftplib.FTP(host, user, password)
+                    #urllib.request.urlretrieve(ftp_path + filename_to_download,filename_local)
+                    logger.info('accessing glofas data ')
+                    urllib.request.urlretrieve(ftp_path + filename_to_download, filename_local)
+                    # Perform FTP operations
+                    logger.info('downloaded glofas data ')
+                    break  # Connection successful, exit the loop
+                except ftplib.error_temp as e:
+                    if "421 Maximum number of connections exceeded" in str(e):
+                        retries += 1
+                        logger.info("Retrying FTP connection...")
+                        time.sleep(5)  # Wait for 5 seconds before retrying
+                    else:
+                        raise  # Reraise other FTP errors
+            else:
+                logger.info("Max retries reached. Unable to establish FTP connection.")
+
+
 
     def downloadFtpChunks(self):
         """
@@ -154,9 +181,7 @@ class GlofasData:
         extract data for admin area
         generate csv files for each admin area
         """
-        from ftplib import FTP
-        from rasterstats import zonal_stats
-        import rasterio               
+            
         logger.info(f'start downloading glofas data for ensamble')  
         # The following extent will download data for the extent of Zambia, Uganda,Kenya,Ethiopia and South Sudan 
         min_lon = 21  #21 Minimum longitude 
@@ -170,13 +195,16 @@ class GlofasData:
             Filename = self.inputPathGrid + 'glofas.nc'
             Filename2 = self.inputPathGrid + f'glofas_{ens}.nc'  
             filename_to_download = f'dis_{ensamble}_{self.current_date}00.nc' 
-            ftp = FTP(GLOFAS_FTP)
-            ftp.login(user=GLOFAS_USER, passwd=GLOFAS_PW)
-            ftp.cwd(f"/fc_netcdf/{self.current_date}/")
+            
+
+            #ftp = FTP(GLOFAS_FTP)
+            #ftp.login(user=GLOFAS_USER, passwd=GLOFAS_PW)
+            #ftp.cwd(f"/fc_netcdf/{self.current_date}/")
 
             if not os.path.exists(Filename2):
-                with open(Filename, "wb") as file:
-                    ftp.retrbinary("RETR " + filename_to_download, file.write)
+                self.makeFtpRequestNcFiles(filename_to_download)
+                #with open(Filename, "wb") as file:
+                #    ftp.retrbinary("RETR " + filename_to_download, file.write)
             
                 nc_file = xr.open_dataset(Filename) 
                 #var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2])) 
@@ -185,20 +213,20 @@ class GlofasData:
                                              )
                 var_data.to_netcdf(Filename2)   
                 nc_file.close()
-            ftp.quit()
+            #ftp.quit()
             logger.info(f'finished downloading data for ensamble {ens}')   
         logger.info('finished downloading data ')        
 
     def start_download_loop(self):
       downloadDone = False
       timeToTryDownload = 43200
-      timeToRetry = 600
+      timeToRetry = 6
       start = time.time()
       end = start + timeToTryDownload
       while downloadDone == False and time.time() < end:
           try:
               if self.countryCodeISO3 in ['SSD','ETH','UGA','KEN',"ZMB"]:
-                  logger.info(f'Dounloading data for {self.countryCodeISO3}')
+                  logger.info(f'Downloading data for {self.countryCodeISO3}')
                   self.downloadFtpChunks()
               else:
                    self.makeFtpRequest()
