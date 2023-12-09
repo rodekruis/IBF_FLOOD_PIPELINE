@@ -74,7 +74,7 @@ except Exception as e:
 ## COUNTRY SETTINGS (this is now definde as an enviromental variable)##
 ######################
  
-#COUNTRY_CODES = ["SSD","UGA","ETH","KEN","ZMB"]
+COUNTRY_CODES = ["SSD","UGA","ETH","KEN","ZMB"]
  
 SETTINGS = {
     "MWI": {
@@ -153,7 +153,7 @@ SETTINGS = {
         "notify_email": True,
         "glofasReturnPeriod":'rl5',
         ##"selectedPcode":["UG20570101","UG20270110","UG41110113","UG20360110","UG41240112","UG20350201","UG41140116","UG10180304"] ,    
-        "selectedPcode": ["UG20570102","UG10180304","UG41240115","UG41280109","UG20460106","UG20360112","UG20350212","UG41140114"] ,
+        "selectedPcode": ["UG20570102","UG10180304","UG41240115","UG41240119","UG20460106","UG20360112","UG20350212","UG41140114"] ,
         #"selectedPcode": ['UG41280109','UG20560114','UG20630312','UG41330302','UG10260604','UG30900108','UG20550109','UG41180107'],
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
