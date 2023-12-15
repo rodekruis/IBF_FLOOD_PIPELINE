@@ -265,10 +265,10 @@ class GlofasData:
                     transform = src.transform
 
                 # Perform zonal statistics
-                stats = zonal_stats(bf_gpd, raster_array, affine=transform, stats= "max", all_touched=True)  
+                stats = zonal_stats(bf_gpd, raster_array, affine=transform, stats=['max', 'median'], all_touched=True)
                 df_dis=bf_gpd.filter(['placeCode','placeCodeParent','name']) 
                 dis = pd.DataFrame(stats)
-                df_dis['dis']=dis['max'].values
+                df_dis['dis']=dis['median'].values
                 df_dis['ensemble']=ens
                 df_dis[f'dis_{ensamble}']= df_dis['dis']                
                 df_dis['pcode']=df_dis['placeCode']
