@@ -10,8 +10,8 @@
 
 
 # Local data files
-pipeline/data
-
+pipeline/data/raster
+pipeline/data/other
  
 !pipeline/data/README.md
 !pipeline/data/trigger_data

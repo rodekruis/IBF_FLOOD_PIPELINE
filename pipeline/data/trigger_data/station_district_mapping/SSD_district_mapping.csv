@@ -1,0 +1,512 @@
+name,placeCode,placeCodeParent,glofasStation
+Bungu,SS010101,SS0101,no_station
+Dolo,SS010102,SS0101,no_station
+Ganji,SS010103,SS0101,no_station
+Gondokoro,SS010104,SS0101,no_station
+Juba Town,SS010105,SS0101,no_station
+Kator,SS010106,SS0101,no_station
+Lirya,SS010107,SS0101,no_station
+Lobonok,SS010108,SS0101,no_station
+Lokiliri,SS010109,SS0101,no_station
+Mangala North,SS010110,SS0101,no_station
+Mangala South,SS010111,SS0101,no_station
+Munuki,SS010112,SS0101,no_station
+Northern Bari,SS010113,SS0101,no_station
+Rejaf,SS010114,SS0101,no_station
+Rokon,SS010115,SS0101,no_station
+Tijor,SS010116,SS0101,no_station
+Wonduruba,SS010117,SS0101,no_station
+Kangapo I,SS010201,SS0102,no_station
+Kangapo II,SS010202,SS0102,no_station
+Lire,SS010203,SS0102,no_station
+Liwolo,SS010204,SS0102,no_station
+Nyepo,SS010205,SS0102,no_station
+Kenyi,SS010301,SS0103,no_station
+Kupera,SS010302,SS0103,no_station
+Lainya,SS010303,SS0103,no_station
+Mukaya,SS010304,SS0103,no_station
+Wuji,SS010305,SS0103,no_station
+Gulumbi,SS010401,SS0104,no_station
+Kimba,SS010402,SS0104,no_station
+Lujulo,SS010403,SS0104,no_station
+Panyume,SS010404,SS0104,no_station
+Wudabi,SS010405,SS0104,no_station
+Gameiza,SS010501,SS0105,no_station
+Muni,SS010502,SS0105,no_station
+Nyori,SS010503,SS0105,no_station
+Reggo,SS010504,SS0105,no_station
+Rijong,SS010505,SS0105,no_station
+Tali,SS010506,SS0105,no_station
+Terekeka,SS010507,SS0105,no_station
+Tindilo,SS010508,SS0105,no_station
+Tombek,SS010509,SS0105,no_station
+Lasu,SS010601,SS0106,no_station
+Mugwo,SS010602,SS0106,no_station
+Otogo,SS010603,SS0106,no_station
+Tore,SS010604,SS0106,no_station
+Yei,SS010605,SS0106,no_station
+Kimotong,SS020101,SS0201,no_station
+Komori,SS020102,SS0201,no_station
+Loriyok,SS020103,SS0201,no_station
+Lotukei,SS020104,SS0201,no_station
+Loudo,SS020105,SS0201,no_station
+Nagishot,SS020106,SS0201,no_station
+Napak,SS020107,SS0201,no_station
+Nauro,SS020108,SS0201,no_station
+Hatire,SS020201,SS0202,no_station
+Ikotos,SS020202,SS0202,no_station
+Imotong,SS020203,SS0202,no_station
+Lomohidang North,SS020204,SS0202,no_station
+Lomohidang South,SS020205,SS0202,no_station
+Losite,SS020206,SS0202,no_station
+Jie,SS020301,SS0203,no_station
+Katodori,SS020302,SS0203,no_station
+Kauto,SS020303,SS0203,no_station
+Lotimor,SS020304,SS0203,no_station
+Mogos,SS020305,SS0203,no_station
+Narus,SS020306,SS0203,no_station
+Natinga,SS020307,SS0203,no_station
+Chumakori,SS020401,SS0204,no_station
+Karukomuge,SS020402,SS0204,no_station
+Lomeyen,SS020403,SS0204,no_station
+Mosingo,SS020404,SS0204,no_station
+Najie,SS020405,SS0204,no_station
+Paringa,SS020406,SS0204,no_station
+Kapoeta Town,SS020501,SS0205,no_station
+Longeleya,SS020502,SS0205,no_station
+Machi One,SS020503,SS0205,no_station
+Machi Two,SS020504,SS0205,no_station
+Pwata,SS020505,SS0205,no_station
+Arihilo,SS020601,SS0206,no_station
+Burgilo,SS020602,SS0206,no_station
+Imehejek,SS020603,SS0206,no_station
+Kurumi,SS020604,SS0206,no_station
+Lohutok,SS020605,SS0206,no_station
+Longiro,SS020606,SS0206,no_station
+Marguna,SS020607,SS0206,no_station
+Pachidi,SS020608,SS0206,no_station
+Lobone,SS020701,SS0207,no_station
+Magwi,SS020702,SS0207,no_station
+Mugali,SS020703,SS0207,no_station
+Nimule,SS020704,SS0207,no_station
+Pageri,SS020705,SS0207,no_station
+Pajok,SS020706,SS0207,no_station
+Bur,SS020801,SS0208,no_station
+Himodonge,SS020802,SS0208,no_station
+Hiyala,SS020803,SS0208,no_station
+Ifwotu,SS020804,SS0208,no_station
+Imurok,SS020805,SS0208,no_station
+Kudo,SS020806,SS0208,no_station
+Torit,SS020807,SS0208,no_station
+Alali,SS030101,SS0301,no_station
+Barmach,SS030102,SS0301,no_station
+Bilkey,SS030103,SS0301,no_station
+Buong,SS030104,SS0301,no_station
+Dengjok,SS030105,SS0301,no_station
+Diror,SS030106,SS0301,no_station
+Nyandit,SS030107,SS0301,no_station
+Walgak,SS030108,SS0301,no_station
+Ayod,SS030201,SS0302,no_station
+Kuach-deng,SS030202,SS0302,no_station
+Kurwai,SS030203,SS0302,no_station
+Mogok,SS030204,SS0302,no_station
+Pagil,SS030205,SS0302,no_station
+Pajiek,SS030206,SS0302,no_station
+Wau,SS030207,SS0302,no_station
+Anyidi,SS030301,SS0303,no_station
+Baidit,SS030302,SS0303,no_station
+Bor,SS030303,SS0303,G5100
+Jalle,SS030304,SS0303,no_station
+Kolnyang,SS030305,SS0303,no_station
+Makuach,SS030306,SS0303,no_station
+Alam,SS030401,SS0304,no_station
+Atar,SS030402,SS0304,no_station
+Belewach,SS030403,SS0304,no_station
+Kaldak,SS030404,SS0304,no_station
+Korwach,SS030405,SS0304,no_station
+Mareng,SS030406,SS0304,no_station
+Nyainthokmalual,SS030407,SS0304,no_station
+Wunlem,SS030408,SS0304,no_station
+Ageer,SS030501,SS0305,no_station
+Dongchak,SS030502,SS0305,no_station
+Padiet,SS030503,SS0305,no_station
+Pagak,SS030504,SS0305,no_station
+Panyang,SS030505,SS0305,no_station
+Payuel,SS030506,SS0305,no_station
+Manajang,SS030601,SS0306,no_station
+Mareang,SS030602,SS0306,no_station
+Old Fangak,SS030603,SS0306,no_station
+Paguir,SS030604,SS0306,no_station
+Phom,SS030605,SS0306,no_station
+Chuil,SS030701,SS0307,no_station
+Nyambor,SS030702,SS0307,no_station
+Pading,SS030703,SS0307,no_station
+Pulturuk,SS030704,SS0307,no_station
+Thol,SS030705,SS0307,no_station
+Waat,SS030706,SS0307,no_station
+Boma,SS030801,SS0308,no_station
+Gumuruk,SS030802,SS0308,no_station
+Kiziongora,SS030803,SS0308,no_station
+Lekuangole,SS030804,SS0308,no_station
+Marow,SS030805,SS0308,no_station
+Mewun,SS030806,SS0308,no_station
+Pibor,SS030807,SS0308,no_station
+Verteth,SS030808,SS0308,no_station
+Adongo,SS030901,SS0309,no_station
+Akiela,SS030902,SS0309,no_station
+Burator,SS030903,SS0309,no_station
+Omiela,SS030904,SS0309,no_station
+Pochalla,SS030905,SS0309,no_station
+Ajuong,SS031001,SS0310,no_station
+Kongor,SS031002,SS0310,no_station
+Lith,SS031003,SS0310,no_station
+Nyuak,SS031004,SS0310,no_station
+Pakeer,SS031005,SS0310,no_station
+Karam,SS031101,SS0311,no_station
+Motot,SS031102,SS0311,no_station
+Pathai,SS031103,SS0311,no_station
+Payai,SS031104,SS0311,no_station
+Pieri,SS031105,SS0311,no_station
+Puolchuol,SS031106,SS0311,no_station
+Tiam,SS031107,SS0311,no_station
+Uror,SS031108,SS0311,no_station
+Abuyong,SS040101,SS0401,no_station
+Alel I,SS040102,SS0401,no_station
+Alel II,SS040103,SS0401,no_station
+Bun-agok,SS040104,SS0401,no_station
+Dor,SS040105,SS0401,no_station
+Magok,SS040106,SS0401,no_station
+Nile,SS040107,SS0401,no_station
+Puluk,SS040108,SS0401,no_station
+Abiriu,SS040201,SS0402,no_station
+Citcok,SS040202,SS0402,no_station
+Duony,SS040203,SS0402,no_station
+Malou Pec,SS040204,SS0402,no_station
+Ngap,SS040205,SS0402,no_station
+Ngap 1,SS040206,SS0402,no_station
+Pagor,SS040207,SS0402,no_station
+Amongpiny,SS040301,SS0403,no_station
+Jiir,SS040302,SS0403,no_station
+Malek 2,SS040303,SS0403,no_station
+Matangai,SS040304,SS0403,no_station
+Mayom,SS040305,SS0403,no_station
+Aduel,SS040401,SS0404,no_station
+Akot,SS040402,SS0404,no_station
+Atiaba,SS040403,SS0404,no_station
+Cueicok,SS040404,SS0404,no_station
+Maleng-agok,SS040405,SS0404,no_station
+Pacong,SS040406,SS0404,no_station
+Paloch,SS040407,SS0404,no_station
+Aloor,SS040501,SS0405,no_station
+Madol,SS040502,SS0405,no_station
+Malueeth,SS040503,SS0405,no_station
+Maper,SS040504,SS0405,no_station
+Mayen,SS040505,SS0405,no_station
+Wun-rieng,SS040506,SS0405,no_station
+Bargel,SS040601,SS0406,no_station
+Domoloto,SS040602,SS0406,no_station
+Makundi,SS040603,SS0406,no_station
+Wulu,SS040604,SS0406,no_station
+Adior,SS040701,SS0407,no_station
+Lekakedu,SS040702,SS0407,no_station
+Malek,SS040703,SS0407,no_station
+Pagarau,SS040704,SS0407,no_station
+Tinagau,SS040705,SS0407,no_station
+Yali,SS040706,SS0407,no_station
+Abang,SS040801,SS0408,no_station
+Aluakluak,SS040802,SS0408,no_station
+Anuol,SS040803,SS0408,no_station
+Geng-geng,SS040804,SS0408,no_station
+Gher,SS040805,SS0408,no_station
+Mapuordit,SS040806,SS0408,no_station
+Yirol,SS040807,SS0408,no_station
+Abul,SS050101,SS0501,no_station
+Achana,SS050102,SS0501,no_station
+Aroyo,SS050103,SS0501,no_station
+Awiil,SS050104,SS0501,no_station
+Bahr Mayen,SS050105,SS0501,no_station
+Chel South,SS050106,SS0501,no_station
+Nyalath,SS050107,SS0501,no_station
+Baach,SS050201,SS0502,no_station
+Madhol,SS050202,SS0502,no_station
+Malual-bai,SS050203,SS0502,no_station
+Mangar-tong I,SS050204,SS0502,no_station
+Mangok,SS050205,SS0502,no_station
+Mayom-wel,SS050206,SS0502,no_station
+Wunlang,SS050207,SS0502,no_station
+Yargot,SS050208,SS0502,no_station
+Ariath,SS050301,SS0503,no_station
+Malual Centre,SS050302,SS0503,no_station
+Malual East,SS050303,SS0503,no_station
+Malual North,SS050304,SS0503,no_station
+Malual West,SS050305,SS0503,no_station
+Ayai,SS050401,SS0504,no_station
+Gakrol,SS050402,SS0504,no_station
+Nyieth,SS050403,SS0504,no_station
+Nyocawany I,SS050404,SS0504,no_station
+Nyocawany II,SS050405,SS0504,no_station
+Panthou,SS050406,SS0504,no_station
+Tar-weng,SS050407,SS0504,no_station
+Tiar-aleit,SS050408,SS0504,no_station
+Wathmuok,SS050409,SS0504,no_station
+Achana 2,SS050501,SS0505,no_station
+Aweil Town,SS050502,SS0505,no_station
+Ayat Centre,SS050503,SS0505,no_station
+Ayat East,SS050504,SS0505,no_station
+Ayat West,SS050505,SS0505,no_station
+Gomjuer Centre,SS050506,SS0505,no_station
+Gomjuer East,SS050507,SS0505,no_station
+Gomjuer West,SS050508,SS0505,no_station
+Mariem East,SS050509,SS0505,no_station
+Mariem West,SS050510,SS0505,no_station
+Abiemnhom,SS060101,SS0601,no_station
+Aworpiny,SS060102,SS0601,no_station
+Manjonga,SS060103,SS0601,no_station
+Panyang 2,SS060104,SS0601,no_station
+Guit,SS060201,SS0602,no_station
+Kedad,SS060202,SS0602,no_station
+Kuach,SS060203,SS0602,no_station
+Kuerguini,SS060204,SS0602,no_station
+Niemni,SS060205,SS0602,no_station
+Nyathoar,SS060206,SS0602,no_station
+Wathnyona,SS060207,SS0602,no_station
+Boaw,SS060301,SS0603,no_station
+Gany,SS060302,SS0603,no_station
+Jaak,SS060303,SS0603,no_station
+Kuachlual,SS060304,SS0603,no_station
+Ngony,SS060305,SS0603,no_station
+Norbor,SS060306,SS0603,no_station
+Pakur,SS060307,SS0603,no_station
+Adok,SS060401,SS0604,no_station
+Bou,SS060402,SS0604,no_station
+Guat,SS060403,SS0604,no_station
+Juong Kang,SS060404,SS0604,no_station
+Leer,SS060405,SS0604,no_station
+Padeah,SS060406,SS0604,no_station
+Pilieny,SS060407,SS0604,no_station
+Yang,SS060408,SS0604,no_station
+Bor 2,SS060501,SS0605,no_station
+Dablual,SS060502,SS0605,no_station
+Luom,SS060503,SS0605,no_station
+Maal,SS060504,SS0605,no_station
+Pabuong,SS060505,SS0605,no_station
+Rubkuay,SS060506,SS0605,no_station
+Thaker,SS060507,SS0605,no_station
+Tharjiath,SS060508,SS0605,no_station
+Tutnyang,SS060509,SS0605,no_station
+Bieh,SS060601,SS0606,no_station
+Kuerbuone,SS060602,SS0606,no_station
+Kueryiek,SS060603,SS0606,no_station
+Mankien,SS060604,SS0606,no_station
+Ngop 2,SS060605,SS0606,no_station
+Pup,SS060606,SS0606,no_station
+Riak,SS060607,SS0606,no_station
+Ruathnyibuol,SS060608,SS0606,no_station
+Wangbuor I,SS060609,SS0606,no_station
+Wangbuor II,SS060610,SS0606,no_station
+Wangbuor III,SS060611,SS0606,no_station
+Wangkei,SS060612,SS0606,no_station
+Ganyliel,SS060701,SS0607,no_station
+Kol,SS060702,SS0607,no_station
+Mayom 2,SS060703,SS0607,no_station
+Nyal,SS060704,SS0607,no_station
+Pachaar,SS060705,SS0607,no_station
+Pachak,SS060706,SS0607,no_station
+Pachienjok,SS060707,SS0607,no_station
+Panyijiar,SS060708,SS0607,no_station
+Thoarnhoum,SS060709,SS0607,no_station
+Tiap,SS060710,SS0607,no_station
+Aliiny,SS060801,SS0608,no_station
+Biu,SS060802,SS0608,no_station
+Jamjang,SS060803,SS0608,no_station
+Nyeel,SS060804,SS0608,no_station
+Pariang,SS060805,SS0608,no_station
+Werthen,SS060806,SS0608,no_station
+Wunkur,SS060807,SS0608,no_station
+Bentiu Town,SS060901,SS0609,no_station
+Budaang,SS060902,SS0609,no_station
+Dhorbor,SS060903,SS0609,no_station
+Kaljak,SS060904,SS0609,no_station
+Ngop,SS060905,SS0609,no_station
+Nhialdiu,SS060906,SS0609,no_station
+Panhiany,SS060907,SS0609,no_station
+Rubkotne,SS060908,SS0609,no_station
+Wathjaak,SS060909,SS0609,no_station
+Abwong,SS070101,SS0701,no_station
+Adong,SS070102,SS0701,no_station
+Akoka,SS070103,SS0701,no_station
+Akotweng,SS070104,SS0701,no_station
+Gel Achiel,SS070105,SS0701,no_station
+Nyongkuach,SS070106,SS0701,no_station
+Nyongrial,SS070107,SS0701,no_station
+Rom,SS070108,SS0701,no_station
+Wunthow,SS070109,SS0701,no_station
+Dethok,SS070201,SS0702,no_station
+Kodok,SS070202,SS0702,no_station
+Kodok Town,SS070203,SS0702,no_station
+Lul,SS070204,SS0702,no_station
+Dajo,SS070301,SS0703,no_station
+Guelguk,SS070302,SS0703,no_station
+Longochuk,SS070303,SS0703,no_station
+Malual,SS070304,SS0703,no_station
+Pamach,SS070305,SS0703,no_station
+Wudier,SS070306,SS0703,no_station
+Dingkar,SS070401,SS0704,no_station
+Jikmir,SS070402,SS0704,no_station
+Kiech Kuon,SS070403,SS0704,no_station
+Kuerenge-Ke,SS070404,SS0704,no_station
+Mading,SS070405,SS0704,no_station
+Maker,SS070406,SS0704,no_station
+Nasir,SS070407,SS0704,no_station
+Roam,SS070408,SS0704,no_station
+Banashowa,SS070501,SS0705,no_station
+Boung,SS070502,SS0705,no_station
+Jinkuata,SS070503,SS0705,no_station
+Jinmakda,SS070504,SS0705,no_station
+Khor El Amer,SS070505,SS0705,no_station
+Jekow,SS070601,SS0706,no_station
+Jotoma,SS070602,SS0706,no_station
+Kigila,SS070603,SS0706,no_station
+Maiwut,SS070604,SS0706,no_station
+Olang,SS070605,SS0706,no_station
+Central Malakal,SS070701,SS0707,no_station
+Eastern Malakal,SS070702,SS0707,no_station
+Lelo,SS070703,SS0707,no_station
+Northern Malakal,SS070704,SS0707,no_station
+Ogot,SS070705,SS0707,no_station
+Southern Malakal,SS070706,SS0707,no_station
+Adhidwoi,SS070801,SS0708,no_station
+Kaka,SS070802,SS0708,no_station
+Magenist,SS070803,SS0708,no_station
+Wedakona,SS070804,SS0708,no_station
+Bimachuk,SS070901,SS0709,no_station
+Galdora,SS070902,SS0709,no_station
+Melut,SS070903,SS0709,no_station
+Panomdit,SS070904,SS0709,no_station
+Wunamum,SS070905,SS0709,no_station
+Anakdiar,SS071001,SS0710,no_station
+Dheteim,SS071002,SS0710,no_station
+Kuel,SS071003,SS0710,no_station
+Pakang,SS071004,SS0710,no_station
+Panyidwoi,SS071005,SS0710,no_station
+Panyikang,SS071006,SS0710,no_station
+Tonga,SS071007,SS0710,no_station
+Chemmedi,SS071101,SS0711,no_station
+Geger,SS071102,SS0711,no_station
+Jalhak,SS071103,SS0711,no_station
+North Renk,SS071104,SS0711,no_station
+South Renk,SS071105,SS0711,no_station
+Doma,SS071201,SS0712,no_station
+Kurmuot,SS071202,SS0712,no_station
+Ulang,SS071203,SS0712,no_station
+Yomding,SS071204,SS0712,no_station
+Nyang,SS080101,SS0801,no_station
+Pathuon East,SS080102,SS0801,no_station
+Pathuon West,SS080103,SS0801,no_station
+Toch East,SS080104,SS0801,no_station
+Toch North,SS080105,SS0801,no_station
+Toch West,SS080106,SS0801,no_station
+Akon North,SS080201,SS0802,no_station
+Akon South,SS080202,SS0802,no_station
+Alek North,SS080203,SS0802,no_station
+Alek South,SS080204,SS0802,no_station
+Alek West,SS080205,SS0802,no_station
+Gogrial,SS080206,SS0802,no_station
+Kuac North,SS080207,SS0802,no_station
+Kuac South,SS080208,SS0802,no_station
+Riau,SS080209,SS0802,no_station
+Ananatak,SS080301,SS0803,no_station
+Makuac,SS080302,SS0803,no_station
+Malualcum,SS080303,SS0803,no_station
+Maparah,SS080304,SS0803,no_station
+Mayen 2,SS080305,SS0803,no_station
+Pagor 2,SS080306,SS0803,no_station
+Palal,SS080307,SS0803,no_station
+Paliang,SS080308,SS0803,no_station
+Pannhial,SS080309,SS0803,no_station
+Paweng,SS080310,SS0803,no_station
+Wun-liit,SS080311,SS0803,no_station
+Akop,SS080401,SS0804,no_station
+Alabek,SS080402,SS0804,no_station
+Aliek,SS080403,SS0804,no_station
+Awuul,SS080404,SS0804,no_station
+Kirik,SS080405,SS0804,no_station
+Manloor,SS080406,SS0804,no_station
+Marial-lou,SS080407,SS0804,no_station
+Pagol,SS080408,SS0804,no_station
+Rual-bet,SS080409,SS0804,no_station
+Warrap,SS080410,SS0804,no_station
+Jak,SS080501,SS0805,no_station
+Manyang-ngok,SS080502,SS0805,no_station
+Thiet,SS080503,SS0805,no_station
+Tonj,SS080504,SS0805,no_station
+Wath-alel,SS080505,SS0805,no_station
+Ajak-kuac,SS080601,SS0806,no_station
+Akoc,SS080602,SS0806,no_station
+Aweeng,SS080603,SS0806,no_station
+Pannyok,SS080604,SS0806,no_station
+Turalei,SS080605,SS0806,no_station
+Wunrok,SS080606,SS0806,no_station
+Abyei Region,SS080701,SS0807,no_station
+Kangi,SS090101,SS0901,no_station
+Kuajiena,SS090102,SS0901,no_station
+Marial Bai,SS090103,SS0901,no_station
+Rocrocdong,SS090104,SS0901,no_station
+Udici,SS090105,SS0901,no_station
+Wau Bai,SS090106,SS0901,no_station
+Ere,SS090201,SS0902,no_station
+Raga,SS090202,SS0902,no_station
+Ringi,SS090203,SS0902,no_station
+Uyujuku,SS090204,SS0902,no_station
+Bagari,SS090301,SS0903,no_station
+Besselia,SS090302,SS0903,no_station
+Kpaile,SS090303,SS0903,no_station
+Wau North,SS090304,SS0903,no_station
+Wau South,SS090305,SS0903,no_station
+Andari,SS100101,SS1001,no_station
+Bagidi,SS100102,SS1001,no_station
+Bariguna,SS100103,SS1001,no_station
+Ezo Centre,SS100104,SS1001,no_station
+Naandi,SS100105,SS1001,no_station
+Yangiri,SS100106,SS1001,no_station
+Ibba Centre,SS100201,SS1002,no_station
+Madebe,SS100202,SS1002,no_station
+Manikakara,SS100203,SS1002,no_station
+Maruko,SS100204,SS1002,no_station
+Nabanga,SS100205,SS1002,no_station
+Kozi,SS100301,SS1003,no_station
+Landili,SS100302,SS1003,no_station
+Mambe,SS100303,SS1003,no_station
+Maridi,SS100304,SS1003,no_station
+Ngamunde,SS100305,SS1003,no_station
+Kediba,SS100401,SS1004,no_station
+Lakamadi,SS100402,SS1004,no_station
+Lozoh,SS100403,SS1004,no_station
+Minga,SS100404,SS1004,no_station
+Witto,SS100405,SS1004,no_station
+Amadi,SS100501,SS1005,no_station
+Bangolo,SS100502,SS1005,no_station
+Kotobi,SS100503,SS1005,no_station
+Mundri,SS100504,SS1005,no_station
+Bagori,SS100601,SS1006,no_station
+Bahr El Grindi,SS100602,SS1006,no_station
+Dari,SS100603,SS1006,no_station
+Kokori,SS100604,SS1006,no_station
+Lessi,SS100605,SS1006,no_station
+Mvolo,SS100606,SS1006,no_station
+Yeri,SS100607,SS1006,no_station
+Nagero,SS100701,SS1007,no_station
+Basukangbi,SS100801,SS1008,no_station
+Nzara Centre,SS100802,SS1008,no_station
+Ringasi,SS100803,SS1008,no_station
+Sakure,SS100804,SS1008,no_station
+Sangua,SS100805,SS1008,no_station
+Mupoi,SS100901,SS1009,no_station
+Namutina,SS100902,SS1009,no_station
+Source Yubu,SS100903,SS1009,no_station
+Tambura,SS100904,SS1009,no_station
+Bangasu,SS101001,SS1010,no_station
+Gangura,SS101002,SS1010,no_station
+Nadiangere,SS101003,SS1010,no_station
+Ri-rangu,SS101004,SS1010,no_station
+Yambio Town,SS101005,SS1010,no_station
