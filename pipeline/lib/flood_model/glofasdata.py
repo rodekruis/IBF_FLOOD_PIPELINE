@@ -83,12 +83,12 @@ class GlofasData:
         self.placeCodeInitial= SETTINGS[countryCodeISO3]['placeCodeInitial'] 
 
 
-        self.nofEns= noOfGlofasEnsambles # 51 # this should be 51
-        self.PIPELINE_INPUT_COD=PIPELINE_INPUT+'cod/'
-        self.ADMIN_AREA_GDF_PATH= os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_admin_areas.geojson")
-        gdf_admin=gpd.read_file(self.ADMIN_AREA_GDF_PATH)
-        self.gdf_admin=gdf_admin.query(f'adminLevel == {self.admin_level}')
-        self.gdf_extr_admin=gdf_admin.query(f'adminLevel == {self.admin_level_glofas_extr}')
+        self.nofEns = noOfGlofasEnsembles # 51 # this should be 51
+        self.PIPELINE_INPUT_COD = PIPELINE_INPUT+'cod/'
+        self.ADMIN_AREA_GDF_PATH = os.path.join(self.PIPELINE_INPUT_COD,f"{countryCodeISO3}_admin_areas.geojson")
+        gdf_admin = gpd.read_file(self.ADMIN_AREA_GDF_PATH)
+        self.gdf_admin = gdf_admin.query(f'adminLevel == {self.admin_level}')
+        self.gdf_extr_admin = gdf_admin.query(f'adminLevel == {self.admin_level_glofas_extr}')
 
 
     def process(self):
@@ -98,8 +98,14 @@ class GlofasData:
         else:
             #self.removeOldGlofasData()
             self.download()
-            if self.countryCodeISO3 in ['SSD','ETH','UGA','KEN',"ZMB"]:#=='SSD':
+            if self.countryCodeISO3 in ['UGA']:
+                self.pointGlofasDataGridToCsv()
+                #self.extractGlofasDataGridToCsv_old()
+                self.extractGlofasDataGrid()
+                self.findTrigger()
+            elif self.countryCodeISO3 in ['SSD','ETH','KEN',"ZMB"]:#=='SSD':
                 self.zonalStatGlofasDataGridToCsv()
+                #self.extractGlofasDataGridToCsv_old()
                 self.extractGlofasDataGrid()
                 self.findTrigger()
             else:
@@ -182,7 +188,7 @@ class GlofasData:
         generate csv files for each admin area
         """
             
-        logger.info(f'start downloading glofas data for ensamble')  
+        logger.info(f'start downloading glofas data for ensemble')  
         # The following extent will download data for the extent of Zambia, Uganda,Kenya,Ethiopia and South Sudan 
         min_lon = 21  #21 Minimum longitude 
         max_lon = 48  # Maximum longitude
@@ -190,11 +196,11 @@ class GlofasData:
         max_lat = 16  # Maximum latitude      
 
         for ens in range (0, self.nofEns):
-            ensamble="{:02d}".format(ens)
-            logger.info(f'start downloading data for ensamble {ens}')
+            ensemble = "{:02d}".format(ens)
+            logger.info(f'start downloading data for ensemble {ens}')
             Filename = self.inputPathGrid + 'glofas.nc'
             Filename2 = self.inputPathGrid + f'glofas_{ens}.nc'  
-            filename_to_download = f'dis_{ensamble}_{self.current_date}00.nc' 
+            filename_to_download = f'dis_{ensemble}_{self.current_date}00.nc' 
             
 
             #ftp = FTP(GLOFAS_FTP)
@@ -214,7 +220,7 @@ class GlofasData:
                 var_data.to_netcdf(Filename2)   
                 nc_file.close()
             #ftp.quit()
-            logger.info(f'finished downloading data for ensamble {ens}')   
+            logger.info(f'finished downloading data for ensemble {ens}')   
         logger.info('finished downloading data ')        
 
     def start_download_loop(self):
@@ -244,15 +250,13 @@ class GlofasData:
 
     def zonalStatGlofasDataGridToCsv(self):
         ''' 
-        zonal statistics for Grided glofas data
+        zonal statistics for Gridded glofas data
         '''
         from rasterstats import zonal_stats
         import rasterio
 
-        #bf_gpd= self.gdf_admin #self.gdf_extr_admin #self.admin_area_gdf
         selectedPcodeVal=self.selectedPcode
         bf_gpd= self.gdf_extr_admin.query('placeCode in @selectedPcodeVal')
-        
         
         for ens in range (0, self.nofEns):
             ensamble="{:02d}".format(ens)       
@@ -268,19 +272,70 @@ class GlofasData:
                 stats = zonal_stats(bf_gpd, raster_array, affine=transform, stats=['max', 'median'], all_touched=True)
                 df_dis=bf_gpd.filter(['placeCode','placeCodeParent','name']) 
                 dis = pd.DataFrame(stats)
-                df_dis['dis']=dis['median'].values
-                df_dis['ensemble']=ens
-                df_dis[f'dis_{ensamble}']= df_dis['dis']                
-                df_dis['pcode']=df_dis['placeCode']
-                df_dis['leadTime']=leadTimelabel
+                df_dis['dis'] = dis['max'].values
+                df_dis['ensemble'] = ens
+                df_dis[f'dis_{ensamble}'] = df_dis['dis']                
+                df_dis['pcode'] = df_dis['placeCode']
+                df_dis['leadTime'] = leadTimelabel
                 df_leadtime_ens.append(df_dis.filter(['pcode','placeCode','placeCodeParent','ensemble','leadTime','dis','rl2','rl5','rl20'])) 
             glofasDffinal = pd.concat(df_leadtime_ens) 
 
             FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
-            logger.info(f'saved csv files for ensamble {ens}')
+            logger.info(f'saved csv files for ensemble {ens}')
 
             glofasDffinal.to_csv(FilenameCsv) 
-        logger.info(f'saved csv files for all ensambles')
+        logger.info(f'saved csv files for all ensembles')
+        
+    def pointGlofasDataGridToCsv(self):
+        ''' 
+        extract point from Gridded glofas data
+        '''
+        from rasterstats import zonal_stats
+        import rasterio
+
+        #bf_gpd= self.gdf_admin #self.gdf_extr_admin #self.admin_area_gdf
+        selectedPcodeVal=self.selectedPcode
+        bf_gpd= self.gdf_extr_admin.query('placeCode in @selectedPcodeVal')
+        
+        # coords needed to extract by point for Uganda
+        coords = list()
+        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
+        df_stations = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
+        df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
+
+        stations = (df_district_mapping.query('placeCode == @extractAdminCode')['glofasStation'].values[0] for extractAdminCode in selectedPcodeVal)
+        matchTable = pd.DataFrame({'station':stations, 'pcode':selectedPcodeVal})
+        mergeDf = pd.merge(matchTable, df_stations, left_on = ['station'], right_on = ['stationCode'])
+        mergeDf['coords'] = [tuple(x.get('coordinates')) for x in mergeDf['geom']]
+        bigTable = pd.merge(mergeDf,bf_gpd, left_on = ['pcode'], right_on = ['placeCode'])
+        
+        for ens in range (0, self.nofEns):
+            ensemble ="{:02d}".format(ens)       
+            Filename = self.inputPathGrid + f'glofas_{ens}.nc'       
+            df_leadtime_ens=[]
+            for i in range(0,7):
+                leadTimelabel = str(i+1)+'_day'  
+                with rasterio.open(Filename) as src:  
+                    # extract by point for uganda
+                    value = [x[0] for x in src.sample(bigTable['coords'], indexes = i + 1)]
+
+                # Perform zonal statistics
+                df_dis = bigTable
+                
+                df_dis['dis'] = value #point extracted value
+                    #logger.info("point extracted")
+                df_dis['ensemble'] = ens
+                df_dis[f'dis_{ensemble}'] = df_dis['dis']                
+                df_dis['pcode'] = df_dis['placeCode']
+                df_dis['leadTime'] = leadTimelabel
+                df_leadtime_ens.append(df_dis.filter(['pcode','station','placeCode','placeCodeParent','ensemble','leadTime','dis','rl2','rl5','rl20'])) 
+            glofasDffinal = pd.concat(df_leadtime_ens) 
+
+            FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
+            logger.info(f'saved csv files for ensemble {ens}')
+
+            glofasDffinal.to_csv(FilenameCsv) 
+        logger.info(f'saved csv files for all ensembles')
 
     def getGlofasData(self):
         filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
@@ -322,7 +377,7 @@ class GlofasData:
             '7-day': False,
             }    
            
-        #glofasDffinal.to_csv(f'glofas_{ensamble}.csv') 
+        #glofasDffinal.to_csv(f'glofas_{ensemble}.csv') 
 
         csv_files = [f'{self.inputPathGrid}glofas_{f}.csv' for f in range (0,self.nofEns) ]
 
@@ -875,14 +930,14 @@ class GlofasData:
   
         bf_gpd['pcode']=bf_gpd['placeCode'].apply(lambda x:int(x[len(self.countryCodeISO3):]))
         bbox_bfs=list(bf_gpd.total_bounds)
-        logger.info(f'start downloading glofas data for ensamble')
+        logger.info(f'start downloading glofas data for ensemble')
 
         for ens in range (0,51):
-            ensamble="{:02d}".format(ens)
-            #logger.info(f'start downloading data for ensamble {ens}')
+            ensemble="{:02d}".format(ens)
+            #logger.info(f'start downloading data for ensemble {ens}')
 
 
-            url = f'ftp://{GLOFAS_USER}:{GLOFAS_PW}@{GLOFAS_FTP}/fc_netcdf/{self.current_date}/dis_{ensamble}_{self.current_date}00.nc'             
+            url = f'ftp://{GLOFAS_USER}:{GLOFAS_PW}@{GLOFAS_FTP}/fc_netcdf/{self.current_date}/dis_{ensemble}_{self.current_date}00.nc'             
             chunk_size=8192
 
             Filename = self.inputPathGrid + 'glofas.nc'
@@ -906,7 +961,7 @@ class GlofasData:
                         #print(f"Downloaded {bytes_downloaded} bytes")
             if out_file:
                 out_file.close()
-            #logger.info(f'finished downloading data for ensamble {ens}')
+            #logger.info(f'finished downloading data for ensemble {ens}')
             nc_file = xr.open_dataset(Filename)  
             var_data =nc_file.sel(lat=slice(bbox_bfs[3], bbox_bfs[1]),lon=slice(bbox_bfs[0], bbox_bfs[2]))           
             df_leadtime_ens=[]
@@ -928,7 +983,7 @@ class GlofasData:
                 zonal_stats_df = (out_grid.groupby(out_grid['pcode']).max().to_dataframe().reset_index())
                 zonal_stats_df['pcode']=zonal_stats_df['pcode'].apply(lambda x:self.placeCodeInitial + str(int(x)).zfill(self.placecodeLen))
                 zonal_stats_df['ensemble']=ens
-                zonal_stats_df[f'dis_{ensamble}']= zonal_stats_df['dis']
+                zonal_stats_df[f'dis_{ensemble}']= zonal_stats_df['dis']
                 
                 zonal_stats_df['leadTime']=leadTimelabel
                 df_leadtime_ens.append(zonal_stats_df.filter(['pcode','ensemble','leadTime','dis','rl2','rl5','rl20']))
@@ -936,7 +991,7 @@ class GlofasData:
             glofasDffinal = pd.concat(df_leadtime_ens) 
 
             FilenameCsv = self.inputPathGrid + f'glofas_{ens}.csv'
-            logger.info(f'saved csv files for ensamble {ens}')
+            logger.info(f'saved csv files for ensemble {ens}')
 
             glofasDffinal.to_csv(FilenameCsv) 
             #glofasDffinal.to_csv(f'/mnt/containermnt/glofas_{ens}.csv')  

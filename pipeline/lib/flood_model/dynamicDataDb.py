@@ -98,7 +98,7 @@ class DatabaseManager:
                         body['disasterType'] = self.getDisasterType()
                         body['date']=self.uploadTime
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +'for admin level: ' + str(adminlevels))
+                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +' for admin level: ' + str(adminlevels))
                     indicator2 = 'alert_threshold'
                     with open(self.affectedFolder +
                                 'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator2 + '.json') as json_file:
@@ -107,7 +107,7 @@ class DatabaseManager:
                         body['date']=self.uploadTime
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
                         
-                    logger.info(f'Uploaded calculated_affected for indicator: {indicator2}' +'for admin level: ' + str(adminlevels))
+                    logger.info(f'Uploaded calculated_affected for indicator: {indicator2}' +' for admin level: ' + str(adminlevels))
                 else:
                     with open(self.affectedFolder +'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '_admin_' + str(adminlevels) + '_' + indicator + '.json') as json_file:
                         body = json.load(json_file)
@@ -115,7 +115,7 @@ class DatabaseManager:
                         body['date']=self.uploadTime
                         #body['adminLevel'] = self.admin_level
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
-                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +'for admin level: ' + str(adminlevels))                                    
+                    logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +' for admin level: ' + str(adminlevels))                                    
                     
 
 
@@ -169,7 +169,7 @@ class DatabaseManager:
 
         stationForecasts = []
         for key in triggers:
-
+            
             if key['eapAlertClass']:
                 alertclass=key['eapAlertClass']
             else:
