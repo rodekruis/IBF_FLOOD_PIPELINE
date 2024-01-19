@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from pathlib import Path
 import ast
 
-from flood_model.secrets import *
+#from flood_model.secrets import *
 
 
 ##################
@@ -12,31 +12,44 @@ from flood_model.secrets import *
 ##################
  
 # 1. Try to load secrets from a local env-variables 
-
- 
+fail = True
 try:
-    COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
-    ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
-    IBF_PASSWORD=os.getenv("IBF_PASSWORD")
-    IBF_URL =os.getenv("IBF_URL")    
-
+     from flood_model.secrets import *
 except:
-     print('No environment variables found localy.')
+     print('no secrets file')
+else:
+     fail = False
+
+if fail:
+    try:
+        COUNTRY_CODES = ast.literal_eval(os.getenv("COUNTRY_CODES_LIST"))
+        ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
+        IBF_PASSWORD=os.getenv("IBF_PASSWORD")
+        IBF_URL =os.getenv("IBF_URL")
+        GLOFAS_USER=os.getenv("GLOFAS_USER")
+        GLOFAS_PW=os.getenv("GLOFAS_PW")
+        GLOFAS_FTP='aux.ecmwf.int'  
+
+    except:
+        print('No environment variables found localy.')
+        COUNTRY_CODES = ["SSD","UGA","ETH","KEN","ZMB"]
+    else:
+         fail = False
  
 
 
 # 2. Try to load secrets from env-variables (i.e. when using Github Actions)
- 
-try:
-    COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
-    ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
-    IBF_PASSWORD=os.environ["IBF_PASSWORD"]
-    IBF_URL=os.environ["IBF_URL"]   
-   
+if fail:
+    try:
+        COUNTRY_CODES = ast.literal_eval(os.environ["COUNTRY_CODES"])
+        ADMIN_LOGIN = os.environ["ADMIN_LOGIN"]
+        IBF_PASSWORD=os.environ["IBF_PASSWORD"]
+        IBF_URL=os.environ["IBF_URL"]   
+    
 
-except:
-     print('No environment variables found.')
-     COUNTRY_CODES = ["SSD","UGA","ETH","KEN","ZMB"]
+    except:
+        print('No environment variables found.')
+     
 # 3. Try to load secrets from Azure key vault (i.e. when running through Logic App) if user has access
 
 '''

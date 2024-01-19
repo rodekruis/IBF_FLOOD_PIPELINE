@@ -37,6 +37,7 @@ def main():
     startTime = time.time() 
     logger.info(str(datetime.datetime.now()))
     ## download data from Datalack  
+    logger.info(IBF_URL)
 
     
     if len(COUNTRY_CODES)==1:

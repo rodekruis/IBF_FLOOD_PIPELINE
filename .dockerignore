@@ -30,6 +30,7 @@ npm-debug.log*
 
 # Secrets
 secrets_
+pipeline/lib/flood_model/secrets.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
@@ -37,5 +38,5 @@ __pycache__/
 *$py.class
 
 #pipeline/data
-#pipeline/data/other
+#pipeline/data/other/glofasgrid
 #pipeline/data/raster
