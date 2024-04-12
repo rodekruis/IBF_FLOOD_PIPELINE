@@ -16,6 +16,9 @@ import geopandas
 import time
 import logging
 logger = logging.getLogger(__name__)
+os.environ['GDAL_DATA'] = '/usr/local/lib/python3.8/dist-packages/fiona/gdal_data/gcs.csv'
+
+
 class Exposure:
 
     """Class used to calculate the exposure per exposure type"""
@@ -40,22 +43,19 @@ class Exposure:
         return_period_='25'
         self.floodExt_raster = RASTER_INPUT +'flood_extent/'+ self.countryCodeISO3 + '_flood_' +return_period_+'year.tif'
             
-            
         #self.image_name= PIPELINE_OUTPUT + 'Map_of_affeced_areas_'+ leadTimeLabel + '_' + countryCodeISO3 + '.png'
-        
         self.image_name = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png' 
-             
         self.popAffeced = RASTER_OUTPUT + "0/" +\
             SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']['population']['source'] + \
                 '_' + self.leadTimeLabel + ".tif"
-                
-
         #self.ADMIN_AREA_GDF_TMP_PATH = os.path.join(PIPELINE_OUTPUT,"admin-areas_TMP.geojson")  #s.geojson', driver='GeoJSON')
         self.ADMIN_AREA_GDF_TMP_PATH = PIPELINE_OUTPUT+"admin-areas_TMP.shp"   
         self.EXPOSURE_DATA_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_SOURCES']
         if self.countryCodeISO3 == 'MWI':
             self.EXPOSURE_DATA_UBR_SOURCES = SETTINGS[countryCodeISO3]['EXPOSURE_DATA_UBR_SOURCES']
-        
+        self.triggersPerStationPath = PIPELINE_OUTPUT + \
+            'triggers_rp_per_station/triggers_rp_' + \
+            self.leadTimeLabel + '_' + countryCodeISO3 + '.json'
         self.levels = SETTINGS[countryCodeISO3]['levels']
         self.pcode_df=pcodes 
         self.db = DatabaseManager(leadTimeLabel, countryCodeISO3,admin_level)
@@ -63,6 +63,21 @@ class Exposure:
             self.population_total = population_total
               
                    
+    def classifyAlertThreshold(self, triggersPerStation):
+        '''
+        Function to determine alert threshold value
+        '''
+        if any(d['eapAlertClass'] == 'max' for d in triggersPerStation):
+            alert_threshold = 1
+        elif any(d['eapAlertClass'] == 'med' for d in triggersPerStation):
+            alert_threshold = 0.7
+        elif any(d['eapAlertClass'] == 'min' for d in triggersPerStation):
+            alert_threshold = 0.3
+        elif any(d['eapAlertClass'] == 'no' for d in triggersPerStation):
+            alert_threshold = 0
+        return alert_threshold
+
+
     def callAllExposure(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
             logger.info(f'indicator: {indicator}')
@@ -73,7 +88,6 @@ class Exposure:
             stats = self.calcAffected(self.disasterExtentRaster, indicator, values['rasterValue'])
             df_stats=pd.DataFrame(stats) 
             df_stats = pd.merge(self.pcode_df,df_stats,  how='left',left_on=f"placeCode_{self.admin_level}" , right_on ='placeCode')
- 
   
             #stats_dff = pd.merge(df,self.pcode_df,  how='left',left_on='placeCode', right_on = f'placeCode_{self.admin_level}')
             for adm_level in SETTINGS[self.countryCodeISO3]['levels']:
@@ -85,7 +99,6 @@ class Exposure:
                     df_stats_levl.reset_index(inplace=True)
                     df_stats_levl['placeCode']=df_stats_levl[f'placeCode_{adm_level}']
                     df_stats_levl=df_stats_levl[['amount','placeCode']].to_dict(orient='records')
-
  
                 self.statsPath = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
                     self.leadTimeLabel + '_' + self.countryCodeISO3 +'_admin_' +str(adm_level) + '_' + indicator + '.json'
@@ -132,7 +145,7 @@ class Exposure:
                     with open(population_affected_percentage_file_path, 'w') as fp:
                         json.dump(population_affected_percentage_records, fp)
 
-                    # define alert_threshold layer
+                # define alert_threshold layer
                 alert_threshold = list(map(self.get_alert_threshold, df_stats_levl))
 
                 alert_threshold_file_path = PIPELINE_OUTPUT + 'calculated_affected/affected_' + \
@@ -200,7 +213,11 @@ class Exposure:
         # population_total = next((x for x in self.population_total if x['placeCode'] == population_affected['placeCode']), None)
         alert_threshold = 0
         if (population_affected['amount'] > 0):
-            alert_threshold = 1
+            # alert_threshold = 1
+            with open(self.triggersPerStationPath) as fp:
+                triggersPerStation = json.load(fp)
+                print('triggersPerStation: ', triggersPerStation)
+            alert_threshold = self.classifyAlertThreshold(triggersPerStation)
         else:
             alert_threshold = 0
         return {

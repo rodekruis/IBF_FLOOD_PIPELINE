@@ -143,8 +143,8 @@ SETTINGS = {
         'lead_times': {
             "7-day": 7
         },
-        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
-        'eapAlertClass':{"no": 0.6,"min": 0.7,"med": 0.8,"max": 0.801},
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8}, # VALUES ARE PROBABILITY (E.G. 60%, 70%)
+        'eapAlertClass':{"no": 0.6,"min": 0.7,"med": 0.8,"max": 0.801}, # VALUES ARE PROBABILITY (E.G. 60%, 70%)
         'admin_level': 3,
         'admin_level_glofas_extr': 3,
         'levels':[3,2,1],
@@ -172,9 +172,14 @@ SETTINGS = {
         "placecodeLen":6, #LENGTH OF CHARS IN ADMIN3 PLACECODE -LENGTH OF CHARS IN COUNTRYCODEiso
         'lead_times': {
             "5-day": 5
-        },
-        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8},
-        'eapAlertClass':{"no": 0.6,"max": 0.601},
+            },
+        'TRIGGER_LEVELS':{"minimum": 1.5,"medium": 2,"maximum": 5}, # multiple thresholds 
+        'eapAlertClass': { # ONLY FOR UGANDA VALUES ARE RETURN PERIODS (E.G. 1.5-YEAR RP, 2-YEAR RP)
+            "no": 1.49, 
+            "min": 1.5, 
+            "med": 2, 
+            "max": 5
+            }, 
         'admin_level': 4,
         'admin_level_glofas_extr': 4,
         'levels':[4,3,2,1],

@@ -60,6 +60,7 @@ class DatabaseManager:
         disasterType = 'floods'
         return disasterType
     
+
     def uploadCalculatedAffected2(self):
         for indicator, values in self.EXPOSURE_DATA_SOURCES.items():
             adminlevels=self.admin_level
@@ -78,6 +79,7 @@ class DatabaseManager:
                     #body['adminLevel'] = self.admin_level
                     self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
                 logger.info('Uploaded calculated_affected for indicator: ' + 'population_affected_percentage for admin level: ' + str(adminlevels))
+
 
     def uploadCalculatedAffected(self):
         for adminlevels in SETTINGS[self.countryCodeISO3]['levels']:#range(1,self.admin_level+1):            
@@ -117,9 +119,7 @@ class DatabaseManager:
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
                     logger.info(f'Uploaded calculated_affected for indicator: {indicator}' +' for admin level: ' + str(adminlevels))                                    
                     
-
-
-            if self.countryCodeISO3 == 'MWII':
+            if self.countryCodeISO3 == 'MWI':
                 for indicator, values in self.EXPOSURE_DATA_UBR_SOURCES.items():
                     affectedIndicatorPath = self.affectedFolder + \
                             'affected_' + self.leadTimeLabel + '_' + self.countryCodeISO3  + '_admin_' + str(adminlevels) + '_' + indicator + '.json'
@@ -130,6 +130,7 @@ class DatabaseManager:
                         self.apiPostRequest('admin-area-dynamic-data/exposure', body=body)
                         logger.info('Uploaded calculated_affected for indicator: ' + f'{indicator} for admin level: ' + str(adminlevels))
 
+
     def uploadRasterFile(self):
         disasterType = self.getDisasterType()
         rasterFile = RASTER_OUTPUT + '0/flood_extents/flood_extent_' + self.leadTimeLabel + '_' + self.countryCodeISO3 + '.tif'
@@ -137,10 +138,10 @@ class DatabaseManager:
         self.apiPostRequest('admin-area-dynamic-data/raster/' + disasterType, files=files)
         logger.info(f'Uploaded raster-file: {rasterFile}')
 
+
     def uploadImage(self,eventName='no-name'):
         disasterType = self.getDisasterType()
        
-        
         imageFile = PIPELINE_OUTPUT + self.countryCodeISO3 + '_' +self.leadTimeLabel +'_floods-map-image.png'     
         
         files = {
@@ -169,7 +170,7 @@ class DatabaseManager:
 
         stationForecasts = []
         for key in triggers:
-            
+            # if key['stationCode'] != 'G5227': 
             if key['eapAlertClass']:
                 alertclass=key['eapAlertClass']
             else:
@@ -181,8 +182,9 @@ class DatabaseManager:
                 "eapAlertClass": alertclass, #key['eapAlertClass'],
                 "forecastReturnPeriod": key['fc_rp'],
                 "triggerLevel": int(key['triggerLevel'])
-
             })
+            # else:
+            #     pass
             
         body = {
             "countryCodeISO3": self.countryCodeISO3,
@@ -208,9 +210,9 @@ class DatabaseManager:
             'stationForecasts': stationForecasts
         }
         #body['disasterType'] = self.getDisasterType()
-        print(body)
         self.apiPostRequest('glofas-stations/triggers', body=body)
         logger.info('Uploaded triggers per station')
+
 
     def uploadTriggersPerLeadTime(self):
         with open(self.triggerFolder +
@@ -220,16 +222,16 @@ class DatabaseManager:
             for key in triggers:
                 triggersPerLeadTime.append({
                     'leadTime': str(key),
-                    'triggered': triggers[key]
+                    'triggered': triggers[key]['triggered'],
+                    "thresholdReached": triggers[key]['thresholdReached']
                 })
-            body = {
-                'countryCodeISO3': self.countryCodeISO3,
-                'disasterType': self.getDisasterType(),
-                'triggersPerLeadTime': triggersPerLeadTime
-            }
-            #body['disasterType'] = self.getDisasterType()
-            body['date']=self.uploadTime
-            self.apiPostRequest('event/triggers-per-leadtime', body=body)
+        body = {
+            'countryCodeISO3': self.countryCodeISO3,
+            'disasterType': self.getDisasterType(),
+            'triggersPerLeadTime': triggersPerLeadTime
+        }
+        body['date']=self.uploadTime
+        self.apiPostRequest('event/triggers-per-leadtime', body=body)
         logger.info('Uploaded triggers per leadTime')
 
     def apiGetRequest(self, path, countryCodeISO3):
