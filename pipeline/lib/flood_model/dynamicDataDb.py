@@ -168,50 +168,42 @@ class DatabaseManager:
         with open(filename) as json_file:
             triggers = json.load(json_file) 
 
-        stationForecasts = []
+        stationForecasts = {
+            "forecastLevel": [],
+            "eapAlertClass": [],
+            "forecastReturnPeriod": [],
+            "triggerLevel": []
+        }
+
         for key in triggers:
-            # if key['stationCode'] != 'G5227': 
-            if key['eapAlertClass']:
-                alertclass=key['eapAlertClass']
-            else:
-                alertclass='no'
-
-            stationForecasts.append({
-                "stationCode": key['stationCode'],
-                "forecastLevel": int(key['fc']),
-                "eapAlertClass": alertclass, #key['eapAlertClass'],
-                "forecastReturnPeriod": key['fc_rp'],
-                "triggerLevel": int(key['triggerLevel'])
+            stationForecasts["forecastLevel"].append({
+                "fid": key['stationCode'],
+                "value": int(key['fc'])
             })
-            # else:
-            #     pass
-            
-        body = {
-            "countryCodeISO3": self.countryCodeISO3,
-            "leadTime": self.leadTimeLabel,
-            "date": self.uploadTime,
-            "stationForecasts": stationForecasts
-        }
+            stationForecasts["eapAlertClass"].append({
+                "fid": key['stationCode'],
+                "value": 'no' if not key['eapAlertClass'] else key['eapAlertClass']
+            })
+            stationForecasts["forecastReturnPeriod"].append({
+                "fid": key['stationCode'],
+                "value": key['fc_rp']
+            })
+            stationForecasts["triggerLevel"].append({
+                "fid": key['stationCode'],
+                "value": 0 if not key['triggerLevel'] else int(key['triggerLevel'])
+            })
 
-        dfStation = pd.DataFrame(index=df.index)
-        dfStation['stationCode'] = df['stationCode']
-        dfStation['forecastLevel'] = df['fc'].astype(np.float64,errors='ignore')
-        #dfStation['forecastProbability'] = df['fc_prob'].astype(np.float64,errors='ignore')
-        #dfStation['forecastTrigger'] = df['fc_trigger'].astype(np.int32,errors='ignore')
-        dfStation['eapAlertClass'] = df['eapAlertClass']
-        dfStation['forecastReturnPeriod'] = df['fc_rp'].astype(np.int32,errors='ignore')
-        dfStation['triggerLevel'] = df['triggerLevel'].astype(np.int32,errors='ignore')
-        stationForecasts = json.loads(dfStation.to_json(orient='records'))
-
-        body2 = {
-            'countryCodeISO3': self.countryCodeISO3,
-            'leadTime': self.leadTimeLabel,
-            'date': self.uploadTime,
-            'stationForecasts': stationForecasts
-        }
-        #body['disasterType'] = self.getDisasterType()
-        self.apiPostRequest('glofas-stations/triggers', body=body)
-        logger.info('Uploaded triggers per station')
+        for key in ["forecastLevel", "eapAlertClass", "forecastReturnPeriod", "triggerLevel"]:
+            body = {
+                "leadTime": self.leadTimeLabel,
+                "date": self.uploadTime,
+                "disasterType": self.getDisasterType(),
+                "pointDataCategory": "glofas_stations",
+                "key": key,
+                "dynamicPointData": stationForecasts[key]
+                }
+            self.apiPostRequest('point-data/dynamic', body=body)
+            logger.info(f'Uploaded triggers per station, key: {key}')
 
 
     def uploadTriggersPerLeadTime(self):
