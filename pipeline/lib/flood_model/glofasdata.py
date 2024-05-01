@@ -91,12 +91,8 @@ class GlofasData:
 
     def process(self):
         if SETTINGS[self.countryCodeISO3]['mock'] == True:
-            if self.countryCodeISO3 in ['UGA']:
-                self.extractMockDataMultiThreshold()
-                self.findMultipleTrigger() 
-            else:
-                self.extractMockData()
-                self.findTrigger()
+            self.extractMockData()
+            self.findTrigger()
         else:
             #self.removeOldGlofasData()
             self.download()
@@ -104,9 +100,7 @@ class GlofasData:
                 self.pointGlofasDataGridToCsv()
                 #self.extractGlofasDataGridToCsv_old()
                 self.extractGlofasDataGrid()
-                # self.extractGlofasDataGridMultiThresholds() 
                 self.findTrigger()
-                # self.findMultipleTrigger() 
             elif self.countryCodeISO3 in ['SSD','ETH','KEN',"ZMB"]:#=='SSD':
                 self.zonalStatGlofasDataGridToCsv()
                 #self.extractGlofasDataGridToCsv_old()
@@ -488,108 +482,6 @@ class GlofasData:
             logger.info('Extracted Glofas data - Trigger per day File saved_')       
 
     
-    def extractGlofasDataGridMultiThresholds(self):
-        trigger_per_day = {
-            "1-day": {"triggered": False, "thresholdReached": False}, 
-            "2-day": {"triggered": False, "thresholdReached": False}, 
-            "3-day": {"triggered": False, "thresholdReached": False}, 
-            "4-day": {"triggered": False, "thresholdReached": False}, 
-            "5-day": {"triggered": False, "thresholdReached": False}, 
-            "6-day": {"triggered": False, "thresholdReached": False}, 
-            "7-day": {"triggered": False, "thresholdReached": False}}
-           
-        #glofasDffinal.to_csv(f'glofas_{ensemble}.csv') 
-
-        csv_files = [f'{self.inputPathGrid}glofas_{f}.csv' for f in range (0,self.nofEns) ]
-
-        # Create an empty list to hold dataframes
-        dfs = []
-
-        # Read each CSV file into a dataframe and append to the list
-        for csv_file in csv_files:
-            df = pd.read_csv(csv_file)
-            dfs.append(df)
-
-        # Concatenate all dataframes in the list into a single dataframe
-        glofasDffinal = pd.concat(dfs, ignore_index=True)
-
-        #glofasDffinal= pd.read_csv(self.glofasAdmnPerDay) 
-        selectedPcodeVal=self.selectedPcode
-        #glofasDffinal= glofasDffinal.query('pcode in @selectedPcode')
-        
-        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
-        df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
- 
-        df_thresholds = df_thresholds.set_index("stationCode", drop=False)
-        df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
-        
-        stations=[]               
-        for extractAdminCode in selectedPcodeVal:
-            station = {}
-            #logger.info(extractAdminCode)
-            station['code'] = df_district_mapping.query('placeCode == @extractAdminCode')['glofasStation'].values[0]            
-            if station['code'] in df_thresholds['stationCode']:#and station['code'] in df_district_mapping['glofasStation']:
-                #logger.info(station['code'])
-                
-                threshold = df_thresholds[df_thresholds['stationCode'] == station['code']][TRIGGER_LEVEL][0]
-                leadtimes = []
-                first_leadtime = None
-                for step in range(1, 8):
-                    leadtime = {}
-                    # Loop through 51 ensembles, get forecast and compare to threshold
-                    ensemble_options = self.nofEns
-                    count = 0
-                    dis_sum = 0
-                    leadTimelabel=str(step)+'_day'   
-                    
-                    for ensemble in range(0, ensemble_options):
-                        discharge = glofasDffinal.query('pcode in @extractAdminCode').query('ensemble ==@ensemble').query('leadTime ==@leadTimelabel')['dis'].values[0]
-                        #logger.info(discharge)
-    
-                        if discharge >= threshold:
-                            count = count + 1
-                        dis_sum = dis_sum + discharge                  
-
-                    prob = int(count/ensemble_options)
-                    dis_avg = dis_sum/ensemble_options
-                    
-                    leadtime['lead_time'] = leadTimelabel
-                    leadtime['fc'] = dis_avg
-                    leadtime['fc_prob'] = prob 
-                    leadtime['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
-                    leadtime['eapAlertClass'] = 'no' # assign temp value
-                    if not first_leadtime and leadtime['fc_trigger'] == 1:
-                        first_leadtime = True
-                        trigger_per_day[leadTimelabel]["triggered"] = True
-                    leadtime['first_leadtime'] = False if not first_leadtime else first_leadtime
-                    print('leadtime: ', leadtime)
-
-                    leadtimes.append(leadtime)
-                    print('leadtimes: ', leadtimes)
-                station["forecast"] = leadtimes
-                stations.append(station)
-                print('stations: ', stations)
-                    
-        # Add 'no_station'
-        for station_code in ['no_station']:
-            station = {}
-            station['code'] = station_code
-            station['fc'] = 0
-            station['fc_prob'] = 0
-            station['fc_trigger'] = 0
-            station['eapAlertClass'] = 'no'
-            stations.append(station)
-        print('stations: ', stations)
-
-        with open(self.extractedGlofasPath, 'w') as fp:
-            json.dump(stations, fp)
-            logger.info('Extracted Glofas data - File saved_')
-
-        with open(self.triggerPerDay, 'w') as fp:
-            json.dump([trigger_per_day], fp)
-            logger.info('Extracted Glofas data - Trigger per day File saved_')       
-
-
     def extractGlofasData(self):
         
         logger.info('\nExtracting Glofas (FTP) Data\n')
@@ -868,10 +760,8 @@ class GlofasData:
                         if SETTINGS[self.countryCodeISO3]['if_mock_trigger'] == True:
                             if step < 3: # Only dummy trigger for 3-day and above
                                 discharge = 0
-                            elif station['code'] == 'G5160':  # UGA dummy flood station 1
+                            elif station['code'] == 'G5220':  # UGA dummy flood station 1
                                 discharge = 600
-                            elif station['code'] == 'G5230':  # UGA dummy flood station 1
-                                discharge = 200
                             elif station['code'] == 'G1067':  # ETH dummy flood station 1
                                 discharge = 5000
                             elif station['code'] == 'G1904':  # ETH dummy flood station 2
@@ -935,138 +825,6 @@ class GlofasData:
             station['fc_prob'] = 0
             station['fc_trigger'] = 0
             station['eapAlertClass'] = 'no'
-            stations.append(station)
-
-        with open(self.extractedGlofasPath, 'w') as fp:
-            json.dump(stations, fp)
-            logger.info('Extracted Glofas data - File saved')
-
-        with open(self.triggerPerDay, 'w') as fp:
-            json.dump([trigger_per_day], fp)
-            logger.info('Extracted Glofas data - Trigger per day File saved')
-
-
-    def extractMockDataMultiThreshold(self):
-        logger.info('\nExtracting Glofas (mock multi thresholds) Data\n')
-
-        # Load input data
-        df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
-        df_thresholds = df_thresholds.set_index("stationCode", drop=False)
-        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
-        df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
-
-        # Set up variables to fill
-        stations = []
-        trigger_per_day = {
-            "1-day": {"triggered": False, "thresholdReached": False}, 
-            "2-day": {"triggered": False, "thresholdReached": False}, 
-            "3-day": {"triggered": False, "thresholdReached": False}, 
-            "4-day": {"triggered": False, "thresholdReached": False}, 
-            "5-day": {"triggered": False, "thresholdReached": False}, 
-            "6-day": {"triggered": False, "thresholdReached": False}, 
-            "7-day": {"triggered": False, "thresholdReached": False}}
-        
-        for index, row in df_thresholds.iterrows():
-            station = {}
-            station['code'] = row['stationCode']
-
-            if station['code'] in df_district_mapping['glofasStation'] and station['code'] != 'no_station':
-                logger.info(station['code'])
-                threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
-                leadtimes = []
-                first_leadtime = False
-                for step in range(1, 8):
-                    leadtime = {}
-                    # Loop through 51 ensembles, get forecast and compare to threshold
-                    ensemble_options = 51
-                    count = 0
-                    dis_sum = 0
-                    leadTimelabel=str(step)+'_day'   
-
-                    for ensemble in range(0, ensemble_options):
-                        # MOCK OVERWRITE DEPENDING ON COUNTRY SETTING
-                        if SETTINGS[self.countryCodeISO3]['if_mock_trigger'] == True:
-                            if step < 3: # Only dummy trigger for 3-day and above
-                                discharge = 0
-                            elif station['code'] == 'G5160':  # UGA dummy flood station 1
-                                discharge = 600
-                            elif station['code'] == 'G5230':  # UGA dummy flood station 1
-                                discharge = 200
-                            elif station['code'] == 'G1067':  # ETH dummy flood station 1
-                                discharge = 5000
-                            elif station['code'] == 'G1904':  # ETH dummy flood station 2
-                                discharge = 5500
-                            elif station['code'] == 'G5305':  # KEN dummy flood station
-                                discharge = 3000
-                            elif station['code'] == 'G5195':  # KEN dummy flood station 'G7195'
-                                discharge = 500
-                            elif station['code'] == 'G1361':  # ZMB dummy flood station 1
-                                discharge = 8000
-                            elif station['code'] == 'G1328':  # ZMB dummy flood station 2
-                                discharge = 9000
-                            elif station['code'] == 'G1319':  # ZMB dummy flood station 3
-                                discharge = 1400
-                            elif station['code'] == 'G5369':  # PHL dummy flood station 1 G1964 G1966 G1967
-                                discharge = 7000
-                            elif station['code'] == 'G4630':  # PHL dummy flood station 2
-                                discharge = 19000
-                            elif station['code'] == 'G196700':  # PHL dummy flood station 3
-                                discharge = 11400
-                            elif station['code'] == 'G5100':  # SS dummy flood station 3
-                                discharge = 41400    
-                            elif station['code'] == 'G1724':  # MWI dummy flood station 1
-                                discharge = 10000
-                            elif station['code'] == 'G2001':  # MWI dummy flood station 2
-                                discharge = 11000
-                            elif station['code'] == 'G5670':  # MWI dummy flood station 3
-                                discharge = 5000
-                            elif station['code'] == 'G5694':  # MWI dummy flood station 4
-                                discharge = 46000
-                            else:
-                                discharge = 0
-                        else:
-                            discharge = 0
-
-                        if discharge >= threshold:
-                            count = count + 1
-                        dis_sum = dis_sum + discharge
-
-                    prob = int(count/ensemble_options)
-                    dis_avg = dis_sum/ensemble_options
-
-                    leadtime['lead_time'] = leadTimelabel.replace("_", "-")
-                    leadtime['fc'] = dis_avg
-                    leadtime['fc_prob'] = prob
-                    leadtime['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
-                    leadtime['eapAlertClass'] = 'no' # assign temp value
-                    leadtime['first_leadtime'] = False
-
-                    if leadtime['fc_trigger'] == 1:
-                        trigger_per_day[str(step)+'-day']["triggered"] = True
-                        if not first_leadtime:
-                            leadtime['first_leadtime'] = True
-                            first_leadtime = True
-
-                    leadtimes.append(leadtime)
-                station["forecast"] = leadtimes
-                stations.append(station)
-
-        # Add 'no_station'
-        for station_code in ['no_station']:
-            station = {}
-            station['code'] = station_code
-            leadtimes = []
-            for step in range(1,8):
-                leadtime = {
-                    'lead_time': str(step)+'-day' ,
-                    'fc': 0,
-                    'fc_prob': 0,
-                    'fc_trigger': 0,
-                    'eapAlertClass': 'no',
-                    'first_leadtime': False
-                }
-                leadtimes.append(leadtime)
-            station['forecast'] = leadtimes
             stations.append(station)
 
         with open(self.extractedGlofasPath, 'w') as fp:
@@ -1143,92 +901,6 @@ class GlofasData:
         with open(self.triggersPerStationPath, 'w') as fp:
             fp.write(out)
             logger.info('Processed Glofas data - File saved')
-
-
-    def nestedDict2DataFrame(self, dict):
-        rows = []
-        for data in dict:
-            station = data['code']
-            data_row = data['forecast']
-            for row in data_row:
-                row['code'] = station
-                rows.append(row)
-        df = pd.DataFrame(rows)
-        return df
-
-
-    def findMultipleTrigger(self):
-        # Load (static) threshold values per station
-        df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
-        # df_thresholds = df_thresholds.set_index("stationCode", drop=False)
-        # df_thresholds.sort_index(inplace=True)
-        # Load extracted Glofas discharge levels per station
-        with open(self.extractedGlofasPath) as json_data:
-            d = json.load(json_data)
-        df_discharge_all = self.nestedDict2DataFrame(d)
-
-        # Merge two datasets
-        df_merged = pd.merge(df_thresholds, df_discharge_all,
-                             left_on='stationCode',
-                             right_on='code',
-                             how='outer')
-        del df_merged['lat']
-        del df_merged['lon']
-        del df_merged['geom']
-        stations = [dict['code'] for dict in d]
-
-        for station in stations:
-            for step in np.unique(df_merged['lead_time']):
-                index = (df_merged['code']==station) & (df_merged['lead_time']==step)
-                df_discharge = df_merged[index]
-                # df_discharge = df_discharge[df_discharge['lead_time']==step]
-
-                # Determine trigger + return period per water station
-                # for index, row in df.iterrows():
-                fc = float(df_discharge['fc'])
-                trigger = int(df_discharge['fc_trigger'])
-                prob = int(df_discharge['fc_prob'])
-                if trigger == 1:
-                    if (self.countryCodeISO3 == 'ZMB') or (self.countryCodeISO3 == 'MWI'):
-                        if fc >= df_discharge['threshold20Year'].values[0]:
-                            return_period_flood_extent = 20
-                        else:
-                            return_period_flood_extent = 10
-                    else:
-                        return_period_flood_extent = 25
-                else:
-                    return_period_flood_extent = None
-                
-                if fc >= df_discharge['threshold20Year'].values[0]:
-                    return_period = 20
-                elif fc >= df_discharge['threshold10Year'].values[0]:
-                    return_period = 10
-                elif fc >= df_discharge['threshold5Year'].values[0]:
-                    return_period = 5
-                elif fc >= df_discharge['threshold2Year'].values[0]:
-                    return_period = 2
-                else:
-                    return_period = None
-                
-                df_merged[index]['fc_rp_flood_extent'] = return_period_flood_extent
-                df_merged[index]['fc_rp'] = return_period
-                if self.countryCodeISO3 == 'UGA':
-                    eapAlertClass = self.classifyEapAlert(return_period)
-                else:
-                    eapAlertClass = self.checkTriggerProb(prob)
-                df_merged[index]['eapAlertClass'] = eapAlertClass
-                if (eapAlertClass == 'max') and (df_merged[index]['first_leadtime'].values[0]) and (df_merged[index]['lead_time'].values[0]==self.leadTimeLabel):
-                    with open(self.triggerPerDay, 'r+') as fp:
-                        trigger_per_day = json.load(fp)
-                        trigger_per_day = trigger_per_day[0]
-                        trigger_per_day[self.leadTimeLabel]["thresholdReached"] = True
-        print(df_merged.keys())
-        print("df_merged: ", df_merged)
-        out = df_merged.to_json(orient='records')
-
-        with open(self.triggersPerStationPath, 'w') as fp:
-            fp.write(out)
-            logger.info(f'Processed Glofas data at station {station} - File saved')
 
 
     def extractGlofasDataGridToCsv_old(self):
