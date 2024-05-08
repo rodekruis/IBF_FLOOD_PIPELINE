@@ -173,7 +173,7 @@ SETTINGS = {
         'lead_times': {
             "5-day": 5
             },
-        'TRIGGER_LEVELS':{"minimum": 1.5,"medium": 2,"maximum": 5}, # multiple thresholds 
+        'TRIGGER_LEVELS':{"minimum": 0.6,"medium": 0.7,"maximum": 0.8}, # multiple thresholds
         'eapAlertClass': { # ONLY FOR UGANDA VALUES ARE RETURN PERIODS (E.G. 1.5-YEAR RP, 2-YEAR RP)
             "no": 1.49, 
             "min": 1.5, 
