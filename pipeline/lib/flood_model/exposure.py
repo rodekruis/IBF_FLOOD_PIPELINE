@@ -216,7 +216,6 @@ class Exposure:
             # alert_threshold = 1
             with open(self.triggersPerStationPath) as fp:
                 triggersPerStation = json.load(fp)
-                print('triggersPerStation: ', triggersPerStation)
             alert_threshold = self.classifyAlertThreshold(triggersPerStation)
         else:
             alert_threshold = 0
