@@ -1,4 +1,4 @@
-import netCDF4
+# import netCDF4
 import xarray as xr
 import numpy as np
 import os
@@ -61,7 +61,6 @@ class GlofasData:
         
         self.glofasAdmnPerDay=PIPELINE_OUTPUT + 'glofas_extraction/glofas_Admin_extraction' + countryCodeISO3 + '.csv'
         
-        
         self.triggerPerDay = PIPELINE_OUTPUT + \
             'triggers_rp_per_station/trigger_per_day_' + countryCodeISO3 + '.json'
         self.extractedGlofasDir = PIPELINE_OUTPUT + 'glofas_extraction'
@@ -81,7 +80,6 @@ class GlofasData:
         self.current_date = CURRENT_DATE.strftime('%Y%m%d')
         self.placecodeLen= SETTINGS[countryCodeISO3]['placecodeLen'] 
         self.placeCodeInitial= SETTINGS[countryCodeISO3]['placeCodeInitial'] 
-
 
         self.nofEns = noOfGlofasEnsembles # 51 # this should be 51
         self.PIPELINE_INPUT_COD = PIPELINE_INPUT+'cod/'
@@ -142,6 +140,8 @@ class GlofasData:
         if downloadDone == False:
             raise ValueError('GLofas download failed for ' +
                             str(timeToTryDownload/3600) + ' hours, no new dataset was found')
+        
+
     def makeFtpRequest(self):
             filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
             ftp_path = 'ftp://'+GLOFAS_USER +':'+GLOFAS_PW + '@' + self.GLOFAS_FTP
@@ -286,6 +286,7 @@ class GlofasData:
             glofasDffinal.to_csv(FilenameCsv) 
         logger.info(f'saved csv files for all ensembles')
         
+
     def pointGlofasDataGridToCsv(self):
         ''' 
         extract point from Gridded glofas data
@@ -337,6 +338,7 @@ class GlofasData:
             glofasDffinal.to_csv(FilenameCsv) 
         logger.info(f'saved csv files for all ensembles')
 
+
     def getGlofasData(self):
         filename = self.GLOFAS_FILENAME + '_' + self.current_date + '00.tar.gz'
         path = 'glofas/' + filename
@@ -349,7 +351,11 @@ class GlofasData:
         tar.extractall(self.inputPath)
         tar.close()
         
+
     def checkTriggerProb(self,num):
+        ''' 
+        Classify EAP Alert based on flood forecast probability specified in settings.py
+        '''
         if self.countryCodeISO3 in ['ZMB']:
             if num <= self.eapAlertClass['no']:
                 return "no"
@@ -364,18 +370,34 @@ class GlofasData:
                 return "max"
             else:
                 return "no"
+    
+
+    def classifyEapAlert(self,num):
+        ''' 
+        Classify EAP Alert based on flood forecast return period specified in settings.py
+        Applicable only for Uganda
+        '''
+        if not num:
+            return "no"
+        elif num >= self.eapAlertClass['max']:
+            return "max"
+        elif num >= self.eapAlertClass['med']:
+            return "med"
+        elif num >= self.eapAlertClass['min']:
+            return "min"
+        else:
+            return "no"
             
       
     def extractGlofasDataGrid(self):
         trigger_per_day = {
-            '1-day': False,
-            '2-day': False,
-            '3-day': False,
-            '4-day': False,
-            '5-day': False,
-            '6-day': False,
-            '7-day': False,
-            }    
+            "1-day": {"triggered": False, "thresholdReached": False}, 
+            "2-day": {"triggered": False, "thresholdReached": False}, 
+            "3-day": {"triggered": False, "thresholdReached": False}, 
+            "4-day": {"triggered": False, "thresholdReached": False}, 
+            "5-day": {"triggered": False, "thresholdReached": False}, 
+            "6-day": {"triggered": False, "thresholdReached": False}, 
+            "7-day": {"triggered": False, "thresholdReached": False}}
            
         #glofasDffinal.to_csv(f'glofas_{ensemble}.csv') 
 
@@ -403,14 +425,14 @@ class GlofasData:
         df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
         
         stations=[]               
-        for exractAdminCode in selectedPcodeVal:
+        for extractAdminCode in selectedPcodeVal:
             station = {}
-            #logger.info(exractAdminCode)
-            station['code'] = df_district_mapping.query('placeCode == @exractAdminCode')['glofasStation'].values[0]            
+            #logger.info(extractAdminCode)
+            station['code'] = df_district_mapping.query('placeCode == @extractAdminCode')['glofasStation'].values[0]            
             if station['code'] in df_thresholds['stationCode']:#and station['code'] in df_district_mapping['glofasStation']:
                 #logger.info(station['code'])
                 
-                threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
+                threshold = df_thresholds[df_thresholds['stationCode'] == station['code']][TRIGGER_LEVEL][0]
             
                 for step in range(1, 8):
                     # Loop through 51 ensembles, get forecast and compare to threshold
@@ -420,7 +442,7 @@ class GlofasData:
                     leadTimelabel=str(step)+'_day'   
                     
                     for ensemble in range(0, ensemble_options):
-                        discharge = glofasDffinal.query('pcode in @exractAdminCode').query('ensemble ==@ensemble').query('leadTime ==@leadTimelabel')['dis'].values[0]
+                        discharge = glofasDffinal.query('pcode in @extractAdminCode').query('ensemble ==@ensemble').query('leadTime ==@leadTimelabel')['dis'].values[0]
                         #logger.info(discharge)
     
                         if discharge >= threshold:
@@ -433,10 +455,10 @@ class GlofasData:
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob 
                     station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
-                    station['eapAlertClass'] = self.checkTriggerProb(prob)
+                    station['eapAlertClass'] = 'no' # assign temp value
 
                     if station['fc_trigger'] == 1:
-                        trigger_per_day[str(step)+'-day'] = True
+                        trigger_per_day[leadTimelabel]["triggered"] = True
 
                     if step == self.leadTimeValue:
                         stations.append(station)
@@ -458,7 +480,7 @@ class GlofasData:
         with open(self.triggerPerDay, 'w') as fp:
             json.dump([trigger_per_day], fp)
             logger.info('Extracted Glofas data - Trigger per day File saved_')       
-  
+
     
     def extractGlofasData(self):
         
@@ -526,15 +548,12 @@ class GlofasData:
             
             if StCode in ['no_station']:#oldStations:
                 continue
-                
 
             station = {}
             station['code'] = StCode 
 
             # Get threshold for this specific station
             if station['code'] in df_district_mapping['glofasStation']:
-                
-              
                 threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
 
                 # Set dimension-values
@@ -544,8 +563,6 @@ class GlofasData:
 
                     # Loop through 51 ensembles, get forecast and compare to threshold
       
-                 
-
                     data = dffinal.query('stationCode==@StCode').query('LeadTime==@step')
                     if not data.empty:
                         #logger.info("Data frame not empty continue to process daily forecast ")
@@ -594,111 +611,6 @@ class GlofasData:
             logger.info('Extracted Glofas data - Trigger per day File saved')
 
 
-    def extractGlofasData_(self):
-        logger.info('\nExtracting Glofas (FTP) Data\n')
-
-        files = [f for f in listdir(self.inputPath) if isfile(
-            join(self.inputPath, f)) and f.endswith('.nc')]
-
-        df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
-        df_thresholds = df_thresholds.set_index("stationCode", drop=False)
-        df_district_mapping = pd.read_json(json.dumps(self.DISTRICT_MAPPING))
-        df_district_mapping = df_district_mapping.set_index("glofasStation", drop=False)
-        stations = []
-        trigger_per_day = {
-            '1-day': False,
-            '2-day': False,
-            '3-day': False,
-            '4-day': False,
-            '5-day': False,
-            '6-day': False,
-            '7-day': False,
-        }
-
-        for i in range(0, len(files)):
-            Filename = os.path.join(self.inputPath, files[i])
-           
-            # Skip old stations > need to be removed from FTP
-            oldStations=['G5230_Na_ZambiaRedcross',
-                         'glofas_discharge_G1724_X33',
-                         'G5196_Uganda_Gauge',
-                         'glofas_discharge_G2001_X34',
-                         'glofas_discharge_G5670_X36',
-                         'glofas_discharge_G5694_X37']
-            
-            if any(pattern in Filename for pattern in oldStations):
-                continue
-                
-            #if 'G5230_Na_ZambiaRedcross' in Filename or 'G5196_Uganda_Gauge' in Filename:
-            #    continue
-
-            station = {}
-            station['code'] = files[i].split('_')[2]
-
-            data = xr.open_dataset(Filename)
-
-            # Get threshold for this specific station
-            if station['code'] in df_thresholds['stationCode'] and station['code'] in df_district_mapping['glofasStation']:
-                
-                logger.info(Filename)
-                threshold = df_thresholds[df_thresholds['stationCode'] ==station['code']][TRIGGER_LEVEL][0]
-
-                # Set dimension-values
-                time = 0
-
-                for step in range(1, 8):
-
-                    # Loop through 51 ensembles, get forecast and compare to threshold
-                    ensemble_options = 51
-                    count = 0
-                    dis_sum = 0
-                    for ensemble in range(0, ensemble_options):
-
-                        discharge = data['dis'].sel(
-                            ensemble=ensemble, step=step).values[time][0]
-
-                        if discharge >= threshold:
-                            count = count + 1
-                        dis_sum = dis_sum + discharge
-
-                    prob = int(count/ensemble_options)
-                    dis_avg = dis_sum/ensemble_options
-                    station['fc'] = dis_avg
-                    station['fc_prob'] = prob 
-                    station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
-                    station['eapAlertClass'] = self.checkTriggerProb(prob) # 1 if prob > self.eapAlertClass['min'] else 0
-                    
-                    
-                    #station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
-                    if station['fc_trigger'] == 1:
-                        trigger_per_day[str(step)+'-day'] = True
-
-                    if step == self.leadTimeValue:
-                        stations.append(station)
-                    station = {}
-                    station['code'] = files[i].split(
-                        '_')[2]
-
-            data.close()
-
-        # Add 'no_station'
-        for station_code in ['no_station']:
-            station = {}
-            station['code'] = station_code
-            station['fc'] = 0
-            station['fc_prob'] = 0
-            station['fc_trigger'] = 0
-            station['eapAlertClass'] = 'no'
-            stations.append(station)
-
-        with open(self.extractedGlofasPath, 'w') as fp:
-            json.dump(stations, fp)
-            logger.info('Extracted Glofas data - File saved')
-
-        with open(self.triggerPerDay, 'w') as fp:
-            json.dump([trigger_per_day], fp)
-            logger.info('Extracted Glofas data - Trigger per day File saved')
-
     def extractMockData(self):
         logger.info('\nExtracting Glofas (mock) Data\n')
 
@@ -711,15 +623,13 @@ class GlofasData:
         # Set up variables to fill
         stations = []
         trigger_per_day = {
-            '1-day': False,
-            '2-day': False,
-            '3-day': False,
-            '4-day': False,
-            '5-day': False,
-            '6-day': False,
-            '7-day': False,
-        }
-        
+            "1-day": {"triggered": False, "thresholdReached": False}, 
+            "2-day": {"triggered": False, "thresholdReached": False}, 
+            "3-day": {"triggered": False, "thresholdReached": False}, 
+            "4-day": {"triggered": False, "thresholdReached": False}, 
+            "5-day": {"triggered": False, "thresholdReached": False}, 
+            "6-day": {"triggered": False, "thresholdReached": False}, 
+            "7-day": {"triggered": False, "thresholdReached": False}}
 
         for index, row in df_thresholds.iterrows():
             station = {}
@@ -735,6 +645,7 @@ class GlofasData:
                     ensemble_options = 51
                     count = 0
                     dis_sum = 0
+                    leadTimelabel=str(step)+'_day'   
 
                     for ensemble in range(0, ensemble_options):
                         # MOCK OVERWRITE DEPENDING ON COUNTRY SETTING
@@ -787,11 +698,10 @@ class GlofasData:
                     station['fc'] = dis_avg
                     station['fc_prob'] = prob
                     station['fc_trigger'] = 1 if prob > self.TRIGGER_LEVELS['minimum'] else 0
-                    #station['fc_trigger'] = 1 if prob > TRIGGER_LEVELS['minimum'] else 0
+                    station['eapAlertClass'] = 'no' # assign temp value
 
                     if station['fc_trigger'] == 1:
-                        trigger_per_day[str(step)+'-day'] = True
-                        station['eapAlertClass'] = 'max'
+                        trigger_per_day[str(step)+'-day']["triggered"] = True
 
                     if step == self.leadTimeValue:
                         stations.append(station)
@@ -817,6 +727,7 @@ class GlofasData:
             json.dump([trigger_per_day], fp)
             logger.info('Extracted Glofas data - Trigger per day File saved')
 
+
     def findTrigger(self):
         # Load (static) threshold values per station
         df_thresholds = pd.read_json(json.dumps(self.GLOFAS_STATIONS))
@@ -841,6 +752,7 @@ class GlofasData:
         for index, row in df.iterrows():
             fc = float(row['fc'])
             trigger = int(row['fc_trigger'])
+            prob = int(row['fc_prob'])
             if trigger == 1:
                 if (self.countryCodeISO3 == 'ZMB') or (self.countryCodeISO3 == 'MWI'):
                     if fc >= row['threshold20Year']:
@@ -865,12 +777,23 @@ class GlofasData:
             
             df.at[index, 'fc_rp_flood_extent'] = return_period_flood_extent
             df.at[index, 'fc_rp'] = return_period
+            if self.countryCodeISO3 == 'UGA':
+                eapAlertClass = self.classifyEapAlert(return_period)
+            else:
+                eapAlertClass = self.checkTriggerProb(prob)
+            df.at[index, 'eapAlertClass'] = eapAlertClass
+            if eapAlertClass == 'max':
+                with open(self.triggerPerDay, 'r+') as fp:
+                    trigger_per_day = json.load(fp)
+                    trigger_per_day = trigger_per_day[0]
+                    trigger_per_day[self.leadTimeLabel]["thresholdReached"] = True
 
         out = df.to_json(orient='records')
 
         with open(self.triggersPerStationPath, 'w') as fp:
             fp.write(out)
             logger.info('Processed Glofas data - File saved')
+
 
     def extractGlofasDataGridToCsv_old(self):
             
