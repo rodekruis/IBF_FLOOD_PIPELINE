@@ -80,7 +80,7 @@ RUN apt-get update && apt-get -y upgrade && \
 # update pip
 RUN python3 -m pip install --no-cache-dir \
     pip \
-    setuptools \
+    setuptools==70.3.0 \
     wheel \
     --upgrade \
     && python3 -m pip install --no-cache-dir numpy

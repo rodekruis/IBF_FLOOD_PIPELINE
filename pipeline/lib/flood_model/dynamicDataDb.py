@@ -41,8 +41,8 @@ class DatabaseManager:
         self.uploadTriggerPerStation()
         self.uploadCalculatedAffected()
         self.uploadRasterFile()
-        if self.countryCodeISO3=='SSD':
-            self.uploadImage()
+        # if self.countryCodeISO3=='SSD':
+        #     self.uploadImage()
     
     def sendNotification(self):
         leadTimes = SETTINGS[self.countryCodeISO3]['lead_times']
